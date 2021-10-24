@@ -18,7 +18,10 @@ interface MessageListItemProps {
   avatar: ReactElement;
 }
 
-const MessageListItem = ({ message, avatar }: MessageListItemProps) => {
+const MessageListItem: React.FC<MessageListItemProps> = ({
+  message,
+  avatar,
+}: MessageListItemProps) => {
   const sender: { displayName: string } = isUserMessage(message)
     ? message.user
     : {

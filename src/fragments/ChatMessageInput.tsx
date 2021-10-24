@@ -1,5 +1,4 @@
 import { IGif } from '@giphy/js-types';
-import { Channel } from 'chatkitty';
 import React, { useContext, useRef } from 'react';
 import { FlexRow, Icon, Icons, StyledBox, Textarea } from 'react-chat-ui-kit';
 import {
@@ -23,13 +22,7 @@ const autoExpand = (el: HTMLTextAreaElement) => {
   }, 0);
 };
 
-interface ChatMessageInputProps {
-  channel: Channel;
-}
-
-const ChatMessageInput: React.FC<ChatMessageInputProps> = ({
-  channel,
-}: ChatMessageInputProps) => {
+const ChatMessageInput: React.FC = () => {
   const theme = useContext(ThemeContext);
   const touch = useMediaQuery(theme.mediaQueries.touch);
 

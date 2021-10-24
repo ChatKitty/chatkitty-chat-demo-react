@@ -42,7 +42,7 @@ const Chat: React.FC = () => {
     >
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
-      <ChatMessageInput channel={channel} />
+      <ChatMessageInput />
     </FlexColumn>
   ) : (
     <StyledBox margin="auto">
