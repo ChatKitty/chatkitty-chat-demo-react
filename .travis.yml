@@ -1,0 +1,35 @@
+language: node_js
+
+node_js: node
+
+before_install:
+  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    echo '
+    CHATKITTY_API_KEY="${STAGING_CHATKITTY_API_KEY}"
+    ' >> .env.production;
+    fi
+  - if [[ -n $TRAVIS_TAG && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    echo '
+    CHATKITTY_API_KEY="${PRODUCTION_CHATKITTY_API_KEY}"
+    ' >> .env.production
+    fi
+
+install:
+  - yarn install
+
+script:
+  - yarn run test
+  - yarn run build
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+  - docker build -t howdi/chatkitty-demo -f docker/Dockerfile .
+  - docker push howdi/chatkitty-demo
+
+after_success:
+  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    TAG="latest";
+    ecs deploy howdi-dev chatkitty-staging-demo --tag $TAG;
+    fi
+  - if [[ -n $TRAVIS_TAG && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    TAG="$(git describe --tags)";
+    ecs deploy howdi chatkitty-demo --tag $TAG;
+    fi
