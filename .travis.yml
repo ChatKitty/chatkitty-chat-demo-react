@@ -1,0 +1,45 @@
+language: node_js
+
+node_js: 12
+
+services:
+  - docker
+
+before_install:
+  - sudo apt-get install -y python3
+  - sudo apt-get install --upgrade -y python-pip
+  - sudo pip install --user virtualenv
+  - virtualenv my_py3 --python=/usr/bin/python3
+  - source my_py3/bin/activate
+  - pip install --upgrade ecs-deploy
+  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    echo "CHATKITTY_API_KEY=$STAGING_CHATKITTY_API_KEY" >> .env.production;
+    fi
+  - if [[ -n $TRAVIS_TAG && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    echo "CHATKITTY_API_KEY=$PRODUCTION_CHATKITTY_API_KEY" >> .env.production;
+    fi
+
+install:
+  - yarn install
+
+script:
+  - yarn run build
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    TAG="latest";
+    docker build -t "howdi/chatkitty-demo:$TAG" -f docker/Dockerfile .;
+    docker push "howdi/chatkitty-demo:$TAG";
+    fi
+  - if [[ -n $TRAVIS_TAG && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    TAG="$(git describe --tags)";
+    docker build -t "howdi/chatkitty-demo:$TAG" -f docker/Dockerfile .;
+    docker push "howdi/chatkitty-demo:$TAG";
+    fi
+
+after_success:
+  - if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    ecs deploy howdi-dev chatkitty-staging-demo --tag $TAG;
+    fi
+  - if [[ -n $TRAVIS_TAG && "$TRAVIS_PULL_REQUEST" == "false" ]]; then
+    ecs deploy howdi chatkitty-demo --tag $TAG;
+    fi
