@@ -21,7 +21,7 @@ const useGuestSession = (
     const makeRequest = async () => {
       setIsLoading(true);
 
-      const result = await kitty.makeRequest({
+      const result = await kitty.startSession({
         username,
       });
 
