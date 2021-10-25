@@ -22,7 +22,7 @@ const useMessages = (
   const [resource, setResource] = useState<Message[]>([]);
 
   useEffect(() => {
-    const startSession = async () => {
+    const makeRequest = async () => {
       setIsLoading(true);
 
       const result = await kitty.getMessages({
@@ -40,7 +40,7 @@ const useMessages = (
       setIsLoading(false);
     };
 
-    startSession();
+    makeRequest();
   }, []);
 
   return {

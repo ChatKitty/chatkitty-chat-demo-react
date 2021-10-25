@@ -12,7 +12,7 @@ const useSendMessageDraft = (
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const startSession = async () => {
+    const makeRequest = async () => {
       setIsLoading(true);
 
       await kitty.sendMessage({
@@ -25,7 +25,7 @@ const useSendMessageDraft = (
       setIsLoading(false);
     };
 
-    startSession();
+    makeRequest();
   }, []);
 
   return {

@@ -21,7 +21,7 @@ const useLeaveChannel = (
   const [resource, setResource] = useState<Channel>();
 
   useEffect(() => {
-    const startSession = async () => {
+    const makeRequest = async () => {
       setIsLoading(true);
 
       const result = await kitty.leaveChannel({ channel });
@@ -37,7 +37,7 @@ const useLeaveChannel = (
       setIsLoading(false);
     };
 
-    startSession();
+    makeRequest();
   }, []);
 
   return {

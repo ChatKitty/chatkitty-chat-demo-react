@@ -21,7 +21,7 @@ const useChatSession = (
   const [error, setError] = useState<ChatKittyError>();
 
   useEffect(() => {
-    const startSession = async () => {
+    const makeRequest = async () => {
       setIsLoading(true);
 
       const result = kitty.startChatSession({ channel, onReceivedMessage });
@@ -37,7 +37,7 @@ const useChatSession = (
       setIsLoading(false);
     };
 
-    startSession();
+    makeRequest();
   }, []);
 
   return {

@@ -12,7 +12,7 @@ const useUpdateMessageDraft = (
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const startSession = async () => {
+    const makeRequest = async () => {
       setIsLoading(true);
 
       await kitty.sendKeystrokes({ channel, keys: draft });
@@ -22,7 +22,7 @@ const useUpdateMessageDraft = (
       setIsLoading(false);
     };
 
-    startSession();
+    makeRequest();
   }, []);
 
   return {

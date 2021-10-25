@@ -21,7 +21,7 @@ const useChannelUnreadMessageCount = (
   const [result, setResult] = useState(0);
 
   useEffect(() => {
-    const startSession = async () => {
+    const makeRequest = async () => {
       setIsLoading(true);
 
       const result = await kitty.getUnreadMessagesCount({
@@ -39,7 +39,7 @@ const useChannelUnreadMessageCount = (
       setIsLoading(false);
     };
 
-    startSession();
+    makeRequest();
   }, []);
 
   return {

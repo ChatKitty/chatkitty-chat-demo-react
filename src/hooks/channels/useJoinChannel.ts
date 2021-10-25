@@ -21,7 +21,7 @@ const useJoinChannel = (
   const [resource, setResource] = useState<Channel>();
 
   useEffect(() => {
-    const startSession = async () => {
+    const makeRequest = async () => {
       setIsLoading(true);
 
       const result = await kitty.joinChannel({ channel });
@@ -37,7 +37,7 @@ const useJoinChannel = (
       setIsLoading(false);
     };
 
-    startSession();
+    makeRequest();
   }, []);
 
   return {

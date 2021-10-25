@@ -19,7 +19,7 @@ const useUsers = (): {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    const startSession = async () => {
+    const makeRequest = async () => {
       setIsLoading(true);
 
       const result = await kitty.getUsers();
@@ -35,7 +35,7 @@ const useUsers = (): {
       setIsLoading(false);
     };
 
-    startSession();
+    makeRequest();
   }, []);
 
   return {

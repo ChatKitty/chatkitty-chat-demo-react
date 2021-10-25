@@ -18,10 +18,10 @@ const useGuestSession = (
   const [error, setError] = useState<ChatKittyError>();
 
   useEffect(() => {
-    const startSession = async () => {
+    const makeRequest = async () => {
       setIsLoading(true);
 
-      const result = await kitty.startSession({
+      const result = await kitty.makeRequest({
         username,
       });
 
@@ -36,7 +36,7 @@ const useGuestSession = (
       setIsLoading(false);
     };
 
-    startSession();
+    makeRequest();
   }, []);
 
   return {
