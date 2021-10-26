@@ -1,31 +1,31 @@
 import {
   ChatKittyError,
   ChatKittyFailedResult,
+  CurrentUser,
   failed,
-  GetUsersSucceededResult,
+  GetCurrentUserSuccessfulResult,
   succeeded,
-  User,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
 import { useEffect, useState } from 'react';
 
-const useUsers = (): {
+const useCurrentUser = (): {
   isLoading: boolean;
   error?: ChatKittyError;
-  resource?: User[];
+  resource?: CurrentUser;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<User[]>([]);
+  const [resource, setResource] = useState<CurrentUser>();
 
   useEffect(() => {
     const makeRequest = async () => {
       setIsLoading(true);
 
-      const result = await kitty.getUsers();
+      const result = await kitty.getCurrentUser();
 
-      if (succeeded<GetUsersSucceededResult>(result)) {
-        setResource(result.paginator.items);
+      if (succeeded<GetCurrentUserSuccessfulResult>(result)) {
+        setResource(result.user);
       }
 
       if (failed<ChatKittyFailedResult>(result)) {
@@ -45,4 +45,4 @@ const useUsers = (): {
   };
 };
 
-export default useUsers;
+export default useCurrentUser;

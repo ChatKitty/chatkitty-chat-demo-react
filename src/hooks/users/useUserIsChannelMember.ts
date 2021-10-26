@@ -1,31 +1,41 @@
 import {
+  Channel,
   ChatKittyError,
   ChatKittyFailedResult,
   failed,
-  GetUsersSucceededResult,
+  GetUserIsChannelMemberSucceededResult,
   succeeded,
   User,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
 import { useEffect, useState } from 'react';
 
-const useUsers = (): {
+const useUserIsChannelMember = ({
+  channel,
+  user,
+}: {
+  channel: Channel;
+  user: User;
+}): {
   isLoading: boolean;
   error?: ChatKittyError;
-  resource?: User[];
+  result: boolean;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<User[]>([]);
+  const [result, setResult] = useState<boolean>(false);
 
   useEffect(() => {
     const makeRequest = async () => {
       setIsLoading(true);
 
-      const result = await kitty.getUsers();
+      const result = await kitty.getUserIsChannelMember({
+        channel,
+        user,
+      });
 
-      if (succeeded<GetUsersSucceededResult>(result)) {
-        setResource(result.paginator.items);
+      if (succeeded<GetUserIsChannelMemberSucceededResult>(result)) {
+        setResult(result.isMember);
       }
 
       if (failed<ChatKittyFailedResult>(result)) {
@@ -41,8 +51,8 @@ const useUsers = (): {
   return {
     isLoading,
     error,
-    resource,
+    result,
   };
 };
 
-export default useUsers;
+export default useUserIsChannelMember;

@@ -1,31 +1,42 @@
 import {
   ChatKittyError,
   ChatKittyFailedResult,
+  ChatKittyUploadProgressListener,
+  CreateChatKittyFileProperties,
+  CurrentUser,
   failed,
-  GetUsersSucceededResult,
   succeeded,
-  User,
+  UpdatedCurrentUserResult,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
 import { useEffect, useState } from 'react';
 
-const useUsers = (): {
+const useUpdateCurrentUserDisplayPicture = ({
+  file,
+  progressListener,
+}: {
+  file: CreateChatKittyFileProperties;
+  progressListener: ChatKittyUploadProgressListener;
+}): {
   isLoading: boolean;
   error?: ChatKittyError;
-  resource?: User[];
+  resource?: CurrentUser;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<User[]>([]);
+  const [resource, setResource] = useState<CurrentUser>();
 
   useEffect(() => {
     const makeRequest = async () => {
       setIsLoading(true);
 
-      const result = await kitty.getUsers();
+      const result = await kitty.updateCurrentUserDisplayPicture({
+        file,
+        progressListener,
+      });
 
-      if (succeeded<GetUsersSucceededResult>(result)) {
-        setResource(result.paginator.items);
+      if (succeeded<UpdatedCurrentUserResult>(result)) {
+        setResource(result.user);
       }
 
       if (failed<ChatKittyFailedResult>(result)) {
@@ -45,4 +56,4 @@ const useUsers = (): {
   };
 };
 
-export default useUsers;
+export default useUpdateCurrentUserDisplayPicture;
