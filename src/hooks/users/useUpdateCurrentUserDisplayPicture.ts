@@ -9,7 +9,7 @@ import {
   UpdatedCurrentUserResult,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const useUpdateCurrentUserDisplayPicture = ({
   file,
@@ -21,38 +21,36 @@ const useUpdateCurrentUserDisplayPicture = ({
   isLoading: boolean;
   error?: ChatKittyError;
   resource?: CurrentUser;
+  makeRequest: () => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<CurrentUser>();
 
-  useEffect(() => {
-    const makeRequest = async () => {
-      setIsLoading(true);
+  const makeRequest = async () => {
+    setIsLoading(true);
 
-      const result = await kitty.updateCurrentUserDisplayPicture({
-        file,
-        progressListener,
-      });
+    const result = await kitty.updateCurrentUserDisplayPicture({
+      file,
+      progressListener,
+    });
 
-      if (succeeded<UpdatedCurrentUserResult>(result)) {
-        setResource(result.user);
-      }
+    if (succeeded<UpdatedCurrentUserResult>(result)) {
+      setResource(result.user);
+    }
 
-      if (failed<ChatKittyFailedResult>(result)) {
-        setError(result.error);
-      }
+    if (failed<ChatKittyFailedResult>(result)) {
+      setError(result.error);
+    }
 
-      setIsLoading(false);
-    };
-
-    makeRequest();
-  }, []);
+    setIsLoading(false);
+  };
 
   return {
     isLoading,
     error,
     resource,
+    makeRequest,
   };
 };
 

@@ -8,7 +8,7 @@ import {
   User,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const useInviteUser = ({
   channel,
@@ -19,36 +19,34 @@ const useInviteUser = ({
 }): {
   isLoading: boolean;
   error?: ChatKittyError;
+  makeRequest: () => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
 
-  useEffect(() => {
-    const makeRequest = async () => {
-      setIsLoading(true);
+  const makeRequest = async () => {
+    setIsLoading(true);
 
-      const result = await kitty.inviteUser({
-        channel,
-        user,
-      });
+    const result = await kitty.inviteUser({
+      channel,
+      user,
+    });
 
-      if (succeeded<InviteUserResult>(result)) {
-        // empty response
-      }
+    if (succeeded<InviteUserResult>(result)) {
+      // empty response
+    }
 
-      if (failed<ChatKittyFailedResult>(result)) {
-        setError(result.error);
-      }
+    if (failed<ChatKittyFailedResult>(result)) {
+      setError(result.error);
+    }
 
-      setIsLoading(false);
-    };
-
-    makeRequest();
-  }, []);
+    setIsLoading(false);
+  };
 
   return {
     isLoading,
     error,
+    makeRequest,
   };
 };
 

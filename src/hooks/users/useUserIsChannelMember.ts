@@ -8,7 +8,7 @@ import {
   User,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const useUserIsChannelMember = ({
   channel,
@@ -20,38 +20,36 @@ const useUserIsChannelMember = ({
   isLoading: boolean;
   error?: ChatKittyError;
   result: boolean;
+  makeRequest: () => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [result, setResult] = useState<boolean>(false);
 
-  useEffect(() => {
-    const makeRequest = async () => {
-      setIsLoading(true);
+  const makeRequest = async () => {
+    setIsLoading(true);
 
-      const result = await kitty.getUserIsChannelMember({
-        channel,
-        user,
-      });
+    const result = await kitty.getUserIsChannelMember({
+      channel,
+      user,
+    });
 
-      if (succeeded<GetUserIsChannelMemberSucceededResult>(result)) {
-        setResult(result.isMember);
-      }
+    if (succeeded<GetUserIsChannelMemberSucceededResult>(result)) {
+      setResult(result.isMember);
+    }
 
-      if (failed<ChatKittyFailedResult>(result)) {
-        setError(result.error);
-      }
+    if (failed<ChatKittyFailedResult>(result)) {
+      setError(result.error);
+    }
 
-      setIsLoading(false);
-    };
-
-    makeRequest();
-  }, []);
+    setIsLoading(false);
+  };
 
   return {
     isLoading,
     error,
     result,
+    makeRequest,
   };
 };
 

@@ -8,7 +8,7 @@ import {
   UserBlockListItem,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const useDeleteUserBlockListItem = ({
   item,
@@ -18,35 +18,33 @@ const useDeleteUserBlockListItem = ({
   isLoading: boolean;
   error?: ChatKittyError;
   resource?: User;
+  makeRequest: () => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<User>();
 
-  useEffect(() => {
-    const makeRequest = async () => {
-      setIsLoading(true);
+  const makeRequest = async () => {
+    setIsLoading(true);
 
-      const result = await kitty.deleteUserBlockListItem({ item });
+    const result = await kitty.deleteUserBlockListItem({ item });
 
-      if (succeeded<DeleteUserBlockListItemSucceededResult>(result)) {
-        setResource(result.user);
-      }
+    if (succeeded<DeleteUserBlockListItemSucceededResult>(result)) {
+      setResource(result.user);
+    }
 
-      if (failed<ChatKittyFailedResult>(result)) {
-        setError(result.error);
-      }
+    if (failed<ChatKittyFailedResult>(result)) {
+      setError(result.error);
+    }
 
-      setIsLoading(false);
-    };
-
-    makeRequest();
-  }, []);
+    setIsLoading(false);
+  };
 
   return {
     isLoading,
     error,
     resource,
+    makeRequest,
   };
 };
 
