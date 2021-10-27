@@ -1,18 +1,16 @@
 import {
-  Channel,
   ChatKittyError,
   ChatKittyFailedResult,
+  DeleteMessageForMeSucceededResult,
   failed,
   Message,
-  SentMessageResult,
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useSendMessageDraft = (
-  channel: Channel,
-  draft: string
+const useDeleteMessageForMe = (
+  message: Message
 ): {
   isLoading: boolean;
   error?: ChatKittyError;
@@ -26,12 +24,9 @@ const useSendMessageDraft = (
   const makeRequest = async () => {
     setIsLoading(true);
 
-    const result = await kitty.sendMessage({
-      channel: channel,
-      body: draft,
-    });
+    const result = await kitty.deleteMessageForMe({ message });
 
-    if (succeeded<SentMessageResult>(result)) {
+    if (succeeded<DeleteMessageForMeSucceededResult>(result)) {
       setResource(result.message);
     }
 
@@ -50,4 +45,4 @@ const useSendMessageDraft = (
   };
 };
 
-export default useSendMessageDraft;
+export default useDeleteMessageForMe;

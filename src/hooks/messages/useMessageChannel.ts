@@ -3,36 +3,32 @@ import {
   ChatKittyError,
   ChatKittyFailedResult,
   failed,
+  GetMessageChannelSucceededResult,
   Message,
-  SentMessageResult,
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useSendMessageDraft = (
-  channel: Channel,
-  draft: string
+const useMessageChannel = (
+  message: Message
 ): {
   isLoading: boolean;
   error?: ChatKittyError;
-  resource?: Message;
+  resource?: Channel;
   makeRequest: () => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<Message>();
+  const [resource, setResource] = useState<Channel>();
 
   const makeRequest = async () => {
     setIsLoading(true);
 
-    const result = await kitty.sendMessage({
-      channel: channel,
-      body: draft,
-    });
+    const result = await kitty.getMessageChannel({ message });
 
-    if (succeeded<SentMessageResult>(result)) {
-      setResource(result.message);
+    if (succeeded<GetMessageChannelSucceededResult>(result)) {
+      setResource(result.channel);
     }
 
     if (failed<ChatKittyFailedResult>(result)) {
@@ -50,4 +46,4 @@ const useSendMessageDraft = (
   };
 };
 
-export default useSendMessageDraft;
+export default useMessageChannel;
