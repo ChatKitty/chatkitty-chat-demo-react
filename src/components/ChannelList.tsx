@@ -9,6 +9,7 @@ interface ChannelListProps {
 const ChannelList: React.FC<ChannelListProps> = ({ loading, channels }) => {
   return (
     <ul className="flex flex-col">
+      <h1 className="p-3 font-medium">Channels</h1>
       {loading
         ? 'Loading ChannelList...'
         : channels &&
