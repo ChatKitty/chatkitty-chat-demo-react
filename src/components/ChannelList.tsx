@@ -1,4 +1,5 @@
 import { Channel } from 'chatkitty';
+import ChannelListItem from 'components/ChannelListItem';
 
 interface ChannelListProps {
   loading: boolean;
@@ -7,12 +8,14 @@ interface ChannelListProps {
 
 const ChannelList: React.FC<ChannelListProps> = ({ loading, channels }) => {
   return (
-    <>
+    <ul className="flex flex-col">
       {loading
         ? 'Loading ChannelList...'
         : channels &&
-          channels.map((channel) => <div key={channel.id}>{channel.name}</div>)}
-    </>
+          channels.map((channel) => (
+            <ChannelListItem key={channel.id} channel={channel} />
+          ))}
+    </ul>
   );
 };
 
