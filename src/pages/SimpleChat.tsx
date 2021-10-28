@@ -7,7 +7,7 @@ const SimpleChat: React.FC = () => {
 
   return (
     <>
-      <div className="max-w-xs min-w-xs border-r min-h-screen">
+      <div className="sm:max-w-xs min-w-xs border-r min-h-screen">
         <ChannelList loading={loadingChannels} channels={channels} />
       </div>
     </>
