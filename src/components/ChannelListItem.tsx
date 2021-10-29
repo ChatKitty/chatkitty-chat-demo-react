@@ -12,9 +12,9 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({
   setSelectedChannel,
 }) => {
   return (
-    <li className="flex flex-row mx-1 group">
+    <li className="flex flex-row group">
       <button
-        className={`cursor-pointer rounded-md flex flex-1 items-center p-2 transition duration-200 ease-in-out transform hover:shadow-md ${
+        className={`cursor-pointer flex flex-1 items-center p-2 transition duration-200 ease-in-out transform hover:shadow-md ${
           selected ? 'bg-purple-300' : 'group-hover:bg-gray-200'
         }`}
         onClick={() => setSelectedChannel(channel)}

@@ -2,8 +2,9 @@ import { Channel, CurrentUser } from 'chatkitty';
 import ChannelHeader from 'components/ChannelHeader';
 import ChannelList from 'components/ChannelList';
 import CurrentUserDisplay from 'components/CurrentUserDisplay';
-import { useCurrentUser, useJoinedChannels } from 'hooks';
-import { useState } from 'react';
+import MessageList from 'components/MessageList';
+import { useCurrentUser, useJoinedChannels, useMessages } from 'hooks';
+import { useEffect, useState } from 'react';
 
 const Preload: React.FC = () => {
   const { isLoading: loadingChannels, resource: channels } =
@@ -27,8 +28,17 @@ interface SimpleChatProps {
 }
 
 const SimpleChat: React.FC<SimpleChatProps> = ({ channels, currentUser }) => {
-  // state (extract to hooks)
   const [selectedChannel, setSelectedChannel] = useState<Channel>(channels[0]);
+
+  const {
+    isLoading: messagesLoading,
+    resource: messages,
+    makeRequest: fetchChannelMessages,
+  } = useMessages();
+
+  useEffect(() => {
+    fetchChannelMessages(selectedChannel);
+  }, [selectedChannel]);
 
   return (
     <div className="flex">
@@ -42,6 +52,7 @@ const SimpleChat: React.FC<SimpleChatProps> = ({ channels, currentUser }) => {
       </div>
       <div className="flex-1">
         <ChannelHeader channel={selectedChannel} />
+        {messagesLoading ? 'Loading...' : <MessageList messages={messages} />}
       </div>
     </div>
   );

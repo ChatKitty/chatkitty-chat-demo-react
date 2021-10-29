@@ -8,45 +8,41 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-const useMessages = (
-  channel: Channel
-): {
+const useMessages = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource: Message[];
+  makeRequest: (channel: Channel) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<Message[]>([]);
 
-  useEffect(() => {
-    const makeRequest = async () => {
-      setIsLoading(true);
+  const makeRequest = async (channel: Channel) => {
+    setIsLoading(true);
 
-      const result = await kitty.getMessages({
-        channel,
-      });
+    const result = await kitty.getMessages({
+      channel,
+    });
 
-      if (succeeded<GetMessagesSucceededResult>(result)) {
-        setResource(result.paginator.items);
-      }
+    if (succeeded<GetMessagesSucceededResult>(result)) {
+      setResource(result.paginator.items);
+    }
 
-      if (failed<ChatKittyFailedResult>(result)) {
-        setError(result.error);
-      }
+    if (failed<ChatKittyFailedResult>(result)) {
+      setError(result.error);
+    }
 
-      setIsLoading(false);
-    };
-
-    makeRequest();
-  }, []);
+    setIsLoading(false);
+  };
 
   return {
     isLoading,
     error,
     resource,
+    makeRequest,
   };
 };
 

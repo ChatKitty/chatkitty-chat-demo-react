@@ -64,6 +64,7 @@
       "no-param-reassign": [2, { "props": false }],
       "@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
       "@typescript-eslint/no-empty-interface": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
       "prettier/prettier": [
         "error",
         {
