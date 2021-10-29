@@ -9,7 +9,7 @@ const ChannelHeader: React.FC<ChannelHeaderProps> = ({ channel }) => {
     <div className="py-2 pl-4 border-b border-gray-100 w-full shadow-sm">
       <h1 className="text-xl text-gray-800">#{channel.name}</h1>
       <p className="font-light text-sm">
-        {(channel.properties as any).description}
+        {(channel.properties as { description: string }).description}
       </p>
     </div>
   );
