@@ -2,20 +2,27 @@ import { Channel } from 'chatkitty';
 import ChannelListItem from 'components/ChannelListItem';
 
 interface ChannelListProps {
-  loading: boolean;
   channels: Channel[];
+  selectedChannel: Channel;
+  setSelectedChannel: React.Dispatch<React.SetStateAction<Channel>>;
 }
 
-const ChannelList: React.FC<ChannelListProps> = ({ loading, channels }) => {
+const ChannelList: React.FC<ChannelListProps> = ({
+  channels,
+  selectedChannel,
+  setSelectedChannel,
+}) => {
   return (
     <ul className="flex flex-col">
       <h1 className="p-3 font-medium">Channels</h1>
-      {loading
-        ? 'Loading ChannelList...'
-        : channels &&
-          channels.map((channel) => (
-            <ChannelListItem key={channel.id} channel={channel} />
-          ))}
+      {channels.map((channel) => (
+        <ChannelListItem
+          key={channel.id}
+          channel={channel}
+          selected={channel.id === selectedChannel.id}
+          setSelectedChannel={setSelectedChannel}
+        />
+      ))}
     </ul>
   );
 };

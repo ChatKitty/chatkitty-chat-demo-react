@@ -1,26 +1,16 @@
 import { CurrentUser } from 'chatkitty';
 
 interface CurrentUserDisplayProps {
-  loading: boolean;
-  user: CurrentUser | undefined;
+  user: CurrentUser;
 }
 
-const CurrentUserDisplay: React.FC<CurrentUserDisplayProps> = ({
-  loading,
-  user,
-}) => {
+const CurrentUserDisplay: React.FC<CurrentUserDisplayProps> = ({ user }) => {
   return (
-    <>
-      {loading
-        ? 'Loading User...'
-        : user && (
-            <div className="py-2 flex flex-col pl-4 border-b">
-              <h1 className="text-xl font-semibold text-gray-800 text-right pr-4">
-                {user.displayName}
-              </h1>
-            </div>
-          )}
-    </>
+    <div className="py-2 flex flex-col pl-4 border-gray-100 border-b">
+      <h1 className="text-xl font-semibold text-gray-800 text-right pr-4">
+        {user.displayName}
+      </h1>
+    </div>
   );
 };
 
