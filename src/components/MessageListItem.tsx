@@ -1,4 +1,5 @@
 import { TextUserMessage } from 'chatkitty';
+import moment from 'moment';
 
 interface MessageListItemProps {
   message: TextUserMessage;
@@ -12,14 +13,14 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message }) => {
           <div className="h-10 w-10 rounded-full overflow-hidden">
             <img src={message.user.displayPictureUrl} />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col items-start">
             <h1 className="px-4 mb-1">
               {message.user.displayName}
               <span className="text-xs font-light px-3 opacity-60">
-                {message.createdTime}
+                {moment(message.createdTime).fromNow()}
               </span>
             </h1>
-            <div className="ml-3 text-sm py-3 px-4 shadow rounded-xl rounded-tl-none">
+            <div className="ml-3 text-sm py-2 px-4 shadow rounded-xl rounded-tl-none bg-white">
               <div>{message.body}</div>
             </div>
           </div>

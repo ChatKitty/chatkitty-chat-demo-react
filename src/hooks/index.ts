@@ -1,6 +1,6 @@
 import useChannelUnreadMessageCount from './channels/useChannelUnreadMessageCount';
 import useJoinChannel from './channels/useJoinChannel';
-import useJoinableChannels from './channels/useJoinedChannels';
+import useJoinableChannels from './channels/useJoinableChannels';
 import useJoinedChannels from './channels/useJoinedChannels';
 import useLeaveChannel from './channels/useLeaveChannel';
 import useMessages from './messages/useMessages';
