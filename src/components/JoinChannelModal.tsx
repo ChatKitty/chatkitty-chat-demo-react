@@ -15,7 +15,7 @@ const JoinChannelModal: React.FC<JoinChannelModalProps> = ({
     useJoinableChannels();
 
   return (
-    <div className="bg-white rounded-lg w-1/2">
+    <div className="bg-white rounded-lg w-1/2 max-w-md">
       <div className="flex flex-col items-start p-4">
         <button className="flex flex-row w-full pb-2" onClick={closeModal}>
           <h1 className="flex-1 text-gray-800 font-medium text-xl text-left">
