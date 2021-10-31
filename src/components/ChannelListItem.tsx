@@ -39,8 +39,9 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({
         {handleExtraActionClick && (
           <button
             className="has-tooltip"
-            onClick={() => {
+            onClick={(evt) => {
               handleExtraActionClick(channel);
+              evt.stopPropagation();
             }}
           >
             <span className="tooltip rounded -ml-12 text-xs font-light">

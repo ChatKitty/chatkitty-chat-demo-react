@@ -1,4 +1,4 @@
-import { Channel, CurrentUser } from 'chatkitty';
+import { Channel } from 'chatkitty';
 import ChannelHeader from 'components/ChannelHeader';
 import ChannelList from 'components/ChannelList';
 import CurrentUserDisplay from 'components/CurrentUserDisplay';
@@ -14,50 +14,34 @@ import {
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
-const Preload: React.FC = () => {
+export type SelectedModal = 'join' | undefined;
+
+const SimpleChat: React.FC = () => {
   const {
     isLoading: loadingChannels,
     resource: channels,
     makeRequest: fetchChannels,
   } = useJoinedChannels();
-  const { isLoading: loadingUser, resource: currentUser } = useCurrentUser();
+  const { resource: currentUser } = useCurrentUser();
 
-  return (
-    <>
-      {loadingChannels || loadingUser || !currentUser ? (
-        'Loading...'
-      ) : (
-        <SimpleChat
-          channels={channels}
-          fetchChannels={fetchChannels}
-          currentUser={currentUser}
-        />
-      )}
-    </>
-  );
-};
-
-interface SimpleChatProps {
-  channels: Channel[];
-  fetchChannels: () => void;
-  currentUser: CurrentUser;
-}
-
-export type SelectedModal = 'join' | undefined;
-
-const SimpleChat: React.FC<SimpleChatProps> = ({
-  channels,
-  fetchChannels,
-  currentUser,
-}) => {
-  const [selectedChannel, setSelectedChannel] = useState<Channel>(channels[0]);
+  const [selectedChannel, setSelectedChannel] = useState<Channel | undefined>();
   const [selectedModal, setSelectedModal] = useState<SelectedModal>();
 
   useEffect(() => {
+    // fetch or change selected channel on channel list change
     if (selectedChannel) {
       fetchChannelMessages(selectedChannel);
+    } else {
+      if (channels.length > 0) {
+        setSelectedChannel(channels[0]);
+      }
     }
-  }, [selectedChannel]);
+
+    // reset selected channels if no available channels
+    if (channels.length === 0) {
+      setSelectedChannel(undefined);
+    }
+  }, [selectedChannel, channels]);
 
   const {
     isLoading: messagesLoading,
@@ -71,30 +55,39 @@ const SimpleChat: React.FC<SimpleChatProps> = ({
   return (
     <div className="flex">
       <div className="w-full sm:w-80 min-h-screen">
-        <CurrentUserDisplay user={currentUser} />
-        <ChannelList
-          channels={channels}
-          selectedChannel={selectedChannel}
-          handleChannelClick={setSelectedChannel}
-          handleExtraActionClick={async (channel) => {
-            await leaveChannel(channel);
-            await fetchChannels();
-          }}
-          setSelectedModal={setSelectedModal}
-        />
+        {currentUser ? (
+          <CurrentUserDisplay user={currentUser} />
+        ) : (
+          'Loading User...'
+        )}
+        {loadingChannels ? (
+          'Loading Channels...'
+        ) : (
+          <ChannelList
+            channels={channels}
+            selectedChannel={selectedChannel}
+            handleChannelClick={setSelectedChannel}
+            handleExtraActionClick={async (channel) => {
+              await leaveChannel(channel);
+              await fetchChannels();
+            }}
+            setSelectedModal={setSelectedModal}
+          />
+        )}
       </div>
+
       <div className="flex-1 m-4 ml-0 rounded-lg overflow-hidden">
         {selectedChannel ? (
           <>
             <ChannelHeader channel={selectedChannel} />
             {messagesLoading ? (
-              'Loading...'
+              'Loading Messages...'
             ) : (
               <MessageList messages={messages} />
             )}
           </>
         ) : (
-          ''
+          'No Channel Selected.'
         )}
       </div>
 
@@ -121,4 +114,4 @@ const SimpleChat: React.FC<SimpleChatProps> = ({
   );
 };
 
-export default Preload;
+export default SimpleChat;
