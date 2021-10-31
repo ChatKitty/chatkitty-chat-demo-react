@@ -14,7 +14,7 @@ const ChannelList: React.FC<ChannelListProps> = ({
 }) => {
   return (
     <ul className="flex flex-col">
-      <h1 className="p-3 font-medium">Channels</h1>
+      <h1 className="p-3">Channels</h1>
       {channels.map((channel) => (
         <ChannelListItem
           key={channel.id}

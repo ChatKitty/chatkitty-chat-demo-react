@@ -42,7 +42,7 @@ const SimpleChat: React.FC<SimpleChatProps> = ({ channels, currentUser }) => {
 
   return (
     <div className="flex">
-      <div className="sm:max-w-xs min-w-xs border-r border-gray-100 min-h-screen shadow-sm">
+      <div className="sm:max-w-xs min-w-xs min-h-screen">
         <CurrentUserDisplay user={currentUser} />
         <ChannelList
           channels={channels}
@@ -50,7 +50,7 @@ const SimpleChat: React.FC<SimpleChatProps> = ({ channels, currentUser }) => {
           setSelectedChannel={setSelectedChannel}
         />
       </div>
-      <div className="flex-1">
+      <div className="flex-1 m-4 ml-0 rounded-lg overflow-hidden">
         <ChannelHeader channel={selectedChannel} />
         {messagesLoading ? 'Loading...' : <MessageList messages={messages} />}
       </div>

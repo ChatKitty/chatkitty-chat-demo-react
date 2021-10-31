@@ -15,12 +15,12 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({
     <li className="flex flex-row group">
       <button
         className={`cursor-pointer flex flex-1 items-center p-2 transition duration-200 ease-in-out transform hover:shadow-md ${
-          selected ? 'bg-purple-300' : 'group-hover:bg-gray-200'
+          selected ? 'bg-purple-50' : 'group-hover:bg-gray-200'
         }`}
         onClick={() => setSelectedChannel(channel)}
       >
         <div
-          className={`flex flex-col rounded-md w-8 h-8 ${
+          className={`flex flex-col rounded-md w-6 h-6 ${
             selected
               ? 'bg-gray-800 text-white'
               : 'bg-purple-400 group-hover:bg-gray-700'
@@ -28,16 +28,19 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({
         >
           #
         </div>
-        <div className="flex-1 pl-1 mr-16">
-          <div className="font-medium">{channel.name}</div>
+        <div className="flex-1 pl-1 mr-16 text-left">
+          <div className="">{channel.name}</div>
+          <p className="text-xs font-light">
+            {(channel.properties as any).description}
+          </p>
         </div>
         <div className="has-tooltip">
-          <span className="tooltip rounded -ml-12 mt-0.5 text-xs font-light">
+          <span className="tooltip rounded -ml-12 text-xs font-light">
             Leave
           </span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
+            className="h-4 w-4 opacity-20 hover:opacity-100"
             viewBox="0 0 20 20"
             fill="currentColor"
           >

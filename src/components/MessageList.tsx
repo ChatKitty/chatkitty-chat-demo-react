@@ -7,7 +7,7 @@ interface MessageListProps {
 
 const MessageList: React.FC<MessageListProps> = ({ messages }) => {
   return (
-    <ul className="flex flex-col">
+    <ul className="flex flex-col bg-purple-50 shadow-inner">
       {messages.map((message) => (
         <MessageListItem
           key={message.id}
