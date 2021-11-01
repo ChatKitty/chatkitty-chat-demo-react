@@ -2,16 +2,13 @@ import { Channel } from 'chatkitty';
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useUpdateMessageDraft = (
-  channel: Channel,
-  draft: string
-): {
+const useUpdateMessageDraft = (): {
   isLoading: boolean;
-  makeRequest: () => void;
+  makeRequest: (channel: Channel, draft: string) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const makeRequest = async () => {
+  const makeRequest = async (channel: Channel, draft: string) => {
     setIsLoading(true);
 
     await kitty.sendKeystrokes({ channel, keys: draft });

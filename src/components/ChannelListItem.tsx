@@ -17,7 +17,7 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({
     <li className="flex flex-row group w-full">
       <div
         className={`cursor-pointer flex flex-1 items-center p-2 transition duration-200 ease-in-out transform hover:shadow-md ${
-          selected ? 'bg-gray-50' : 'group-hover:bg-gray-200'
+          selected ? 'bg-gray-100' : 'group-hover:bg-gray-200'
         }`}
         onClick={() => handleClick(channel)}
       >

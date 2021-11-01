@@ -8,12 +8,13 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 const useMessages = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource: Message[];
+  setResource: Dispatch<SetStateAction<Message[]>>;
   makeRequest: (channel: Channel) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,6 +43,7 @@ const useMessages = (): {
     isLoading,
     error,
     resource,
+    setResource,
     makeRequest,
   };
 };

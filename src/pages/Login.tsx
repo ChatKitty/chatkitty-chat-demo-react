@@ -1,8 +1,8 @@
 import { useGuestSession } from 'hooks';
 
-type LoginProps = {
+interface LoginProps {
   entrypoint: React.FC;
-};
+}
 
 const Login: React.FC<LoginProps> = ({ entrypoint: Component }: LoginProps) => {
   const { isLoading } = useGuestSession();

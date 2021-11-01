@@ -1,16 +1,17 @@
 import { Channel } from 'chatkitty';
-import ChannelHeader from 'components/ChannelHeader';
 import ChannelList from 'components/ChannelList';
 import CurrentUserDisplay from 'components/CurrentUserDisplay';
 import JoinChannelModal from 'components/JoinChannelModal';
-import MessageList from 'components/MessageList';
 import {
   useCurrentUser,
   useJoinChannel,
   useJoinedChannels,
   useLeaveChannel,
   useMessages,
+  useSendMessageDraft,
+  useUpdateMessageDraft,
 } from 'hooks';
+import ChannelDetail from 'pages/ChannelDetail';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
@@ -23,6 +24,17 @@ const SimpleChat: React.FC = () => {
     makeRequest: fetchChannels,
   } = useJoinedChannels();
   const { resource: currentUser } = useCurrentUser();
+  const { makeRequest: leaveChannel } = useLeaveChannel();
+  const { makeRequest: joinChannel } = useJoinChannel();
+  const { makeRequest: updateMessageDraft } = useUpdateMessageDraft();
+  const { makeRequest: sendMessageDraft } = useSendMessageDraft();
+
+  const {
+    isLoading: messagesLoading,
+    resource: messages,
+    setResource: setMessages,
+    makeRequest: fetchChannelMessages,
+  } = useMessages();
 
   const [selectedChannel, setSelectedChannel] = useState<Channel | undefined>();
   const [selectedModal, setSelectedModal] = useState<SelectedModal>();
@@ -30,10 +42,14 @@ const SimpleChat: React.FC = () => {
   useEffect(() => {
     // fetch or change selected channel on channel list change
     if (selectedChannel) {
-      fetchChannelMessages(selectedChannel);
+      const initChannel = async () => {
+        await fetchChannelMessages(selectedChannel);
+      };
+      initChannel();
     } else {
       if (channels.length > 0) {
-        setSelectedChannel(channels[0]);
+        const defaultChannel = channels[0];
+        setSelectedChannel(defaultChannel);
       }
     }
 
@@ -42,15 +58,6 @@ const SimpleChat: React.FC = () => {
       setSelectedChannel(undefined);
     }
   }, [selectedChannel, channels]);
-
-  const {
-    isLoading: messagesLoading,
-    resource: messages,
-    makeRequest: fetchChannelMessages,
-  } = useMessages();
-
-  const { makeRequest: leaveChannel } = useLeaveChannel();
-  const { makeRequest: joinChannel } = useJoinChannel();
 
   return (
     <div className="flex">
@@ -76,16 +83,16 @@ const SimpleChat: React.FC = () => {
         )}
       </div>
 
-      <div className="flex-1 m-4 ml-0 rounded-lg overflow-hidden">
+      <div className="flex flex-col flex-1 rounded-lg overflow-hidden max-h-screen min-h-screen">
         {selectedChannel ? (
-          <>
-            <ChannelHeader channel={selectedChannel} />
-            {messagesLoading ? (
-              'Loading Messages...'
-            ) : (
-              <MessageList messages={messages} />
-            )}
-          </>
+          <ChannelDetail
+            channel={selectedChannel}
+            messagesLoading={messagesLoading}
+            messages={messages}
+            setMessages={setMessages}
+            sendMessage={sendMessageDraft}
+            updateMessage={updateMessageDraft}
+          />
         ) : (
           'No Channel Selected.'
         )}
@@ -107,7 +114,7 @@ const SimpleChat: React.FC = () => {
             }}
           />
         ) : (
-          ''
+          'Invalid Modal'
         )}
       </Modal>
     </div>

@@ -27,7 +27,6 @@ const useGuestSession = (
 
       if (succeeded<StartSessionResult>(result)) {
         // succeeded
-        console.log('started guest session.');
       }
 
       if (failed<ChatKittyFailedResult>(result)) {
