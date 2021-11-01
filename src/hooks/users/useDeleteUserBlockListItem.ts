@@ -10,21 +10,17 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useDeleteUserBlockListItem = ({
-  item,
-}: {
-  item: UserBlockListItem;
-}): {
+const useDeleteUserBlockListItem = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource?: User;
-  makeRequest: () => void;
+  makeRequest: (item: UserBlockListItem) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<User>();
 
-  const makeRequest = async () => {
+  const makeRequest = async (item: UserBlockListItem) => {
     setIsLoading(true);
 
     const result = await kitty.deleteUserBlockListItem({ item });

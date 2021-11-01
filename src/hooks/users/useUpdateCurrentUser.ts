@@ -9,19 +9,15 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useUpdateCurrentUser = ({
-  update,
-}: {
-  update: (user: CurrentUser) => CurrentUser;
-}): {
+const useUpdateCurrentUser = (): {
   isLoading: boolean;
   error?: ChatKittyError;
-  makeRequest: () => void;
+  makeRequest: (update: (user: CurrentUser) => CurrentUser) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
 
-  const makeRequest = async () => {
+  const makeRequest = async (update: (user: CurrentUser) => CurrentUser) => {
     setIsLoading(true);
 
     const result = await kitty.updateCurrentUser(update);

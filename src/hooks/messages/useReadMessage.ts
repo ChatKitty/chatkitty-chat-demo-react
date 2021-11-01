@@ -9,19 +9,17 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useReadMessage = (
-  message: Message
-): {
+const useReadMessage = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource?: Message;
-  makeRequest: () => void;
+  makeRequest: (message: Message) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<Message>();
 
-  const makeRequest = async () => {
+  const makeRequest = async (message: Message) => {
     setIsLoading(true);
 
     const result = await kitty.readMessage({ message });

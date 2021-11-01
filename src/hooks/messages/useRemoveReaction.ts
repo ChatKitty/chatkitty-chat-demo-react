@@ -10,20 +10,17 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useRemoveReaction = (
-  message: Message,
-  emoji: string
-): {
+const useRemoveReaction = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource?: Reaction;
-  makeRequest: () => void;
+  makeRequest: (message: Message, emoji: string) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<Reaction>();
 
-  const makeRequest = async () => {
+  const makeRequest = async (message: Message, emoji: string) => {
     setIsLoading(true);
 
     const result = await kitty.removeReaction({ message, emoji });

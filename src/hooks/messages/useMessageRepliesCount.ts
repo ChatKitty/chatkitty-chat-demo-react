@@ -9,19 +9,17 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useMessageRepliesCount = (
-  message: Message
-): {
+const useMessageRepliesCount = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   result: number;
-  makeRequest: () => void;
+  makeRequest: (message: Message) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [result, setResult] = useState(0);
 
-  const makeRequest = async () => {
+  const makeRequest = async (message: Message) => {
     setIsLoading(true);
 
     const result = await kitty.getMessageRepliesCount({ message });

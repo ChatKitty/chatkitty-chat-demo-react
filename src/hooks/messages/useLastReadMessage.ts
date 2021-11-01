@@ -10,20 +10,17 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useLastReadMessage = (
-  channel: Channel,
-  username: string
-): {
+const useLastReadMessage = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource?: Message;
-  makeRequest: () => void;
+  makeRequest: (channel: Channel, username: string) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<Message>();
 
-  const makeRequest = async () => {
+  const makeRequest = async (channel: Channel, username: string) => {
     setIsLoading(true);
 
     const result = await kitty.getLastReadMessage({ channel, username });

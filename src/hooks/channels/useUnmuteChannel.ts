@@ -9,19 +9,17 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useUnmuteChannel = (
-  channel: Channel
-): {
+const useUnmuteChannel = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource?: Channel;
-  makeRequest: () => void;
+  makeRequest: (channel: Channel) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<Channel>();
 
-  const makeRequest = async () => {
+  const makeRequest = async (channel: Channel) => {
     setIsLoading(true);
 
     const result = await kitty.unmuteChannel({ channel });

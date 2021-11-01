@@ -11,23 +11,23 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useUpdateCurrentUserDisplayPicture = ({
-  file,
-  progressListener,
-}: {
-  file: CreateChatKittyFileProperties;
-  progressListener: ChatKittyUploadProgressListener;
-}): {
+const useUpdateCurrentUserDisplayPicture = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource?: CurrentUser;
-  makeRequest: () => void;
+  makeRequest: (
+    file: CreateChatKittyFileProperties,
+    progressListener: ChatKittyUploadProgressListener
+  ) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<CurrentUser>();
 
-  const makeRequest = async () => {
+  const makeRequest = async (
+    file: CreateChatKittyFileProperties,
+    progressListener: ChatKittyUploadProgressListener
+  ) => {
     setIsLoading(true);
 
     const result = await kitty.updateCurrentUserDisplayPicture({

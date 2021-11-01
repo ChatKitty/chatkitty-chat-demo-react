@@ -10,20 +10,17 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useAddChannelModerator = (
-  channel: Channel,
-  user: User
-): {
+const useAddChannelModerator = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource?: Channel;
-  makeRequest: () => void;
+  makeRequest: (channel: Channel, user: User) => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
   const [resource, setResource] = useState<Channel>();
 
-  const makeRequest = async () => {
+  const makeRequest = async (channel: Channel, user: User) => {
     setIsLoading(true);
 
     const result = await kitty.addChannelModerator({ channel, user });
