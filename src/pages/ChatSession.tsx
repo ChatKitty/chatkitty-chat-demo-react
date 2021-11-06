@@ -12,15 +12,17 @@ interface ChannelDetailProps {
   setMessages: Dispatch<SetStateAction<Message[]>>;
   sendMessage: (channel: Channel, draft: string) => void;
   updateMessage: (channel: Channel, draft: string) => void;
+  setSidePanelOpen: () => void;
 }
 
-const ChannelDetail: React.FC<ChannelDetailProps> = ({
+const ChatSession: React.FC<ChannelDetailProps> = ({
   channel,
   messagesLoading,
   messages,
   setMessages,
   sendMessage,
   updateMessage,
+  setSidePanelOpen,
 }) => {
   const { makeRequest: startChatSession } = useChatSession();
 
@@ -34,7 +36,7 @@ const ChannelDetail: React.FC<ChannelDetailProps> = ({
 
   return (
     <>
-      <ChannelHeader channel={channel} />
+      <ChannelHeader channel={channel} onPrevious={setSidePanelOpen} />
       <MessageList loading={messagesLoading} messages={messages} />
       <MessageInput
         channel={channel}
@@ -45,4 +47,4 @@ const ChannelDetail: React.FC<ChannelDetailProps> = ({
   );
 };
 
-export default ChannelDetail;
+export default ChatSession;

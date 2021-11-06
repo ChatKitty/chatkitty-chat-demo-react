@@ -46,7 +46,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
         onKeyPress={(evt) => {
           // TODO handle mobile
           if (evt.code === 'Enter') {
-            if (!evt.shiftKey) {
+            if (
+              !(evt.shiftKey || window.matchMedia('(max-width: 640px)').matches)
+            ) {
               submit(input);
               evt.preventDefault();
             }

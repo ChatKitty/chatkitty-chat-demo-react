@@ -11,7 +11,7 @@ import {
   useSendMessageDraft,
   useUpdateMessageDraft,
 } from 'hooks';
-import ChannelDetail from 'pages/ChannelDetail';
+import ChannelDetail from 'pages/ChatSession';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
@@ -59,10 +59,26 @@ const BasicChat: React.FC = () => {
     }
   }, [selectedChannel, channels]);
 
+  // presentational
+  const [sidePanelOpen, setSidePanelOpen] = useState(false);
+
   return (
     <div className="flex">
-      <div className="w-full sm:w-80 min-h-screen">
-        <CurrentUserDisplay loading={!currentUser} user={currentUser} />
+      <div
+        className={`w-100 sm:w-80 min-h-screen overflow-hidden
+        transition transform-gpu duration-300 ease-in-out bg-white
+        ${sidePanelOpen ? '-translate-x-0' : '-translate-x-full'}
+        z-50
+        `}
+      >
+        <CurrentUserDisplay
+          loading={!currentUser}
+          user={currentUser}
+          onClose={() => {
+            console.log(sidePanelOpen);
+            setSidePanelOpen(false);
+          }}
+        />
         <ChannelList
           loading={loadingChannels}
           channels={channels}
@@ -76,7 +92,9 @@ const BasicChat: React.FC = () => {
         />
       </div>
 
-      <div className="flex flex-col flex-1 rounded-lg overflow-hidden max-h-screen min-h-screen">
+      <div
+        className={`fixed sm:static flex flex-col flex-1 rounded-lg overflow-hidden max-h-screen min-h-screen`}
+      >
         {selectedChannel ? (
           <ChannelDetail
             channel={selectedChannel}
@@ -85,6 +103,7 @@ const BasicChat: React.FC = () => {
             setMessages={setMessages}
             sendMessage={sendMessageDraft}
             updateMessage={updateMessageDraft}
+            setSidePanelOpen={() => setSidePanelOpen(true)}
           />
         ) : (
           'No Channel Selected.'

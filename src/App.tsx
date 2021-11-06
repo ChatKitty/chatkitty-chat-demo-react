@@ -1,5 +1,5 @@
 import BasicChat from 'pages/BasicChat';
-import Session from 'pages/Session';
+import Session from 'pages/GuestSession';
 
 const App: React.FC = () => {
   return <Session entrypoint={BasicChat}></Session>;
