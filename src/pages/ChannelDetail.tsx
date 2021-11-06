@@ -35,18 +35,12 @@ const ChannelDetail: React.FC<ChannelDetailProps> = ({
   return (
     <>
       <ChannelHeader channel={channel} />
-      {messagesLoading ? (
-        'Loading Messages...'
-      ) : (
-        <>
-          <MessageList messages={messages} />
-          <MessageInput
-            channel={channel}
-            sendMessage={sendMessage}
-            updateMessage={updateMessage}
-          />
-        </>
-      )}
+      <MessageList loading={messagesLoading} messages={messages} />
+      <MessageInput
+        channel={channel}
+        sendMessage={sendMessage}
+        updateMessage={updateMessage}
+      />
     </>
   );
 };

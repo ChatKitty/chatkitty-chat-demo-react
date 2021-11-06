@@ -1,4 +1,4 @@
-import { SelectedModal } from 'pages/SimpleChat';
+import { SelectedModal } from 'pages/BasicChat';
 
 interface ChannelListHeaderProps {
   setSelectedModal: (modal?: SelectedModal) => void;

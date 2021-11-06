@@ -1,8 +1,8 @@
-import Login from 'pages/Login';
-import SimpleChat from 'pages/SimpleChat';
+import BasicChat from 'pages/BasicChat';
+import Session from 'pages/Session';
 
 const App: React.FC = () => {
-  return <Login entrypoint={SimpleChat}></Login>;
+  return <Session entrypoint={BasicChat}></Session>;
 };
 
 export default App;

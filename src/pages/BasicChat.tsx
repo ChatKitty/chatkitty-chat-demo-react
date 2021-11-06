@@ -17,7 +17,7 @@ import Modal from 'react-modal';
 
 export type SelectedModal = 'join' | undefined;
 
-const SimpleChat: React.FC = () => {
+const BasicChat: React.FC = () => {
   const {
     isLoading: loadingChannels,
     resource: channels,
@@ -62,25 +62,18 @@ const SimpleChat: React.FC = () => {
   return (
     <div className="flex">
       <div className="w-full sm:w-80 min-h-screen">
-        {currentUser ? (
-          <CurrentUserDisplay user={currentUser} />
-        ) : (
-          'Loading User...'
-        )}
-        {loadingChannels ? (
-          'Loading Channels...'
-        ) : (
-          <ChannelList
-            channels={channels}
-            selectedChannel={selectedChannel}
-            handleChannelClick={setSelectedChannel}
-            handleExtraActionClick={async (channel) => {
-              await leaveChannel(channel);
-              await fetchChannels();
-            }}
-            setSelectedModal={setSelectedModal}
-          />
-        )}
+        <CurrentUserDisplay loading={!currentUser} user={currentUser} />
+        <ChannelList
+          loading={loadingChannels}
+          channels={channels}
+          selectedChannel={selectedChannel}
+          handleChannelClick={setSelectedChannel}
+          handleExtraActionClick={async (channel) => {
+            await leaveChannel(channel);
+            await fetchChannels();
+          }}
+          setSelectedModal={setSelectedModal}
+        />
       </div>
 
       <div className="flex flex-col flex-1 rounded-lg overflow-hidden max-h-screen min-h-screen">
@@ -121,4 +114,4 @@ const SimpleChat: React.FC = () => {
   );
 };
 
-export default SimpleChat;
+export default BasicChat;

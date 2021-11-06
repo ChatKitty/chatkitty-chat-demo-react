@@ -10,10 +10,7 @@ import {
 import kitty from 'clients/kitty';
 import { useState } from 'react';
 
-const useUserIsChannelMember = (
-  channel: Channel,
-  user: User
-): {
+const useUserIsChannelMember = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   result: boolean;
