@@ -63,9 +63,9 @@ const BasicChat: React.FC = () => {
   const [sidePanelOpen, setSidePanelOpen] = useState(false);
 
   return (
-    <div className="flex w-100">
+    <div className="flex w-full h-full">
       <div
-        className={`w-100 sm:w-80 min-h-screen overflow-hidden
+        className={`w-full sm:w-80 min-h-screen overflow-hidden
         transition transform-gpu duration-300 ease-in-out bg-white sm:-translate-x-0
         ${sidePanelOpen ? '-translate-x-0' : '-translate-x-full'} z-10
         `}
@@ -74,7 +74,6 @@ const BasicChat: React.FC = () => {
           loading={!currentUser}
           user={currentUser}
           onClose={() => {
-            console.log(sidePanelOpen);
             setSidePanelOpen(false);
           }}
         />
