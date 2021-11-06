@@ -10,3 +10,7 @@
 .has-tooltip:hover .tooltip {
   @apply visible z-50;
 }
+
+.webkit-fill {
+  min-height: -webkit-fill-available;
+}

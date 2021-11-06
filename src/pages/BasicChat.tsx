@@ -11,7 +11,7 @@ import {
   useSendMessageDraft,
   useUpdateMessageDraft,
 } from 'hooks';
-import ChannelDetail from 'pages/ChatSession';
+import ChatSession from 'pages/ChatSession';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
@@ -65,7 +65,7 @@ const BasicChat: React.FC = () => {
   return (
     <div className="flex w-full h-full">
       <div
-        className={`w-full sm:w-80 min-h-screen overflow-hidden
+        className={`webkit-fill w-full sm:w-80 overflow-hidden
         transition transform-gpu duration-300 ease-in-out bg-white sm:-translate-x-0
         ${sidePanelOpen ? '-translate-x-0' : '-translate-x-full'} z-10
         `}
@@ -94,10 +94,10 @@ const BasicChat: React.FC = () => {
       </div>
 
       <div
-        className={`w-full fixed sm:static flex flex-col flex-1 rounded-lg overflow-hidden max-h-screen min-h-screen`}
+        className={`webkit-fill w-full h-full fixed sm:static flex flex-col flex-1 rounded-lg overflow-hidden`}
       >
         {selectedChannel ? (
-          <ChannelDetail
+          <ChatSession
             channel={selectedChannel}
             messagesLoading={messagesLoading}
             messages={messages}
