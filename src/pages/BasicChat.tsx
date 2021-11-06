@@ -65,9 +65,10 @@ const BasicChat: React.FC = () => {
   return (
     <div className="flex w-full h-full">
       <div
-        className={`webkit-fill w-full sm:w-80 overflow-hidden
+        className={`webkit-fill w-full h-full sm:w-80 overflow-hidden
         transition transform-gpu duration-300 ease-in-out bg-white sm:-translate-x-0
         ${sidePanelOpen ? '-translate-x-0' : '-translate-x-full'} z-10
+        flex flex-col
         `}
       >
         <CurrentUserDisplay
