@@ -10,7 +10,7 @@ const MessageList: React.FC<MessageListProps> = ({ loading, messages }) => {
   return (
     <ul
       id="messageList"
-      className="flex-1 flex flex-col-reverse bg-gray-100 shadow-inner overflow-y-scroll"
+      className="flex-1 flex flex-col-reverse bg-gray-100 shadow-inner overflow-y-scroll webkit-scroll"
     >
       {loading ? (
         <>LOADING...</>

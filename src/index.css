@@ -14,3 +14,7 @@
 .webkit-fill {
   min-height: -webkit-fill-available;
 }
+
+.webkit-scroll {
+  -webkit-overflow-scrolling: touch;
+}

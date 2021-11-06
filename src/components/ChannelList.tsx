@@ -25,7 +25,7 @@ const ChannelList: React.FC<ChannelListProps> = ({
   ) : (
     <ul className="flex-1 flex flex-col overflow-hidden">
       <ChannelListHeader setSelectedModal={setSelectedModal} />
-      <div className="flex-1 overflow-y-scroll">
+      <div className="flex-1 overflow-y-scroll webkit-scroll">
         {channels.length > 0 &&
           channels.map((channel) => (
             <ChannelListItem
