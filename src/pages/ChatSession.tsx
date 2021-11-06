@@ -4,6 +4,7 @@ import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
 import { useChatSession } from 'hooks';
 import { Dispatch, SetStateAction, useEffect } from 'react';
+import { animateScroll as scroll } from 'react-scroll';
 
 interface ChannelDetailProps {
   channel: Channel;
@@ -40,7 +41,12 @@ const ChatSession: React.FC<ChannelDetailProps> = ({
       <MessageList loading={messagesLoading} messages={messages} />
       <MessageInput
         channel={channel}
-        sendMessage={sendMessage}
+        sendMessage={(...args) => {
+          sendMessage(...args);
+          scroll.scrollToBottom({
+            containerId: 'messageList',
+          });
+        }}
         updateMessage={updateMessage}
       />
     </>

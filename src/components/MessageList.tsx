@@ -8,7 +8,10 @@ interface MessageListProps {
 
 const MessageList: React.FC<MessageListProps> = ({ loading, messages }) => {
   return (
-    <ul className="flex-1 flex flex-col-reverse bg-gray-100 shadow-inner overflow-y-scroll">
+    <ul
+      id="messageList"
+      className="flex-1 flex flex-col-reverse bg-gray-100 shadow-inner overflow-y-scroll"
+    >
       {loading ? (
         <>LOADING...</>
       ) : (
