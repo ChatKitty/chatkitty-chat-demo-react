@@ -63,12 +63,11 @@ const BasicChat: React.FC = () => {
   const [sidePanelOpen, setSidePanelOpen] = useState(false);
 
   return (
-    <div className="flex">
+    <div className="flex w-100">
       <div
         className={`w-100 sm:w-80 min-h-screen overflow-hidden
-        transition transform-gpu duration-300 ease-in-out bg-white
-        ${sidePanelOpen ? '-translate-x-0' : '-translate-x-full'}
-        z-50
+        transition transform-gpu duration-300 ease-in-out bg-white sm:-translate-x-0
+        ${sidePanelOpen ? '-translate-x-0' : '-translate-x-full'} z-10
         `}
       >
         <CurrentUserDisplay
@@ -83,7 +82,10 @@ const BasicChat: React.FC = () => {
           loading={loadingChannels}
           channels={channels}
           selectedChannel={selectedChannel}
-          handleChannelClick={setSelectedChannel}
+          handleChannelClick={(channel: Channel) => {
+            setSelectedChannel(channel);
+            setSidePanelOpen(false);
+          }}
           handleExtraActionClick={async (channel) => {
             await leaveChannel(channel);
             await fetchChannels();
@@ -93,7 +95,7 @@ const BasicChat: React.FC = () => {
       </div>
 
       <div
-        className={`fixed sm:static flex flex-col flex-1 rounded-lg overflow-hidden max-h-screen min-h-screen`}
+        className={`w-full fixed sm:static flex flex-col flex-1 rounded-lg overflow-hidden max-h-screen min-h-screen`}
       >
         {selectedChannel ? (
           <ChannelDetail
@@ -113,6 +115,7 @@ const BasicChat: React.FC = () => {
       {/* Modal */}
       <Modal
         className="flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-30"
+        style={{ overlay: { zIndex: 100 } }}
         isOpen={!!selectedModal}
         onRequestClose={() => setSelectedModal(undefined)}
         appElement={document.getElementById('app') || undefined}
