@@ -15,6 +15,14 @@ const MessageInput: React.FC<MessageInputProps> = ({
 }) => {
   const [input, setInput] = useState('');
 
+  const submit = (input: string) => {
+    const trimmed = input.trim();
+    if (trimmed) {
+      sendMessage(channel, trimmed);
+      setInput('');
+    }
+  };
+
   return (
     <div className="flex flex-row items-center bottom-0 p-4 py-2 bg-gray-100 border-t-4 border-white">
       <button className="pr-4">
@@ -38,9 +46,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
         onKeyPress={(evt) => {
           // TODO handle mobile
           if (evt.code === 'Enter') {
-            if (input) {
-              sendMessage(channel, input);
-              setInput('');
+            if (!evt.shiftKey) {
+              submit(input);
+              evt.preventDefault();
             }
           }
         }}
@@ -61,10 +69,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
       <button
         className="pl-4"
         onClick={() => {
-          if (input) {
-            sendMessage(channel, input);
-            setInput('');
-          }
+          submit(input);
         }}
       >
         <svg

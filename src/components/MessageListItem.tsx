@@ -20,7 +20,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({ message }) => {
                 {moment(message.createdTime).fromNow()}
               </span>
             </h1>
-            <div className="ml-3 text-sm py-2 px-4 shadow rounded-xl rounded-tl-none bg-white">
+            <div className="ml-3 text-sm py-2 px-4 shadow rounded-xl rounded-tl-none bg-white whitespace-pre-wrap">
               <div>{message.body}</div>
             </div>
           </div>
