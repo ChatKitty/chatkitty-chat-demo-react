@@ -1,7 +1,7 @@
-import { Channel } from 'chatkitty';
+import { PublicChannel } from 'chatkitty';
 
 interface ChannelHeaderProps {
-  channel: Channel;
+  channel: PublicChannel;
   onPrevious: () => void;
 }
 

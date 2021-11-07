@@ -1,12 +1,14 @@
-import { Channel, Message } from 'chatkitty';
-import ChannelHeader from 'components/ChannelHeader';
+import { Channel, CurrentUser, isDirectChannel, Message } from 'chatkitty';
+import DirectChannelHeader from 'components/DirectChannelHeader';
 import MessageInput from 'components/MessageInput';
 import MessageList from 'components/MessageList';
+import PublicChannelHeader from 'components/PublicChannelHeader';
 import { useChatSession } from 'hooks';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { animateScroll as scroll } from 'react-scroll';
 
 interface ChannelDetailProps {
+  currentUser: CurrentUser;
   channel: Channel;
   messagesLoading: boolean;
   messages: Message[];
@@ -17,6 +19,7 @@ interface ChannelDetailProps {
 }
 
 const ChatSession: React.FC<ChannelDetailProps> = ({
+  currentUser,
   channel,
   messagesLoading,
   messages,
@@ -35,9 +38,24 @@ const ChatSession: React.FC<ChannelDetailProps> = ({
     return session.end;
   }, [channel]);
 
+  const renderHeader = (channel: Channel) => {
+    if (isDirectChannel(channel)) {
+      return (
+        <DirectChannelHeader
+          currentUser={currentUser}
+          channel={channel}
+          onPrevious={setSidePanelOpen}
+        />
+      );
+    }
+    return (
+      <PublicChannelHeader channel={channel} onPrevious={setSidePanelOpen} />
+    );
+  };
+
   return (
     <>
-      <ChannelHeader channel={channel} onPrevious={setSidePanelOpen} />
+      {renderHeader(channel)}
       <MessageList loading={messagesLoading} messages={messages} />
       <MessageInput
         channel={channel}

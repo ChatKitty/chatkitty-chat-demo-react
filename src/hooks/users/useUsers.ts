@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 const useUsers = (): {
   isLoading: boolean;
   error?: ChatKittyError;
-  resource?: User[];
+  resource: User[];
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();

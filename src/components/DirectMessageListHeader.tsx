@@ -1,23 +1,23 @@
 import { SelectedModal } from 'pages/BasicChat';
 
-interface ChannelListHeaderProps {
+interface DirectMessageListHeaderProps {
   setSelectedModal: (modal?: SelectedModal) => void;
 }
 
-const ChannelListHeader: React.FC<ChannelListHeaderProps> = ({
+const DirectMessageListHeader: React.FC<DirectMessageListHeaderProps> = ({
   setSelectedModal,
 }) => {
   return (
     <div className="flex flex-row items-center">
-      <h1 className="p-3 flex-1">Channels</h1>
+      <h1 className="p-3 flex-1">Direct Messages</h1>
       <button
         className="has-tooltip"
         onClick={() => {
-          setSelectedModal('join');
+          setSelectedModal('directMessage');
         }}
       >
-        <span className="tooltip rounded -ml-10 mt-1 text-xs font-light">
-          Join
+        <span className="tooltip rounded -ml-11 mt-1 text-xs font-light">
+          Start
         </span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -38,4 +38,4 @@ const ChannelListHeader: React.FC<ChannelListHeaderProps> = ({
   );
 };
 
-export default ChannelListHeader;
+export default DirectMessageListHeader;

@@ -22,7 +22,7 @@ const useCreateChannel = (): {
     type: string;
     members?: ChatKittyUserReference[];
     name?: string;
-  }) => void;
+  }) => Promise<Channel | undefined>;
 } => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<ChatKittyError>();
@@ -41,15 +41,17 @@ const useCreateChannel = (): {
 
     const result = await kitty.createChannel({ members, name, type });
 
+    setIsLoading(false);
+
     if (succeeded<CreatedChannelResult>(result)) {
       setResource(result.channel);
+      return result.channel;
     }
 
     if (failed<ChatKittyFailedResult>(result)) {
+      console.log(result);
       setError(result.error);
     }
-
-    setIsLoading(false);
   };
 
   return {

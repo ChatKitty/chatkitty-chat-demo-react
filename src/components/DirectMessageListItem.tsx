@@ -1,13 +1,17 @@
-import { Channel } from 'chatkitty';
+import { getParticipantList } from 'util/UserUtil';
 
-interface ChannelListItemProps {
-  channel: Channel;
+import { CurrentUser, DirectChannel } from 'chatkitty';
+
+interface DirectMessageListItemProps {
+  currentUser: CurrentUser;
+  channel: DirectChannel;
   selected?: boolean;
-  handleClick: (channel: Channel) => void;
-  handleExtraActionClick?: (channel: Channel) => void;
+  handleClick: (channel: DirectChannel) => void;
+  handleExtraActionClick?: (channel: DirectChannel) => void;
 }
 
-const ChannelListItem: React.FC<ChannelListItemProps> = ({
+const DirectMessageListItem: React.FC<DirectMessageListItemProps> = ({
+  currentUser,
   channel,
   selected,
   handleClick,
@@ -25,38 +29,33 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({
           className={`flex flex-col rounded-md w-6 h-6 ${
             selected
               ? 'bg-gray-800 text-white'
-              : 'bg-purple-400 group-hover:bg-gray-700 text-white'
+              : 'bg-blue-500 group-hover:bg-gray-700 text-white'
           } justify-center items-center mr-4 group-hover:text-white`}
         >
-          #
+          @
         </div>
         <div className="flex-1 pl-1 mr-16 text-left">
-          <div className="">{channel.name}</div>
-          <p className="text-xs font-light">
-            {(channel.properties as { description: string }).description}
-          </p>
+          <div className="">{getParticipantList(channel, currentUser)}</div>
         </div>
         {handleExtraActionClick && (
           <button
-            className="has-tooltip"
             onClick={(evt) => {
               handleExtraActionClick(channel);
               evt.stopPropagation();
             }}
           >
-            <span className="tooltip rounded -ml-12 text-xs font-light">
-              Leave
-            </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 opacity-20 hover:opacity-100"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+              className="h-3 w-3 opacity-20 hover:opacity-100"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
-                fillRule="evenodd"
-                d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-                clipRule="evenodd"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
               />
             </svg>
           </button>
@@ -66,4 +65,4 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({
   );
 };
 
-export default ChannelListItem;
+export default DirectMessageListItem;
