@@ -92,6 +92,7 @@ const BasicChat: React.FC = () => {
           await joinChannel(channel);
           await fetchChannels();
           setSelectedChannel(channel);
+          setSidePanelOpen(false);
         }}
       />
     );
@@ -107,9 +108,13 @@ const BasicChat: React.FC = () => {
           if (channel) {
             await fetchChannels();
             setSelectedChannel(channel);
+            setSidePanelOpen(false);
           }
         }}
-        setSelectedChannel={setSelectedChannel}
+        setSelectedChannel={(channel) => {
+          setSelectedChannel(channel);
+          setSidePanelOpen(false);
+        }}
       />
     );
   }
