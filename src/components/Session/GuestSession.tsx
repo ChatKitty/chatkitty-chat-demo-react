@@ -1,15 +1,12 @@
 import { useGuestSession } from 'hooks';
 
 interface LoginProps {
-  entrypoint: React.FC;
+  children: React.ReactNode;
 }
 
-const GuestSession: React.FC<LoginProps> = ({
-  entrypoint: Component,
-}: LoginProps) => {
+const GuestSession: React.FC<LoginProps> = ({ children }: LoginProps) => {
   const { isLoading } = useGuestSession();
-
-  return isLoading ? <p>Starting Chatkitty Session...</p> : <Component />;
+  return <>{isLoading ? <p>Starting Chatkitty Session...</p> : children}</>;
 };
 
 export default GuestSession;

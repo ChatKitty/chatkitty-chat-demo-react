@@ -65,7 +65,7 @@ const BasicChatModal: React.FC<BasicChatModalProps> = ({
 
   return (
     <ReactModal
-      className={`flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-30`}
+      className="flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-30"
       style={{ overlay: { zIndex: 100 } }}
       isOpen={!!modal}
       onRequestClose={() => setModal(undefined)}

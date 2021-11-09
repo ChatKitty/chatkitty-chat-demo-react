@@ -1,14 +1,20 @@
 import { pickDirectChannels, pickPublicChannels } from 'util/ChannelUtil';
 
-import { Channel } from 'chatkitty';
+import { Channel, isDirectChannel } from 'chatkitty';
+import DirectChannelHeader from 'components/Channel/DirectChannelHeader';
 import DirectChannelList from 'components/Channel/DirectChannelList';
+import EmptyChannelHeader from 'components/Channel/EmptyChannelHeader';
+import PublicChannelHeader from 'components/Channel/PublicChannelHeader';
 import PublicChannelList from 'components/Channel/PublicChannelList';
+import MessageInput from 'components/Message/MessageInput';
+import MessageList from 'components/Message/MessageList';
 import ChatSession from 'components/Session/ChatSession';
 import CurrentUserDisplay from 'components/User/CurrentUserDisplay';
 import BasicChatModal from 'pages/BasicChat/BasicChatModal';
 import useEffect from 'pages/BasicChat/useEffect';
 import useResources from 'pages/BasicChat/useResources';
 import useState from 'pages/BasicChat/useState';
+import { animateScroll as scroll } from 'react-scroll';
 
 const BasicChat: React.FC = () => {
   const resources = useResources();
@@ -88,17 +94,37 @@ const BasicChat: React.FC = () => {
       >
         {selectedChannel ? (
           <ChatSession
-            currentUser={currentUser}
             channel={selectedChannel}
-            messagesLoading={fetchingMessages}
-            messages={messages}
-            setMessages={setMessages}
-            sendMessage={sendMessage}
-            updateMessage={updateMessage}
-            setSidePanelOpen={() => setSidePanelOpen(true)}
-          />
+            onMessageReceived={(message) => {
+              setMessages((prev) => [message, ...prev]);
+            }}
+          >
+            {isDirectChannel(selectedChannel) ? (
+              <DirectChannelHeader
+                currentUser={currentUser}
+                channel={selectedChannel}
+                onPrevious={() => setSidePanelOpen(true)}
+              />
+            ) : (
+              <PublicChannelHeader
+                channel={selectedChannel}
+                onPrevious={() => setSidePanelOpen(true)}
+              />
+            )}
+            <MessageList loading={fetchingMessages} messages={messages} />
+            <MessageInput
+              channel={selectedChannel}
+              sendMessage={(...args) => {
+                sendMessage(...args);
+                scroll.scrollToBottom({
+                  containerId: 'messageList',
+                });
+              }}
+              updateMessage={updateMessage}
+            />
+          </ChatSession>
         ) : (
-          'No Channel Selected.'
+          <EmptyChannelHeader onPrevious={() => setSidePanelOpen(true)} />
         )}
       </div>
 
