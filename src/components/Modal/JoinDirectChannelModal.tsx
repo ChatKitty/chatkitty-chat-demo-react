@@ -8,7 +8,7 @@ import UserListItem from 'components/User/UserListItem';
 import { useUsers } from 'hooks';
 
 interface JoinDirectChannelModalProps {
-  currentUser: CurrentUser | undefined;
+  currentUser: CurrentUser;
   channels: DirectChannel[];
   closeModal: () => void;
   createChannel: (params: CreateChannelRequest) => void;
@@ -46,7 +46,7 @@ const JoinDirectChannelModal: React.FC<JoinDirectChannelModalProps> = ({
             />
           </svg>
         </button>
-        {usersLoading || !currentUser ? (
+        {usersLoading ? (
           'Loading...'
         ) : (
           <>
