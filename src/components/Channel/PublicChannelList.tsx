@@ -1,18 +1,18 @@
-import { Channel } from 'chatkitty';
-import ChannelListHeader from 'components/ChannelListHeader';
-import ChannelListItem from 'components/ChannelListItem';
+import { Channel, PublicChannel } from 'chatkitty';
+import PublicChannelListHeading from 'components/Channel/PublicChannelListHeading';
+import PublicChannelListItem from 'components/Channel/PublicChannelListItem';
 import { SelectedModal } from 'pages/BasicChat';
 
 interface ChannelListProps {
   loading: boolean;
-  channels: Channel[];
+  channels: PublicChannel[];
   selectedChannel?: Channel;
-  handleChannelClick: (channel: Channel) => void;
-  handleExtraActionClick: (channel: Channel) => void;
+  handleChannelClick: (channel: PublicChannel) => void;
+  handleExtraActionClick: (channel: PublicChannel) => void;
   setSelectedModal: (modal?: SelectedModal) => void;
 }
 
-const ChannelList: React.FC<ChannelListProps> = ({
+const PublicChannelList: React.FC<ChannelListProps> = ({
   loading,
   channels,
   selectedChannel,
@@ -24,10 +24,10 @@ const ChannelList: React.FC<ChannelListProps> = ({
     <>LOADING...</>
   ) : (
     <>
-      <ChannelListHeader setSelectedModal={setSelectedModal} />
+      <PublicChannelListHeading setSelectedModal={setSelectedModal} />
       {channels.length > 0 &&
         channels.map((channel) => (
-          <ChannelListItem
+          <PublicChannelListItem
             key={channel.id}
             channel={channel}
             selected={channel.id === selectedChannel?.id}
@@ -39,4 +39,4 @@ const ChannelList: React.FC<ChannelListProps> = ({
   );
 };
 
-export default ChannelList;
+export default PublicChannelList;

@@ -1,9 +1,9 @@
 import { Channel, CurrentUser, DirectChannel } from 'chatkitty';
-import DirectMessageListHeader from 'components/DirectMessageListHeader';
-import DirectMessageListItem from 'components/DirectMessageListItem';
+import DirectChannelListHeading from 'components/Channel/DirectChannelListHeading';
+import DirectChannelListItem from 'components/Channel/DirectChannelListItem';
 import { SelectedModal } from 'pages/BasicChat';
 
-interface DirectMessageListProps {
+interface DirectChannelListProps {
   currentUser: CurrentUser;
   loading: boolean;
   channels: DirectChannel[];
@@ -13,7 +13,7 @@ interface DirectMessageListProps {
   setSelectedModal: (modal?: SelectedModal) => void;
 }
 
-const DirectMessageList: React.FC<DirectMessageListProps> = ({
+const DirectChannelList: React.FC<DirectChannelListProps> = ({
   currentUser,
   loading,
   channels,
@@ -26,10 +26,10 @@ const DirectMessageList: React.FC<DirectMessageListProps> = ({
     <>LOADING...</>
   ) : (
     <>
-      <DirectMessageListHeader setSelectedModal={setSelectedModal} />
+      <DirectChannelListHeading setSelectedModal={setSelectedModal} />
       {channels.length > 0 &&
         channels.map((channel) => (
-          <DirectMessageListItem
+          <DirectChannelListItem
             key={channel.id}
             currentUser={currentUser}
             channel={channel}
@@ -42,4 +42,4 @@ const DirectMessageList: React.FC<DirectMessageListProps> = ({
   );
 };
 
-export default DirectMessageList;
+export default DirectChannelList;

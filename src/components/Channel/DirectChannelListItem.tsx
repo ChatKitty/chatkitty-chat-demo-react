@@ -2,7 +2,7 @@ import { getParticipantList } from 'util/UserUtil';
 
 import { CurrentUser, DirectChannel } from 'chatkitty';
 
-interface DirectMessageListItemProps {
+interface DirectChannelListItemProps {
   currentUser: CurrentUser;
   channel: DirectChannel;
   selected?: boolean;
@@ -10,7 +10,7 @@ interface DirectMessageListItemProps {
   handleExtraActionClick?: (channel: DirectChannel) => void;
 }
 
-const DirectMessageListItem: React.FC<DirectMessageListItemProps> = ({
+const DirectChannelListItem: React.FC<DirectChannelListItemProps> = ({
   currentUser,
   channel,
   selected,
@@ -65,4 +65,4 @@ const DirectMessageListItem: React.FC<DirectMessageListItemProps> = ({
   );
 };
 
-export default DirectMessageListItem;
+export default DirectChannelListItem;

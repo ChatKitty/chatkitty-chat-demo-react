@@ -2,13 +2,13 @@ import { getParticipantList } from 'util/UserUtil';
 
 import { CurrentUser, DirectChannel } from 'chatkitty';
 
-interface ChannelHeaderProps {
+interface DirectChannelHeaderProps {
   currentUser: CurrentUser;
   channel: DirectChannel;
   onPrevious: () => void;
 }
 
-const ChannelHeader: React.FC<ChannelHeaderProps> = ({
+const DirectChannelHeader: React.FC<DirectChannelHeaderProps> = ({
   currentUser,
   channel,
   onPrevious,
@@ -43,4 +43,4 @@ const ChannelHeader: React.FC<ChannelHeaderProps> = ({
   );
 };
 
-export default ChannelHeader;
+export default DirectChannelHeader;

@@ -1,13 +1,13 @@
-import { Channel } from 'chatkitty';
+import { PublicChannel } from 'chatkitty';
 
-interface ChannelListItemProps {
-  channel: Channel;
+interface PublicChannelListItemProps {
+  channel: PublicChannel;
   selected?: boolean;
-  handleClick: (channel: Channel) => void;
-  handleExtraActionClick?: (channel: Channel) => void;
+  handleClick: (channel: PublicChannel) => void;
+  handleExtraActionClick?: (channel: PublicChannel) => void;
 }
 
-const ChannelListItem: React.FC<ChannelListItemProps> = ({
+const PublicChannelListItem: React.FC<PublicChannelListItemProps> = ({
   channel,
   selected,
   handleClick,
@@ -66,4 +66,4 @@ const ChannelListItem: React.FC<ChannelListItemProps> = ({
   );
 };
 
-export default ChannelListItem;
+export default PublicChannelListItem;

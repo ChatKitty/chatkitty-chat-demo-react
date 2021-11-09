@@ -1,11 +1,11 @@
 import { PublicChannel } from 'chatkitty';
 
-interface ChannelHeaderProps {
+interface PublicChannelHeaderProps {
   channel: PublicChannel;
   onPrevious: () => void;
 }
 
-const ChannelHeader: React.FC<ChannelHeaderProps> = ({
+const PublicChannelHeader: React.FC<PublicChannelHeaderProps> = ({
   channel,
   onPrevious,
 }) => {
@@ -37,4 +37,4 @@ const ChannelHeader: React.FC<ChannelHeaderProps> = ({
   );
 };
 
-export default ChannelHeader;
+export default PublicChannelHeader;

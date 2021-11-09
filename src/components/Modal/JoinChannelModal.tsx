@@ -1,5 +1,5 @@
 import { Channel } from 'chatkitty';
-import ChannelListItem from 'components/ChannelListItem';
+import PublicChannelListItem from 'components/Channel/PublicChannelListItem';
 import { useJoinableChannels } from 'hooks';
 
 interface JoinChannelModalProps {
@@ -40,7 +40,7 @@ const JoinChannelModal: React.FC<JoinChannelModalProps> = ({
           'Loading...'
         ) : channels.length > 0 ? (
           channels.map((channel) => (
-            <ChannelListItem
+            <PublicChannelListItem
               key={channel.id}
               channel={channel}
               handleClick={async (channel) => {

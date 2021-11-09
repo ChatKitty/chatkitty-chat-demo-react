@@ -4,10 +4,10 @@ import {
   CurrentUser,
   DirectChannel,
 } from 'chatkitty';
-import UserListItem from 'components/UserListItem';
+import UserListItem from 'components/User/UserListItem';
 import { useUsers } from 'hooks';
 
-interface JoinChannelModalProps {
+interface JoinDirectChannelModalProps {
   currentUser: CurrentUser | undefined;
   channels: DirectChannel[];
   closeModal: () => void;
@@ -15,7 +15,7 @@ interface JoinChannelModalProps {
   setSelectedChannel: (channel: Channel) => void;
 }
 
-const JoinChannelModal: React.FC<JoinChannelModalProps> = ({
+const JoinDirectChannelModal: React.FC<JoinDirectChannelModalProps> = ({
   currentUser,
   channels,
   closeModal,
@@ -93,4 +93,4 @@ const JoinChannelModal: React.FC<JoinChannelModalProps> = ({
   );
 };
 
-export default JoinChannelModal;
+export default JoinDirectChannelModal;

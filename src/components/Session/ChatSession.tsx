@@ -1,8 +1,8 @@
 import { Channel, CurrentUser, isDirectChannel, Message } from 'chatkitty';
-import DirectChannelHeader from 'components/DirectChannelHeader';
-import MessageInput from 'components/MessageInput';
-import MessageList from 'components/MessageList';
-import PublicChannelHeader from 'components/PublicChannelHeader';
+import DirectChannelHeader from 'components/Channel/DirectChannelHeader';
+import PublicChannelHeader from 'components/Channel/PublicChannelHeader';
+import MessageInput from 'components/Message/MessageInput';
+import MessageList from 'components/Message/MessageList';
 import { useChatSession } from 'hooks';
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { animateScroll as scroll } from 'react-scroll';

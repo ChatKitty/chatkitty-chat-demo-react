@@ -6,11 +6,12 @@ import {
   isPublicChannel,
   PublicChannel,
 } from 'chatkitty';
-import ChannelList from 'components/ChannelList';
-import CurrentUserDisplay from 'components/CurrentUserDisplay';
-import DirectMessageList from 'components/DirectMessageList';
-import DirectMessageModal from 'components/DirectMessageModal';
-import JoinChannelModal from 'components/JoinChannelModal';
+import DirectChannelList from 'components/Channel/DirectChannelList';
+import PublicChannelList from 'components/Channel/PublicChannelList';
+import JoinChannelModal from 'components/Modal/JoinChannelModal';
+import JoinDirectChannelModal from 'components/Modal/JoinDirectChannelModal';
+import ChatSession from 'components/Session/ChatSession';
+import CurrentUserDisplay from 'components/User/CurrentUserDisplay';
 import {
   useCreateChannel,
   useCurrentUser,
@@ -22,7 +23,6 @@ import {
   useSendMessageDraft,
   useUpdateMessageDraft,
 } from 'hooks';
-import ChatSession from 'pages/ChatSession';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 
@@ -98,7 +98,7 @@ const BasicChat: React.FC = () => {
     );
   } else if (selectedModal === 'directMessage') {
     modalContent = (
-      <DirectMessageModal
+      <JoinDirectChannelModal
         currentUser={currentUser}
         channels={directChannels}
         closeModal={() => setSelectedModal(undefined)}
@@ -142,7 +142,7 @@ const BasicChat: React.FC = () => {
           }}
         />
         <ul className="flex-1 flex flex-col overflow-y-scroll webkit-scroll">
-          <ChannelList
+          <PublicChannelList
             loading={loadingChannels}
             channels={publicChannels}
             selectedChannel={selectedChannel}
@@ -156,7 +156,7 @@ const BasicChat: React.FC = () => {
             }}
             setSelectedModal={setSelectedModal}
           />
-          <DirectMessageList
+          <DirectChannelList
             currentUser={currentUser}
             loading={loadingChannels}
             channels={directChannels}

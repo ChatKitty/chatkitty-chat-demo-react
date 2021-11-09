@@ -1,5 +1,5 @@
 import { Message, TextUserMessage } from 'chatkitty';
-import MessageListItem from 'components/MessageListItem';
+import MessageListItem from 'components/Message/MessageListItem';
 
 interface MessageListProps {
   loading: boolean;

@@ -4,7 +4,7 @@ interface LoginProps {
   entrypoint: React.FC;
 }
 
-const Session: React.FC<LoginProps> = ({
+const GuestSession: React.FC<LoginProps> = ({
   entrypoint: Component,
 }: LoginProps) => {
   const { isLoading } = useGuestSession();
@@ -12,4 +12,4 @@ const Session: React.FC<LoginProps> = ({
   return isLoading ? <p>Starting Chatkitty Session...</p> : <Component />;
 };
 
-export default Session;
+export default GuestSession;
