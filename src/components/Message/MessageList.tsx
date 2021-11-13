@@ -10,7 +10,7 @@ interface MessageListProps {
 const MessageList: React.FC<MessageListProps> = ({ loading, messages }) => (
   <ul
     id="messageList"
-    className="flex-1 flex flex-col-reverse bg-gray-100 shadow-inner overflow-y-scroll webkit-scroll"
+    className="flex-1 flex flex-col-reverse bg-gray-100 shadow-inner overflow-y-auto webkit-scroll"
   >
     {loading ? (
       <Spinner />

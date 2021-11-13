@@ -26,7 +26,7 @@ const JoinDirectChannelModal: React.FC<JoinDirectChannelModalProps> = ({
   const { isLoading: usersLoading, resource: users } = useUsers();
 
   return (
-    <div className="bg-white rounded-lg w-11/12 sm:w-8/12 md:w-1/2 max-w-md z-20 max-h-96 overflow-y-scroll webkit-scroll">
+    <div className="bg-white rounded-lg w-11/12 sm:w-8/12 md:w-1/2 max-w-md z-20 max-h-3/4 overflow-y-auto webkit-scroll">
       <div className="flex flex-col items-start p-4">
         <button className="flex flex-row w-full pb-2" onClick={closeModal}>
           <h1 className="flex-1 text-gray-800 font-medium text-xl text-left">

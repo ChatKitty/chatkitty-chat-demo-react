@@ -60,7 +60,7 @@ const BasicChat: React.FC = () => {
           }}
           online={online}
         />
-        <ul className="flex-1 flex flex-col overflow-y-scroll webkit-scroll">
+        <ul className="flex-1 flex flex-col overflow-y-auto webkit-scroll">
           <PublicChannelList
             channels={pickPublicChannels(joinedChannels)}
             selectedChannel={selectedChannel}
