@@ -10,6 +10,7 @@ import MessageInput from 'components/Message/MessageInput';
 import MessageList from 'components/Message/MessageList';
 import ChatSession from 'components/Session/ChatSession';
 import CurrentUserDisplay from 'components/User/CurrentUserDisplay';
+import Spinner from 'components/Utility/Spinner';
 import BasicChatModal from 'pages/BasicChat/BasicChatModal';
 import useEffect from 'pages/BasicChat/useEffect';
 import useResources from 'pages/BasicChat/useResources';
@@ -36,7 +37,7 @@ const BasicChat: React.FC = () => {
   } = resources;
 
   if (fetchingCurrentUser || fetchingJoinedChannels || !currentUser) {
-    return <>LOADING...</>;
+    return <Spinner />;
   }
 
   const {

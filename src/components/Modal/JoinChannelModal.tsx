@@ -1,5 +1,6 @@
 import { Channel } from 'chatkitty';
 import PublicChannelListItem from 'components/Channel/PublicChannelListItem';
+import Spinner from 'components/Utility/Spinner';
 import { useJoinableChannels } from 'hooks';
 
 interface JoinChannelModalProps {
@@ -37,7 +38,7 @@ const JoinChannelModal: React.FC<JoinChannelModalProps> = ({
           </svg>
         </button>
         {channelsLoading ? (
-          'Loading...'
+          <Spinner size={16} />
         ) : channels.length > 0 ? (
           channels.map((channel) => (
             <PublicChannelListItem

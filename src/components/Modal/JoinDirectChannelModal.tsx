@@ -5,6 +5,7 @@ import {
   DirectChannel,
 } from 'chatkitty';
 import UserListItem from 'components/User/UserListItem';
+import Spinner from 'components/Utility/Spinner';
 import { useUsers } from 'hooks';
 
 interface JoinDirectChannelModalProps {
@@ -47,7 +48,7 @@ const JoinDirectChannelModal: React.FC<JoinDirectChannelModalProps> = ({
           </svg>
         </button>
         {usersLoading ? (
-          'Loading...'
+          <Spinner size={16} />
         ) : (
           <>
             {users.length > 0 ? (
