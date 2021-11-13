@@ -39,6 +39,7 @@ export interface BasicChatResources {
     setCurrentUser: React.Dispatch<
       React.SetStateAction<CurrentUser | undefined>
     >;
+    setJoinedChannels: React.Dispatch<React.SetStateAction<Channel[]>>;
   };
   request: {
     leaveChannel: (channel: Channel) => void;
@@ -64,6 +65,7 @@ const useBasicChatResources = (): BasicChatResources => {
   const {
     isLoading: fetchingJoinedChannels,
     resource: joinedChannels,
+    setResource: setJoinedChannels,
     makeRequest: fetchJoinedChannels,
   } = useJoinedChannels();
   const {
@@ -111,6 +113,7 @@ const useBasicChatResources = (): BasicChatResources => {
     set: {
       setMessages,
       setCurrentUser,
+      setJoinedChannels,
     },
     request: {
       leaveChannel,

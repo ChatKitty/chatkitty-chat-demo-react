@@ -11,3 +11,7 @@ export const pickDirectChannels = (channels: Channel[]): DirectChannel[] =>
 
 export const pickPublicChannels = (channels: Channel[]): PublicChannel[] =>
   channels.filter((channel) => isPublicChannel(channel)) as PublicChannel[];
+
+export const sortChannels = (channels: Channel[]): void => {
+  channels.sort();
+};

@@ -34,7 +34,6 @@ const BasicChatModal: React.FC<BasicChatModalProps> = ({
         closeModal={() => setModal(undefined)}
         joinChannel={async (channel) => {
           await joinChannel(channel);
-          await fetchJoinedChannels();
           setSelectedChannel(channel);
           setSidePanelOpen(false);
         }}
@@ -50,7 +49,7 @@ const BasicChatModal: React.FC<BasicChatModalProps> = ({
           const channel = await createChannel(params);
 
           if (channel) {
-            await fetchJoinedChannels();
+            await fetchJoinedChannels(); // TODO
             setSelectedChannel(channel);
             setSidePanelOpen(false);
           }

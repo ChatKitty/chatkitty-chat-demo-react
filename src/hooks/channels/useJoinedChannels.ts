@@ -1,3 +1,5 @@
+import { sortChannels } from 'util/ChannelUtil';
+
 import {
   Channel,
   ChatKittyError,
@@ -13,6 +15,7 @@ const useJoinedChannels = (): {
   isLoading: boolean;
   error?: ChatKittyError;
   resource: Channel[];
+  setResource: React.Dispatch<React.SetStateAction<Channel[]>>;
   makeRequest: () => void;
 } => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +30,9 @@ const useJoinedChannels = (): {
     });
 
     if (succeeded<GetChannelsSucceededResult>(result)) {
-      setResource(result.paginator.items);
+      const channels = result.paginator.items;
+      sortChannels(channels);
+      setResource(channels);
     }
 
     if (failed<ChatKittyFailedResult>(result)) {
@@ -45,6 +50,7 @@ const useJoinedChannels = (): {
     isLoading,
     error,
     resource,
+    setResource,
     makeRequest,
   };
 };

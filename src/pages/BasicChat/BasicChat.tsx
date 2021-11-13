@@ -21,8 +21,6 @@ const BasicChat: React.FC = () => {
   const resources = useResources();
   const state = useState();
 
-  useEffect(resources, state);
-
   const {
     loading: { fetchingCurrentUser, fetchingJoinedChannels, fetchingMessages },
     get: { currentUser, joinedChannels, messages },
@@ -35,6 +33,8 @@ const BasicChat: React.FC = () => {
       updateMessage,
     },
   } = resources;
+
+  useEffect(resources, state);
 
   if (fetchingCurrentUser || fetchingJoinedChannels || !currentUser) {
     return <Spinner />;
@@ -70,7 +70,6 @@ const BasicChat: React.FC = () => {
             }}
             handleExtraActionClick={async (channel) => {
               await leaveChannel(channel);
-              await fetchJoinedChannels();
             }}
             setModal={setModal}
           />
@@ -84,7 +83,7 @@ const BasicChat: React.FC = () => {
             }}
             handleExtraActionClick={async (channel) => {
               await hideChannel(channel);
-              await fetchJoinedChannels();
+              await fetchJoinedChannels(); // TODO
             }}
             setModal={setModal}
           />
