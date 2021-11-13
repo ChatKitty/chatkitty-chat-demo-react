@@ -41,7 +41,7 @@ const BasicChat: React.FC = () => {
   }
 
   const {
-    get: { selectedChannel, sidePanelOpen },
+    get: { selectedChannel, sidePanelOpen, online },
     set: { setSelectedChannel, setSidePanelOpen, setModal },
   } = state;
 
@@ -58,6 +58,7 @@ const BasicChat: React.FC = () => {
           onClose={() => {
             setSidePanelOpen(false);
           }}
+          online={online}
         />
         <ul className="flex-1 flex flex-col overflow-y-scroll webkit-scroll">
           <PublicChannelList

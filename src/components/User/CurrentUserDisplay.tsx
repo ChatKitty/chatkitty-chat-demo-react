@@ -3,11 +3,13 @@ import { CurrentUser } from 'chatkitty';
 interface CurrentUserDisplayProps {
   user: CurrentUser;
   onClose: () => void;
+  online: boolean;
 }
 
 const CurrentUserDisplay: React.FC<CurrentUserDisplayProps> = ({
   user,
   onClose,
+  online,
 }) => {
   return (
     <div className="flex flex-row items-center pl-3">
@@ -21,7 +23,7 @@ const CurrentUserDisplay: React.FC<CurrentUserDisplayProps> = ({
           </h1>
           <span
             className={`${
-              user.presence.online ? 'bg-green-500' : 'bg-gray-300'
+              online ? 'bg-green-500' : 'bg-gray-300'
             } rounded-full w-2 h-2 ml-2`}
           ></span>
         </div>

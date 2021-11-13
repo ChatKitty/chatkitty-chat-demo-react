@@ -1,3 +1,4 @@
+import kitty from 'clients/kitty';
 import { BasicChatResources } from 'pages/BasicChat/useResources';
 import { BasicChatState } from 'pages/BasicChat/useState';
 import { useEffect } from 'react';
@@ -12,10 +13,13 @@ const useChannelSelection = (
      **/
     const {
       get: { selectedChannel },
-      set: { setSelectedChannel },
+      set: { setSelectedChannel, setOnline },
     } = state;
 
-    const { joinedChannels } = resources.get;
+    const {
+      get: { joinedChannels },
+      set: { setCurrentUser },
+    } = resources;
 
     if (selectedChannel) {
       const initChannel = async () => {
@@ -34,6 +38,22 @@ const useChannelSelection = (
     if (joinedChannels.length === 0) {
       setSelectedChannel(undefined);
     }
+
+    // keep currentUser in sync
+    kitty.onCurrentUserChanged((currentUser) => {
+      if (currentUser) {
+        setCurrentUser(currentUser);
+      }
+    });
+
+    // set online status
+    kitty.onCurrentUserOnline(() => {
+      location.reload();
+    });
+
+    kitty.onCurrentUserOffline(() => {
+      setOnline(false);
+    });
   }, [state.get.selectedChannel, resources.get.joinedChannels]);
 };
 

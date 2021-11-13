@@ -1,3 +1,4 @@
+import Spinner from 'components/Utility/Spinner';
 import { useGuestSession } from 'hooks';
 
 interface LoginProps {
@@ -6,7 +7,7 @@ interface LoginProps {
 
 const GuestSession: React.FC<LoginProps> = ({ children }: LoginProps) => {
   const { isLoading } = useGuestSession();
-  return <>{isLoading ? <p>Starting Chatkitty Session...</p> : children}</>;
+  return <>{isLoading ? <Spinner /> : children}</>;
 };
 
 export default GuestSession;
