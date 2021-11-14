@@ -1,4 +1,4 @@
-import { pickDirectChannels } from 'util/ChannelUtil';
+import { pickDirectChannels, sortChannels } from 'util/ChannelUtil';
 
 import { CreateChannelRequest, CurrentUser } from 'chatkitty';
 import JoinChannelModal from 'components/Modal/JoinChannelModal';
@@ -18,7 +18,8 @@ const BasicChatModal: React.FC<BasicChatModalProps> = ({
 }) => {
   const {
     get: { currentUser, joinedChannels },
-    request: { joinChannel, fetchJoinedChannels, createChannel },
+    set: { setJoinedChannels },
+    request: { joinChannel, createChannel },
   } = resources;
 
   const {
@@ -49,7 +50,11 @@ const BasicChatModal: React.FC<BasicChatModalProps> = ({
           const channel = await createChannel(params);
 
           if (channel) {
-            await fetchJoinedChannels(); // TODO
+            setJoinedChannels((prev) => {
+              const next = [...(prev || []), channel];
+              sortChannels(next);
+              return next;
+            });
             setSelectedChannel(channel);
             setSidePanelOpen(false);
           }

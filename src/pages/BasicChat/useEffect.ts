@@ -125,7 +125,6 @@ const useBasicChatEffect = (
 
     unsubs.push(
       kitty.onChannelUnhidden((channel) => {
-        // TODO, doesn't work at the moment, search for fetchJoinedChannels to remove
         setJoinedChannels((prev) => {
           const next = [...(prev || []), channel];
           sortChannels(next);
