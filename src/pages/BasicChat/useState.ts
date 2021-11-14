@@ -1,4 +1,4 @@
-import { Channel } from 'chatkitty';
+import { Channel, User } from 'chatkitty';
 import { useState } from 'react';
 import { Modal } from 'types';
 
@@ -8,6 +8,7 @@ export interface BasicChatState {
     modal: Modal;
     sidePanelOpen: boolean;
     online: boolean;
+    usersTyping: User[];
   };
   set: {
     setSelectedChannel: React.Dispatch<
@@ -16,6 +17,7 @@ export interface BasicChatState {
     setModal: React.Dispatch<React.SetStateAction<Modal>>;
     setSidePanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setOnline: React.Dispatch<React.SetStateAction<boolean>>;
+    setUsersTyping: React.Dispatch<React.SetStateAction<User[]>>;
   };
 }
 
@@ -24,6 +26,7 @@ const useBasicChatState = (): BasicChatState => {
   const [modal, setModal] = useState<Modal>();
   const [sidePanelOpen, setSidePanelOpen] = useState(true);
   const [online, setOnline] = useState(true);
+  const [usersTyping, setUsersTyping] = useState<User[]>([]);
 
   return {
     get: {
@@ -31,12 +34,14 @@ const useBasicChatState = (): BasicChatState => {
       modal,
       sidePanelOpen,
       online,
+      usersTyping,
     },
     set: {
       setSelectedChannel,
       setModal,
       setSidePanelOpen,
       setOnline,
+      setUsersTyping,
     },
   };
 };

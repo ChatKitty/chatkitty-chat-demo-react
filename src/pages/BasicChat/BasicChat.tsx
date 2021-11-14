@@ -42,7 +42,7 @@ const BasicChat: React.FC = () => {
   }
 
   const {
-    get: { selectedChannel, sidePanelOpen, online },
+    get: { selectedChannel, sidePanelOpen, online, usersTyping },
     set: { setSelectedChannel, setSidePanelOpen, setModal },
   } = state;
 
@@ -110,7 +110,11 @@ const BasicChat: React.FC = () => {
                 onPrevious={() => setSidePanelOpen(true)}
               />
             )}
-            <MessageList loading={fetchingMessages} messages={messages || []} />
+            <MessageList
+              loading={fetchingMessages}
+              messages={messages || []}
+              usersTyping={usersTyping}
+            />
             <MessageInput
               channel={selectedChannel}
               sendMessage={(...args) => {

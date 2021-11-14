@@ -16,11 +16,11 @@ const useBasicChatEffect = (
 ): void => {
   const {
     get: { selectedChannel },
-    set: { setSelectedChannel, setOnline },
+    set: { setSelectedChannel, setOnline, setUsersTyping },
   } = state;
 
   const {
-    get: { joinedChannels },
+    get: { joinedChannels, currentUser },
     set: { setCurrentUser, setJoinedChannels },
   } = resources;
 
@@ -135,13 +135,21 @@ const useBasicChatEffect = (
 
     unsubs.push(
       kitty.onParticipantStartedTyping((user) => {
-        console.log(user);
+        setUsersTyping((prev) => {
+          if (
+            prev.filter((u) => u.id === user.id || u.id === currentUser?.id)
+              .length > 0
+          ) {
+            return prev;
+          }
+          return [...prev, user];
+        });
       })
     );
 
     unsubs.push(
-      kitty.onParticipantStartedTyping((user) => {
-        console.log(user);
+      kitty.onParticipantStoppedTyping((user) => {
+        setUsersTyping((prev) => prev.filter((u) => u.id !== user.id));
       })
     );
 
