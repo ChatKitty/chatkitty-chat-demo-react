@@ -27,13 +27,7 @@ const BasicChat: React.FC = () => {
     loading: { fetchingCurrentUser, fetchingJoinedChannels, fetchingMessages },
     get: { currentUser, joinedChannels, messages },
     set: { setMessages },
-    request: {
-      leaveChannel,
-      fetchJoinedChannels,
-      hideChannel,
-      sendMessage,
-      updateMessage,
-    },
+    request: { leaveChannel, hideChannel, sendMessage, updateMessage },
   } = resources;
 
   useEffect(resources, state);
@@ -88,10 +82,7 @@ const BasicChat: React.FC = () => {
               setSelectedChannel(channel);
               setSidePanelOpen(false);
             }}
-            handleExtraActionClick={async (channel) => {
-              await hideChannel(channel);
-              await fetchJoinedChannels(); // TODO
-            }}
+            handleExtraActionClick={hideChannel}
             setModal={setModal}
           />
         </ul>

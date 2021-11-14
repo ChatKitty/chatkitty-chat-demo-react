@@ -3470,10 +3470,10 @@ char-regex@^1.0.2:
   resolved "https://registry.npmjs.org/char-regex/-/char-regex-1.0.2.tgz"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-chatkitty@1.50.0:
-  version "1.50.0"
-  resolved "https://registry.npmjs.org/chatkitty/-/chatkitty-1.50.0.tgz"
-  integrity sha512-qq337gsCx+Il/m0xI5XI8JVXjIUOniuFyX61p91/73vBRGJ4Q0vv6JldKZUTHmthCSo3Z4kMhesKbPrvFR8fnQ==
+chatkitty@^1.51.0:
+  version "1.51.1"
+  resolved "https://registry.yarnpkg.com/chatkitty/-/chatkitty-1.51.1.tgz#a109077bec85b6429f78ccc13842941ca973ffdb"
+  integrity sha512-nClgTJhNc5+a2it2pzjiligE8ptCtXVnc//zUsGoiuUSDDwxC79g2VSB2LNCeNNPUtQSHZYyufBEss2vzL7QHg==
   dependencies:
     "@stomp/rx-stomp" "^1.1.2"
     axios "^0.21.1"

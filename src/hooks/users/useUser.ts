@@ -2,7 +2,7 @@ import {
   ChatKittyError,
   ChatKittyFailedResult,
   failed,
-  GetUserResult,
+  GetUserSucceededResult,
   succeeded,
   User,
 } from 'chatkitty';
@@ -26,7 +26,7 @@ const useUser = (
 
       const result = await kitty.getUser(param);
 
-      if (succeeded<GetUserResult>(result)) {
+      if (succeeded<GetUserSucceededResult>(result)) {
         setResource(result.user);
       }
 

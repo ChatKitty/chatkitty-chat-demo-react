@@ -114,6 +114,27 @@ const useBasicChatEffect = (
     );
 
     unsubs.push(
+      kitty.onChannelHidden((channel) => {
+        setJoinedChannels((prev) => {
+          const next = (prev || []).filter((c) => c.id !== channel.id);
+          sortChannels(next);
+          return next;
+        });
+      })
+    );
+
+    unsubs.push(
+      kitty.onChannelUnhidden((channel) => {
+        // TODO, doesn't work at the moment, search for fetchJoinedChannels to remove
+        setJoinedChannels((prev) => {
+          const next = [...(prev || []), channel];
+          sortChannels(next);
+          return next;
+        });
+      })
+    );
+
+    unsubs.push(
       kitty.onParticipantStartedTyping((user) => {
         console.log(user);
       })
