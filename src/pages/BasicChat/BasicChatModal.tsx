@@ -43,7 +43,7 @@ const BasicChatModal: React.FC<BasicChatModalProps> = ({
     modalContent = (
       <JoinDirectChannelModal
         currentUser={currentUser as CurrentUser} // guarded at parent
-        channels={pickDirectChannels(joinedChannels)}
+        channels={pickDirectChannels(joinedChannels || [])}
         closeModal={() => setModal(undefined)}
         createChannel={async (params: CreateChannelRequest) => {
           const channel = await createChannel(params);

@@ -8,18 +8,18 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { Dispatch, SetStateAction, useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
+import { Dispatch, SetStateAction } from 'react';
 
 const useMessages = (): {
   isLoading: boolean;
   error?: ChatKittyError;
-  resource: Message[];
-  setResource: Dispatch<SetStateAction<Message[]>>;
+  resource?: Message[];
+  setResource: Dispatch<SetStateAction<Message[] | undefined>>;
   makeRequest: (channel: Channel) => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<Message[]>([]);
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<Message[]>();
 
   const makeRequest = async (channel: Channel) => {
     setIsLoading(true);

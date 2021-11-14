@@ -7,7 +7,8 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
+import { useEffect } from 'react';
 
 const useChannel = (
   id: number
@@ -16,9 +17,8 @@ const useChannel = (
   error?: ChatKittyError;
   resource?: Channel;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<Channel>();
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<Channel>();
 
   useEffect(() => {
     const makeRequest = async () => {

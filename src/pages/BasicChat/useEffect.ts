@@ -34,6 +34,7 @@ const useBasicChatEffect = (
 
   useEffect(() => {
     if (
+      joinedChannels &&
       joinedChannels.length > 0 &&
       (!selectedChannel ||
         joinedChannels.filter((channel) => channel.id === selectedChannel.id)
@@ -51,7 +52,7 @@ const useBasicChatEffect = (
     }
 
     // reset selected channels if no available channels
-    if (selectedChannel && joinedChannels.length === 0) {
+    if (selectedChannel && joinedChannels && joinedChannels.length === 0) {
       setSelectedChannel(undefined);
     }
   }, [selectedChannel, joinedChannels]);
@@ -82,7 +83,7 @@ const useBasicChatEffect = (
     unsubs.push(
       kitty.onChannelJoined((channel) => {
         setJoinedChannels((prev) => {
-          const next = [...prev, channel];
+          const next = [...(prev || []), channel];
           sortChannels(next);
           return next;
         });
@@ -92,7 +93,7 @@ const useBasicChatEffect = (
     unsubs.push(
       kitty.onChannelLeft((channel) => {
         setJoinedChannels((prev) => {
-          const next = prev.filter((c) => c.id !== channel.id);
+          const next = (prev || []).filter((c) => c.id !== channel.id);
           sortChannels(next);
           return next;
         });
@@ -102,10 +103,25 @@ const useBasicChatEffect = (
     unsubs.push(
       kitty.onChannelUpdated((channel) => {
         setJoinedChannels((prev) => {
-          const next = [...prev.filter((c) => c.id !== channel.id), channel];
+          const next = [
+            ...(prev || []).filter((c) => c.id !== channel.id),
+            channel,
+          ];
           sortChannels(next);
           return next;
         });
+      })
+    );
+
+    unsubs.push(
+      kitty.onParticipantStartedTyping((user) => {
+        console.log(user);
+      })
+    );
+
+    unsubs.push(
+      kitty.onParticipantStartedTyping((user) => {
+        console.log(user);
       })
     );
 

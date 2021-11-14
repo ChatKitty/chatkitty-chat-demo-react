@@ -7,17 +7,16 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useMessageRepliesCount = (): {
   isLoading: boolean;
   error?: ChatKittyError;
-  result: number;
+  resource?: number;
   makeRequest: (message: Message) => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [result, setResult] = useState(0);
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<number>();
 
   const makeRequest = async (message: Message) => {
     setIsLoading(true);
@@ -25,7 +24,7 @@ const useMessageRepliesCount = (): {
     const result = await kitty.getMessageRepliesCount({ message });
 
     if (succeeded<GetCountSucceedResult>(result)) {
-      setResult(result.count);
+      setResource(result.count);
     }
 
     if (failed<ChatKittyFailedResult>(result)) {
@@ -38,7 +37,7 @@ const useMessageRepliesCount = (): {
   return {
     isLoading,
     error,
-    result,
+    resource,
     makeRequest,
   };
 };

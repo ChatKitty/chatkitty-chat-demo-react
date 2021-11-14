@@ -51,7 +51,7 @@ const JoinDirectChannelModal: React.FC<JoinDirectChannelModalProps> = ({
           <Spinner size={16} />
         ) : (
           <>
-            {users.length > 0 ? (
+            {users && users.length > 0 ? (
               users.map(
                 (user) =>
                   user.id !== currentUser.id && (

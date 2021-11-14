@@ -7,7 +7,8 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
 const useCurrentUser = (): {
   isLoading: boolean;
@@ -16,9 +17,8 @@ const useCurrentUser = (): {
   setResource: Dispatch<SetStateAction<CurrentUser | undefined>>;
   makeRequest: () => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<CurrentUser>();
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<CurrentUser>();
 
   const makeRequest = async () => {
     setIsLoading(true);

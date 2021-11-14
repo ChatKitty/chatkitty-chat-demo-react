@@ -16,6 +16,8 @@ import useEffect from 'pages/BasicChat/useEffect';
 import useResources from 'pages/BasicChat/useResources';
 import useState from 'pages/BasicChat/useState';
 import { animateScroll as scroll } from 'react-scroll';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BasicChat: React.FC = () => {
   const resources = useResources();
@@ -36,7 +38,12 @@ const BasicChat: React.FC = () => {
 
   useEffect(resources, state);
 
-  if (fetchingCurrentUser || fetchingJoinedChannels || !currentUser) {
+  if (
+    fetchingCurrentUser ||
+    fetchingJoinedChannels ||
+    !currentUser ||
+    !joinedChannels
+  ) {
     return <Spinner />;
   }
 
@@ -97,7 +104,7 @@ const BasicChat: React.FC = () => {
           <ChatSession
             channel={selectedChannel}
             onMessageReceived={(message) => {
-              setMessages((prev) => [message, ...prev]);
+              setMessages((prev) => [message, ...(prev || [])]);
             }}
           >
             {isDirectChannel(selectedChannel) ? (
@@ -112,7 +119,7 @@ const BasicChat: React.FC = () => {
                 onPrevious={() => setSidePanelOpen(true)}
               />
             )}
-            <MessageList loading={fetchingMessages} messages={messages} />
+            <MessageList loading={fetchingMessages} messages={messages || []} />
             <MessageInput
               channel={selectedChannel}
               sendMessage={(...args) => {
@@ -130,6 +137,7 @@ const BasicChat: React.FC = () => {
       </div>
 
       <BasicChatModal resources={resources} state={state} />
+      <ToastContainer position="top-right" />
     </div>
   );
 };

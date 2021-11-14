@@ -8,17 +8,16 @@ import {
   User,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useUserIsChannelMember = (): {
   isLoading: boolean;
   error?: ChatKittyError;
-  result: boolean;
+  resource?: boolean;
   makeRequest: (channel: Channel, user: User) => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [result, setResult] = useState<boolean>(false);
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<boolean>();
 
   const makeRequest = async (channel: Channel, user: User) => {
     setIsLoading(true);
@@ -29,7 +28,7 @@ const useUserIsChannelMember = (): {
     });
 
     if (succeeded<GetUserIsChannelMemberSucceededResult>(result)) {
-      setResult(result.isMember);
+      setResource(result.isMember);
     }
 
     if (failed<ChatKittyFailedResult>(result)) {
@@ -42,7 +41,7 @@ const useUserIsChannelMember = (): {
   return {
     isLoading,
     error,
-    result,
+    resource,
     makeRequest,
   };
 };

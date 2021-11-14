@@ -6,7 +6,8 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
+import { useEffect } from 'react';
 
 const useGuestSession = (
   username = 'b2a6da08-88bf-4778-b993-7234e6d8a3ff'
@@ -14,8 +15,9 @@ const useGuestSession = (
   isLoading: boolean;
   error?: ChatKittyError;
 } => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<ChatKittyError>();
+  const { isLoading, error, setIsLoading, setError } = useResourceState({
+    defaultIsLoading: true,
+  });
 
   useEffect(() => {
     const makeRequest = async () => {

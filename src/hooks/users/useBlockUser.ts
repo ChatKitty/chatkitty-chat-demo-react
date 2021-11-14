@@ -7,7 +7,7 @@ import {
   User,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useBlockUser = (): {
   isLoading: boolean;
@@ -15,9 +15,8 @@ const useBlockUser = (): {
   resource?: User;
   makeRequest: (user: User) => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<User>();
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<User>();
 
   const makeRequest = async (user: User) => {
     setIsLoading(true);

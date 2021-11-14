@@ -9,7 +9,7 @@ import {
   UpdatedCurrentUserResult,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useUpdateCurrentUserDisplayPicture = (): {
   isLoading: boolean;
@@ -20,9 +20,8 @@ const useUpdateCurrentUserDisplayPicture = (): {
     progressListener: ChatKittyUploadProgressListener
   ) => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<CurrentUser>();
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<CurrentUser>();
 
   const makeRequest = async (
     file: CreateChatKittyFileProperties,

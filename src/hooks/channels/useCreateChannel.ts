@@ -8,7 +8,7 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useCreateChannel = (): {
   isLoading: boolean;
@@ -24,9 +24,8 @@ const useCreateChannel = (): {
     name?: string;
   }) => Promise<Channel | undefined>;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<Channel>();
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<Channel>();
 
   const makeRequest = async ({
     type,
@@ -49,7 +48,6 @@ const useCreateChannel = (): {
     }
 
     if (failed<ChatKittyFailedResult>(result)) {
-      console.log(result);
       setError(result.error);
     }
   };

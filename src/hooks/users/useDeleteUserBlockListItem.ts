@@ -8,7 +8,7 @@ import {
   UserBlockListItem,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useDeleteUserBlockListItem = (): {
   isLoading: boolean;
@@ -16,9 +16,8 @@ const useDeleteUserBlockListItem = (): {
   resource?: User;
   makeRequest: (item: UserBlockListItem) => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<User>();
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<User>();
 
   const makeRequest = async (item: UserBlockListItem) => {
     setIsLoading(true);

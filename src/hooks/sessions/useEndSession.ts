@@ -1,11 +1,11 @@
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useEndSession = (): {
   isLoading: boolean;
   makeRequest: () => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, setIsLoading } = useResourceState();
 
   const makeRequest = async () => {
     setIsLoading(true);

@@ -7,7 +7,7 @@ import {
   UpdatedChannelResult,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useUpdateChannel = (): {
   isLoading: boolean;
@@ -15,9 +15,8 @@ const useUpdateChannel = (): {
   resource?: Channel;
   makeRequest: (channel: Channel) => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<Channel>();
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<Channel>();
 
   const makeRequest = async (channel: Channel) => {
     setIsLoading(true);

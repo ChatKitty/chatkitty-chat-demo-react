@@ -7,18 +7,18 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
+import { useEffect } from 'react';
 
 const useUnreadChannelsCount = (
   filter: GetUnreadChannelsFilter
 ): {
   isLoading: boolean;
   error?: ChatKittyError;
-  result: number;
+  resource?: number;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [result, setResult] = useState(0);
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<number>();
 
   useEffect(() => {
     const makeRequest = async () => {
@@ -27,7 +27,7 @@ const useUnreadChannelsCount = (
       const result = await kitty.getUnreadChannelsCount({ filter });
 
       if (succeeded<GetCountSucceedResult>(result)) {
-        setResult(result.count);
+        setResource(result.count);
       }
 
       if (failed<ChatKittyFailedResult>(result)) {
@@ -43,7 +43,7 @@ const useUnreadChannelsCount = (
   return {
     isLoading,
     error,
-    result,
+    resource,
   };
 };
 

@@ -31,15 +31,17 @@ export interface BasicChatResources {
   };
   get: {
     currentUser: CurrentUser | undefined;
-    messages: Message[];
-    joinedChannels: Channel[];
+    messages: Message[] | undefined;
+    joinedChannels: Channel[] | undefined;
   };
   set: {
-    setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+    setMessages: React.Dispatch<React.SetStateAction<Message[] | undefined>>;
     setCurrentUser: React.Dispatch<
       React.SetStateAction<CurrentUser | undefined>
     >;
-    setJoinedChannels: React.Dispatch<React.SetStateAction<Channel[]>>;
+    setJoinedChannels: React.Dispatch<
+      React.SetStateAction<Channel[] | undefined>
+    >;
   };
   request: {
     leaveChannel: (channel: Channel) => void;

@@ -9,18 +9,18 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
+import { useEffect } from 'react';
 
 const useJoinedChannels = (): {
   isLoading: boolean;
   error?: ChatKittyError;
-  resource: Channel[];
-  setResource: React.Dispatch<React.SetStateAction<Channel[]>>;
+  resource?: Channel[];
+  setResource: React.Dispatch<React.SetStateAction<Channel[] | undefined>>;
   makeRequest: () => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<Channel[]>([]);
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<Channel[]>();
 
   const makeRequest = async () => {
     setIsLoading(true);

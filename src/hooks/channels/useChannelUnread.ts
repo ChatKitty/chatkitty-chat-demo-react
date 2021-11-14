@@ -7,18 +7,18 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useEffect, useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
+import { useEffect } from 'react';
 
 const useChannelUnread = (
   channel: Channel
 ): {
   isLoading: boolean;
   error?: ChatKittyError;
-  result: boolean;
+  resource?: boolean;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [result, setResult] = useState(false);
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<boolean>();
 
   useEffect(() => {
     const makeRequest = async () => {
@@ -29,7 +29,7 @@ const useChannelUnread = (
       });
 
       if (succeeded<GetChannelUnreadSucceededResult>(result)) {
-        setResult(result.unread);
+        setResource(result.unread);
       }
 
       if (failed<ChatKittyFailedResult>(result)) {
@@ -45,7 +45,7 @@ const useChannelUnread = (
   return {
     isLoading,
     error,
-    result,
+    resource,
   };
 };
 

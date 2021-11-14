@@ -39,7 +39,7 @@ const JoinChannelModal: React.FC<JoinChannelModalProps> = ({
         </button>
         {channelsLoading ? (
           <Spinner size={16} />
-        ) : channels.length > 0 ? (
+        ) : channels && channels.length > 0 ? (
           channels.map((channel) => (
             <PublicChannelListItem
               key={channel.id}

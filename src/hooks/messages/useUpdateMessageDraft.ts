@@ -1,12 +1,12 @@
 import { Channel } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useUpdateMessageDraft = (): {
   isLoading: boolean;
   makeRequest: (channel: Channel, draft: string) => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading, setIsLoading } = useResourceState();
 
   const makeRequest = async (channel: Channel, draft: string) => {
     setIsLoading(true);

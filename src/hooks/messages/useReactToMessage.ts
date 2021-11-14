@@ -8,7 +8,7 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useReactToMessage = (): {
   isLoading: boolean;
@@ -16,9 +16,8 @@ const useReactToMessage = (): {
   resource?: Reaction;
   makeRequest: (message: Message, emoji: string) => void;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<Reaction>();
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<Reaction>();
 
   const makeRequest = async (message: Message, emoji: string) => {
     setIsLoading(true);

@@ -9,7 +9,7 @@ import {
   succeeded,
 } from 'chatkitty';
 import kitty from 'clients/kitty';
-import { useState } from 'react';
+import useResourceState from 'hooks/useResourceState';
 
 const useChatSession = (): {
   isLoading: boolean;
@@ -20,9 +20,8 @@ const useChatSession = (): {
     onReceivedMessage: (message: Message) => void
   ) => ChatSession;
 } => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<ChatKittyError>();
-  const [resource, setResource] = useState<ChatSession>();
+  const { isLoading, error, resource, setIsLoading, setError, setResource } =
+    useResourceState<ChatSession>();
 
   const makeRequest = (
     channel: Channel,
