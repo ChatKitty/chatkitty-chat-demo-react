@@ -58,6 +58,8 @@ const useBasicChatEffect = (
   }, [selectedChannel, joinedChannels]);
 
   useEffect(() => {
+    if (!currentUser) return;
+
     const unsubs: ChatKittyUnsubscribe[] = [];
 
     unsubs.push(
@@ -137,8 +139,8 @@ const useBasicChatEffect = (
       kitty.onParticipantStartedTyping((user) => {
         setUsersTyping((prev) => {
           if (
-            prev.filter((u) => u.id === user.id || u.id === currentUser?.id)
-              .length > 0
+            prev.filter((u) => u.id === user.id).length > 0 ||
+            user.id === currentUser.id
           ) {
             return prev;
           }
@@ -156,7 +158,7 @@ const useBasicChatEffect = (
     return () => {
       unsubs.forEach((unsub) => unsub());
     };
-  }, []);
+  }, [currentUser]);
 };
 
 export default useBasicChatEffect;

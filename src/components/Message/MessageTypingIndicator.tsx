@@ -11,10 +11,9 @@ const MessageTypingIndicator: React.FC<MessageTypingIndicatorProps> = ({
     <div className="col-start-1 col-end-8 px-6 py-3">
       <div className="flex flex-row items-center">
         {usersTyping.map((user, index) => (
-          <>
+          <div key={user.id} className="animate-pulse flex flex-row">
             <div
-              key={user.id}
-              className={`animate-pulse h-10 w-10 min-w-10 rounded-full overflow-hidden transform -translate-x-${
+              className={`h-10 w-10 min-w-10 rounded-full overflow-hidden transform -translate-x-${
                 8 * index
               }`}
             >
@@ -22,14 +21,14 @@ const MessageTypingIndicator: React.FC<MessageTypingIndicatorProps> = ({
             </div>
             {index === usersTyping.length - 1 && (
               <div
-                className={`animate-pulse ml-3 text-sm py-2 px-4 shadow rounded-xl rounded-tl-none bg-white whitespace-pre-wrap transform -translate-x-${
+                className={`ml-3 text-sm py-2 px-4 shadow rounded-xl rounded-tl-none bg-white whitespace-pre-wrap transform -translate-x-${
                   8 * index
                 }`}
               >
                 <div>typing...</div>
               </div>
             )}
-          </>
+          </div>
         ))}
       </div>
     </div>
