@@ -1,0 +1,34 @@
+{
+  "containerDefinitions": [
+    {
+      "name": "demo",
+      "image": "howdi/chatkitty-demo:latest",
+      "cpu": 0,
+      "memoryReservation": 128,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 0,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "awslogs-chatkitty-production",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "demo"
+        }
+      }
+    }
+  ],
+  "family": "chatkitty-demo",
+  "taskRoleArn": "arn:aws:iam::785157241395:role/dev-docker-task",
+  "networkMode": "bridge",
+  "volumes": [],
+  "placementConstraints": []
+}
