@@ -4,16 +4,13 @@
   "plugins": [
     "@typescript-eslint",
     "react",
-    "prettier",
     "import"
   ],
   "extends": [
     "eslint:recommended",
-    "prettier",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:react/recommended",
-    "plugin:prettier/recommended"
+    "plugin:react/recommended"
   ],
   "env": {
     "browser": true,
@@ -59,12 +56,6 @@
     "import/no-named-as-default": 0,
     "no-param-reassign": [2, { "props": false }],
     "@typescript-eslint/no-empty-function": ["error", { "allow": ["arrowFunctions"] }],
-    "@typescript-eslint/no-empty-interface": "off",
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ]
+    "@typescript-eslint/no-empty-interface": "off"
   }
 }
