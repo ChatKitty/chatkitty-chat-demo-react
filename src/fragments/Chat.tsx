@@ -16,7 +16,7 @@ import ChatMessages from './ChatMessages';
 const Chat: React.FC = () => {
   const { channel, startChatSession, prependToMessages, currentUser } =
     useContext(ChatAppContext);
-  const [typingUsers, setTypingUsers] = useState<User | null>(null);
+  const [typingUsers, setTypingUsers] = useState<User[]>([]);
   const [typingUser, setTypingUser] = useState<User | null>(null);
   useEffect(() => {
     if (!channel) {
@@ -30,11 +30,18 @@ const Chat: React.FC = () => {
       (user: User) => {
         if (currentUser?.id !== user.id) {
           setTypingUser(user);
+          setTypingUsers([...typingUsers, user]);
         }
       },
       (user: User) => {
         if (currentUser?.id !== user.id) {
           setTypingUser(null);
+          setTypingUsers(
+            typingUsers.splice(
+              typingUsers.findIndex((item) => item.id === user.id),
+              1
+            )
+          );
         }
       }
     );
