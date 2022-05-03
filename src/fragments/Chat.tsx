@@ -57,7 +57,7 @@ const Chat: React.FC = () => {
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
       {typingUser && (
-        <StyledBox>
+        <StyledBox style={{ display: 'grid', gridTemplateColumns: '1fr 60fr' }}>
           <img src={typingUser.displayPictureUrl} width="20px" />
           <p> is typing</p>
         </StyledBox>
