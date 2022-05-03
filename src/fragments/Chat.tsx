@@ -58,8 +58,8 @@ const Chat: React.FC = () => {
       <ChatMessages channel={channel} />
       {typingUser && (
         <StyledBox>
-          <img src="${user.displayPictureUrl}" />
-          is typing
+          <img src={typingUser.displayPictureUrl} width="20px" />
+          <p> is typing</p>
         </StyledBox>
       )}
       <ChatMessageInput />
