@@ -16,7 +16,7 @@ import ChatMessages from './ChatMessages';
 const Chat: React.FC = () => {
   const { channel, startChatSession, prependToMessages, currentUser } =
     useContext(ChatAppContext);
-
+  const [typingUsers, setTypingUsers] = useState<User | null>(null);
   const [typingUser, setTypingUser] = useState<User | null>(null);
   useEffect(() => {
     if (!channel) {
@@ -58,7 +58,13 @@ const Chat: React.FC = () => {
       <ChatMessages channel={channel} />
       {typingUser && (
         <StyledBox style={{ display: 'grid', gridTemplateColumns: '1fr 60fr' }}>
-          <img src={typingUser.displayPictureUrl} width="20px" />
+          {typingUsers.map((user) => (
+            <img
+              key={user?.id}
+              src={user.displayPictureUrl}
+              style={{ borderRadius: '50%', width: '20px' }}
+            />
+          ))}
           <p> is typing</p>
         </StyledBox>
       )}
