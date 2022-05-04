@@ -59,7 +59,7 @@ const Chat: React.FC = () => {
 
     return session.end;
   }, [channel]);
-
+  console.log(typingUsers);
   return channel ? (
     <FlexColumn
       height="100%"
@@ -71,7 +71,7 @@ const Chat: React.FC = () => {
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
       {typingUser && (
-        <StyledBox style={{ whiteSpace: 'nowrap', width: '120px' }}>
+        <StyledBox style={{ whiteSpace: 'nowrap', width: '200px' }}>
           {numUserTyping < 6 &&
             typingUsers.map((user) => (
               <img
@@ -80,15 +80,27 @@ const Chat: React.FC = () => {
                 src={user.displayPictureUrl}
                 style={{
                   display: 'inline-block',
-                  borderRadius: '50%',
                   width: '20px',
-                  padding: '2px',
+                  marginLeft: '10px',
+                  borderRadius: '50%',
                 }}
               />
             ))}
-          {numUserTyping >= 6 && <p> several people are typing</p>}
-          {numUserTyping < 6 && numUserTyping > 1 && <p>are typing</p>}
-          {numUserTyping === 1 && <p> is typing</p>}
+          {numUserTyping >= 6 && (
+            <p style={{ paddingLeft: '11px', paddingBottom: '5px' }}>
+              several people are typing
+            </p>
+          )}
+          {numUserTyping < 6 && numUserTyping > 1 && (
+            <p style={{ paddingLeft: '11px', paddingBottom: '5px' }}>
+              are typing
+            </p>
+          )}
+          {numUserTyping === 1 && (
+            <p style={{ paddingLeft: '11px', paddingBottom: '5px' }}>
+              is typing
+            </p>
+          )}
         </StyledBox>
       )}
       <ChatMessageInput />
