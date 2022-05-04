@@ -17,6 +17,7 @@ const Chat: React.FC = () => {
   const { channel, startChatSession, prependToMessages, currentUser } =
     useContext(ChatAppContext);
   const [typingUsers, setTypingUsers] = useState<User[]>([]);
+  const [numUserTyping, setNumTyping] = useState(0);
   const [typingUser, setTypingUser] = useState<User | null>(null);
   useEffect(() => {
     if (!channel) {
@@ -30,7 +31,10 @@ const Chat: React.FC = () => {
       (user: User) => {
         if (currentUser?.id !== user.id) {
           setTypingUser(user);
-          setTypingUsers([...typingUsers, user]);
+          setTypingUsers((typingUsers) => [...typingUsers, user]);
+          if (numUserTyping < 5) {
+            setNumTyping(numUserTyping + 1);
+          }
         }
       },
       (user: User) => {
@@ -42,6 +46,9 @@ const Chat: React.FC = () => {
               1
             )
           );
+          if (numUserTyping > 1) {
+            setNumTyping(numUserTyping - 1);
+          }
         }
       }
     );
@@ -64,16 +71,20 @@ const Chat: React.FC = () => {
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
       {typingUser && (
-        <StyledBox style={{ display: 'grid', gridTemplateColumns: '1fr 60fr' }}>
-          {typingUsers.map((user) => (
-            <img
-              key={user?.id}
-              src={user.displayPictureUrl}
-              style={{ borderRadius: '50%', width: '20px' }}
-            />
-          ))}
-          <p> is typing</p>
-        </StyledBox>
+        <FlexColumn>
+          {numUserTyping < 6 &&
+            typingUsers.map((user) => (
+              <img
+                key={user.id}
+                src={user.displayPictureUrl}
+                style={{ borderRadius: '50%', width: '20px' }}
+              />
+            ))}
+          {numUserTyping > 1 && (
+            <p> and {numUserTyping - 1} others are typing</p>
+          )}
+          {numUserTyping === 1 && <p> is typing</p>}
+        </FlexColumn>
       )}
       <ChatMessageInput />
     </FlexColumn>
