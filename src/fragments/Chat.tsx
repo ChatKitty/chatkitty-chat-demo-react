@@ -71,7 +71,7 @@ const Chat: React.FC = () => {
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
       {typingUser && (
-        <StyledBox style={{ whiteSpace: 'nowrap', width: '100px' }}>
+        <StyledBox style={{ whiteSpace: 'nowrap', width: '120px' }}>
           {numUserTyping < 6 &&
             typingUsers.map((user) => (
               <img
@@ -82,6 +82,7 @@ const Chat: React.FC = () => {
                   display: 'inline-block',
                   borderRadius: '50%',
                   width: '20px',
+                  padding: '2px',
                 }}
               />
             ))}
