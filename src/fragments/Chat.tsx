@@ -71,20 +71,24 @@ const Chat: React.FC = () => {
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
       {typingUser && (
-        <FlexColumn>
+        <StyledBox style={{ whiteSpace: 'nowrap', width: '100px' }}>
           {numUserTyping < 6 &&
             typingUsers.map((user) => (
               <img
+                className="wrapper"
                 key={user.id}
                 src={user.displayPictureUrl}
-                style={{ borderRadius: '50%', width: '20px' }}
+                style={{
+                  display: 'inline-block',
+                  borderRadius: '50%',
+                  width: '20px',
+                }}
               />
             ))}
-          {numUserTyping > 1 && (
-            <p> and {numUserTyping - 1} others are typing</p>
-          )}
+          {numUserTyping >= 6 && <p> several people are typing</p>}
+          {numUserTyping < 6 && numUserTyping > 1 && <p>are typing</p>}
           {numUserTyping === 1 && <p> is typing</p>}
-        </FlexColumn>
+        </StyledBox>
       )}
       <ChatMessageInput />
     </FlexColumn>
