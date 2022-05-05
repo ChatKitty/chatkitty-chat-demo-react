@@ -16,9 +16,10 @@ import ChatMessages from './ChatMessages';
 const Chat: React.FC = () => {
   const { channel, startChatSession, prependToMessages, currentUser } =
     useContext(ChatAppContext);
+
   const [typingUsers, setTypingUsers] = useState<User[]>([]);
-  const [numUserTyping, setNumTyping] = useState(0);
-  const [typingUser, setTypingUser] = useState<User | null>(null);
+  const [numUserTyping, setNumUsers] = useState(0);
+
   useEffect(() => {
     if (!channel) {
       return;
@@ -30,16 +31,14 @@ const Chat: React.FC = () => {
       },
       (user: User) => {
         if (currentUser?.id !== user.id) {
-          setTypingUser(user);
           setTypingUsers((typingUsers) => [...typingUsers, user]);
-          if (numUserTyping < 5) {
-            setNumTyping(numUserTyping + 1);
+          if (numUserTyping < 6) {
+            setNumUsers(numUserTyping + 1);
           }
         }
       },
       (user: User) => {
         if (currentUser?.id !== user.id) {
-          setTypingUser(null);
           setTypingUsers(
             typingUsers.splice(
               typingUsers.findIndex((item) => item.id === user.id),
@@ -47,7 +46,7 @@ const Chat: React.FC = () => {
             )
           );
           if (numUserTyping > 1) {
-            setNumTyping(numUserTyping - 1);
+            setNumUsers(numUserTyping - 1);
           }
         }
       }
@@ -59,7 +58,7 @@ const Chat: React.FC = () => {
 
     return session.end;
   }, [channel]);
-  console.log(typingUsers);
+
   return channel ? (
     <FlexColumn
       height="100%"
@@ -70,7 +69,7 @@ const Chat: React.FC = () => {
     >
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
-      {typingUser && (
+      {typingUsers[0] && (
         <StyledBox style={{ whiteSpace: 'nowrap', width: '200px' }}>
           {numUserTyping < 6 &&
             typingUsers.map((user) => (
