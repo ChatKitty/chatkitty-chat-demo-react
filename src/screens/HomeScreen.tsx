@@ -1,3 +1,4 @@
+import MemberList from 'fragments/MemberList';
 import React from 'react';
 import { FlexRow } from 'react-chat-ui-kit';
 
@@ -11,6 +12,7 @@ const HomeScreen: React.FC = () => {
       <Menu />
       <Chat />
       <JoinChannelDialog />
+      <MemberList />
     </FlexRow>
   );
 };
