@@ -7,8 +7,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint .",
-    "lint-fix": "eslint --quiet --fix",
-    "format": "prettier --write \"src/**/*.+(ts|tsx|js|jsx|json|yml|yaml|css|md|vue)\"",
+    "lint-fix": "prettier-eslint --write \"src/**/*.+(ts|tsx|js|jsx|json|yml|yaml|css|md)\"",
     "eject": "react-scripts eject",
     "prepare": "husky install"
   },
@@ -44,15 +43,16 @@
     "@typescript-eslint/eslint-plugin": "4.0.1",
     "@typescript-eslint/parser": "4.0.1",
     "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.24.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.4.1",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.1",
     "lint-staged": "^11.1.2",
-    "prettier": "^2.3.2"
+    "prettier": "^2.6.2",
+    "prettier-eslint": "^14.0.2",
+    "prettier-eslint-cli": "^5.0.1"
   },
   "browserslist": {
     "production": [
@@ -67,11 +67,8 @@
     ]
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint --cache --fix"
-    ],
-    "*.{json,md,html}": [
-      "prettier --write"
+    "*.{ts,tsx,js,jsx,json,md,html}": [
+      "prettier-eslint --write \"src/**/*.+(ts|tsx|js|jsx|json|yml|yaml|css|md)\""
     ]
   }
 }
