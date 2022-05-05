@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+import { Message, User } from 'chatkitty';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   FlexColumn,
   Heading,
@@ -11,19 +12,39 @@ import { ChatAppContext } from '../providers/ChatAppProvider';
 import ChatHeader from './ChatHeader';
 import ChatMessageInput from './ChatMessageInput';
 import ChatMessages from './ChatMessages';
+import TypingIndicator from './TypingIndicator';
 
 const Chat: React.FC = () => {
-  const { channel, startChatSession, prependToMessages } =
+  const { channel, startChatSession, prependToMessages, currentUser } =
     useContext(ChatAppContext);
+
+  const [typingUsers, setTypingUsers] = useState<User[]>([]);
 
   useEffect(() => {
     if (!channel) {
       return;
     }
-
-    const session = startChatSession(channel, (message) => {
-      prependToMessages([message]);
-    });
+    const session = startChatSession(
+      channel,
+      (message: Message) => {
+        prependToMessages([message]);
+      },
+      (user: User) => {
+        if (currentUser?.id !== user.id) {
+          setTypingUsers((typingUsers) => [...typingUsers, user]);
+        }
+      },
+      (user: User) => {
+        if (currentUser?.id !== user.id) {
+          setTypingUsers(
+            typingUsers.splice(
+              typingUsers.findIndex((item) => item.id === user.id),
+              1
+            )
+          );
+        }
+      }
+    );
 
     if (!session) {
       return;
@@ -42,13 +63,14 @@ const Chat: React.FC = () => {
     >
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
+      <TypingIndicator typingUsers={typingUsers} />
       <ChatMessageInput />
     </FlexColumn>
   ) : (
     <StyledBox margin="auto">
-      <Heading size={HeadingSizes.HUGE}>Select channel</Heading>
+      <Heading size={HeadingSizes.BIG}>Select channel</Heading>
     </StyledBox>
   );
-};
+}; //
 
 export default Chat;

@@ -51,7 +51,9 @@ interface ChatAppContext {
   ) => Promise<ChatKittyPaginator<Message> | null>;
   startChatSession: (
     channel: Channel,
-    onReceivedMessage: (message: Message) => void
+    onReceivedMessage: (message: Message) => void,
+    onTypingStarted: (user: User) => void,
+    onTypingStopped: (user: User) => void
   ) => ChatSession | null;
   prependToMessages: (messages: Message[]) => void;
   appendToMessages: (messages: Message[]) => void;
@@ -301,9 +303,16 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
   const startChatSession = (
     channel: Channel,
-    onReceivedMessage: (message: Message) => void
+    onReceivedMessage: (message: Message) => void,
+    onTypingStarted: (user: User) => void,
+    onTypingStopped: (user: User) => void
   ): ChatSession | null => {
-    const result = kitty.startChatSession({ channel, onReceivedMessage });
+    const result = kitty.startChatSession({
+      channel,
+      onReceivedMessage,
+      onTypingStarted,
+      onTypingStopped,
+    });
 
     if (succeeded<StartedChatSessionResult>(result)) {
       return result.session;
