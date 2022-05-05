@@ -12,13 +12,13 @@ import { ChatAppContext } from '../providers/ChatAppProvider';
 import ChatHeader from './ChatHeader';
 import ChatMessageInput from './ChatMessageInput';
 import ChatMessages from './ChatMessages';
+import TypingIndicator from './TypingIndicator';
 
 const Chat: React.FC = () => {
   const { channel, startChatSession, prependToMessages, currentUser } =
     useContext(ChatAppContext);
 
   const [typingUsers, setTypingUsers] = useState<User[]>([]);
-  const [numUserTyping, setNumUsers] = useState(0);
 
   useEffect(() => {
     if (!channel) {
@@ -32,9 +32,6 @@ const Chat: React.FC = () => {
       (user: User) => {
         if (currentUser?.id !== user.id) {
           setTypingUsers((typingUsers) => [...typingUsers, user]);
-          if (numUserTyping < 6) {
-            setNumUsers(numUserTyping + 1);
-          }
         }
       },
       (user: User) => {
@@ -45,9 +42,6 @@ const Chat: React.FC = () => {
               1
             )
           );
-          if (numUserTyping > 1) {
-            setNumUsers(numUserTyping - 1);
-          }
         }
       }
     );
@@ -69,39 +63,7 @@ const Chat: React.FC = () => {
     >
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
-      {typingUsers[0] && (
-        <StyledBox style={{ whiteSpace: 'nowrap', width: '200px' }}>
-          {numUserTyping < 6 &&
-            typingUsers.map((user) => (
-              <img
-                className="wrapper"
-                key={user.id}
-                src={user.displayPictureUrl}
-                style={{
-                  display: 'inline-block',
-                  width: '20px',
-                  marginLeft: '10px',
-                  borderRadius: '50%',
-                }}
-              />
-            ))}
-          {numUserTyping >= 6 && (
-            <p style={{ paddingLeft: '11px', paddingBottom: '5px' }}>
-              several people are typing
-            </p>
-          )}
-          {numUserTyping < 6 && numUserTyping > 1 && (
-            <p style={{ paddingLeft: '11px', paddingBottom: '5px' }}>
-              are typing
-            </p>
-          )}
-          {numUserTyping === 1 && (
-            <p style={{ paddingLeft: '11px', paddingBottom: '5px' }}>
-              is typing
-            </p>
-          )}
-        </StyledBox>
-      )}
+      <TypingIndicator typingUsers={typingUsers} />
       <ChatMessageInput />
     </FlexColumn>
   ) : (
