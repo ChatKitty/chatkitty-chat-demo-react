@@ -4,6 +4,7 @@ import ChatKitty, {
   ChatKittyUnsubscribe,
   ChatSession,
   CurrentUser,
+  GetChannelMembersRequest,
   GetChannelsSucceededResult,
   GetCountSucceedResult,
   GetMessagesSucceededResult,
@@ -260,6 +261,17 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
       showChat(result.channel);
     }
   };
+
+  const MemberList = async (channel: Channel) =>{
+    const result = await kitty.getChannelMembers({ channel });
+
+    if (succeeded(result)) {
+      const members = result.paginator.items;
+      return members;
+    }
+
+    return null;
+  }
 
   const leaveChannel = async (c: Channel) => {
     const result = await kitty.leaveChannel({ channel: c });
