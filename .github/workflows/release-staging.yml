@@ -44,9 +44,9 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Build React application
-          run: |
-            yarn install --frozen-lockfile;
-            yarn run build;
+        run: |
+          yarn install --frozen-lockfile;
+          yarn run build;
 
       - name: Build and push Docker image
         id: docker-build
