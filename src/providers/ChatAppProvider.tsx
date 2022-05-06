@@ -4,7 +4,6 @@ import ChatKitty, {
   ChatKittyUnsubscribe,
   ChatSession,
   CurrentUser,
-  GetChannelMembersRequest,
   GetChannelsSucceededResult,
   GetCountSucceedResult,
   GetMessagesSucceededResult,
@@ -50,6 +49,9 @@ interface ChatAppContext {
   messagesPaginator: (
     channel: Channel
   ) => Promise<ChatKittyPaginator<Message> | null>;
+  memberListPaginator: (
+    Channel: Channel
+  ) => Promise<ChatKittyPaginator<User> |null>;
   startChatSession: (
     channel: Channel,
     onReceivedMessage: (message: Message) => void,
@@ -89,6 +91,7 @@ const initialValues: ChatAppContext = {
   channelUnreadMessagesCount: () => Promise.prototype,
   startChatSession: () => null,
   messagesPaginator: () => Promise.prototype,
+  memberListPaginator: () => Promise.prototype,
   prependToMessages: () => {},
   appendToMessages: () => {},
   channel: null,
@@ -262,17 +265,6 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     }
   };
 
-  const MemberList = async (channel: Channel) =>{
-    const result = await kitty.getChannelMembers({ channel });
-
-    if (succeeded(result)) {
-      const members = result.paginator.items;
-      return members;
-    }
-
-    return null;
-  }
-
   const leaveChannel = async (c: Channel) => {
     const result = await kitty.leaveChannel({ channel: c });
 
@@ -357,6 +349,16 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
+  const memberListPaginator = async (channel: Channel) =>{
+    const result = await kitty.getChannelMembers({ channel: channel });
+
+    if (succeeded<GetUsersSucceededResult>(result)) {
+      return result.paginator;
+    }
+
+    return null;
+  };
+
   const prependToMessages = (items: Message[]) => {
     setMessages((old) => [...items, ...old]);
   };
@@ -420,6 +422,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         channelUnreadMessagesCount,
         startChatSession,
         messagesPaginator,
+        memberListPaginator,
         prependToMessages,
         appendToMessages,
         messageDraft,

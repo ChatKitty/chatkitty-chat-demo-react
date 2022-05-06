@@ -12,7 +12,7 @@ const MemberList: React.FC = () => {
   const theme = useContext(ThemeContext);
   const isMedium = useMediaQuery(theme.mediaQueries.medium);
 
-  const { layout, channel } = useContext(ChatAppContext);
+  const { layout, channel, memberListPaginator } = useContext(ChatAppContext);
 
   useEffect(() => {
     if (!channel) {
