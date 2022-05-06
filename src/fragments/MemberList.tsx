@@ -1,5 +1,6 @@
+import {  User } from 'chatkitty';
 import { ChatAppContext } from 'providers/ChatAppProvider';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-chat-ui-kit';
 import {
   Drawer,
@@ -14,10 +15,14 @@ const MemberList: React.FC = () => {
 
   const { layout, channel, memberListPaginator } = useContext(ChatAppContext);
 
+  const [channelMembers, setChannelMembers] = useState<User[] | null>([]);
+
   useEffect(() => {
     if (!channel) {
       return;
     }
+    const memberList = memberListPaginator(channel);
+    memberList.then(resolved => {setChannelMembers(resolved)});
   });
 
   return (
