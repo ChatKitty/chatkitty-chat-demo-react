@@ -1,7 +1,7 @@
 import {  User } from 'chatkitty';
 import { ChatAppContext } from 'providers/ChatAppProvider';
 import React, { useContext, useEffect, useState } from 'react';
-import { useMediaQuery } from 'react-chat-ui-kit';
+import { StyledBox, useMediaQuery } from 'react-chat-ui-kit';
 import {
   Drawer,
   Heading,
@@ -32,17 +32,41 @@ const MemberList: React.FC = () => {
     >
       <Heading
         variant={HeadingVariants.INVERSE}
-        style={{ fontSize: '20px', marginTop: '5px', marginLeft: '5px' }}
+        style={{ fontSize: '25px', marginTop: '30px', marginLeft: '10px' }}
       >
         {channel?.name}
       </Heading>
 
       <Heading
         variant={HeadingVariants.INVERSE}
-        style={{ marginTop: '20px', marginLeft: '5px' }}
+        style={{ marginTop: '30px', marginLeft: '10px' }}
       >
         Channel Members
       </Heading>
+      <StyledBox style={{marginTop: '20px'}}>
+        {channelMembers?.map((user) => 
+        <StyledBox key={user.id}>
+          <img 
+            src={user.displayPictureUrl} 
+            style={{
+              display: 'inline-block',
+              width: '20px',
+              marginLeft: '10px',
+              marginTop: '5px',
+              borderRadius: '50%',
+            }}
+          />
+          <p style={{
+            display: 'inline-block',
+            marginLeft: '10px',
+            width: '100px',
+            color: 'white'
+          }}>
+            {user.displayName}
+          </p>
+        </StyledBox>
+        )}
+      </StyledBox>
     </Drawer>
   );
 };
