@@ -3586,11 +3586,6 @@ char-regex@^1.0.2:
   resolved "https://registry.npmjs.org/char-regex/-/char-regex-1.0.2.tgz"
   integrity sha512-kWWXztvZ5SBQV+eRgKFeh8q5sLuZY2+8WUIzlxWVTg+oGwY14qylx1KbKzHd8P6ZYkAg0xyIDU9JMHhyJMZ1jw==
 
-
-chatkitty@1.56.3:
-  version "1.56.3"
-  resolved "https://registry.npmjs.org/chatkitty/-/chatkitty-1.56.3.tgz"
-
 chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
@@ -3599,7 +3594,6 @@ chardet@^0.7.0:
 chatkitty@1.56.3:
   version "1.56.3"
   resolved "https://registry.yarnpkg.com/chatkitty/-/chatkitty-1.56.3.tgz#c9a5ca0ed5012a946441bdebb1e0081674b65804"
-
   integrity sha512-NE+HxKK8TM47Fvnb3FaAOmeVi4OYsZF8Xy7Bo/aRSX7v4qeT/zy+RcvZpwaSkfUZUJxTfcd0Q1iS7sg1V82Rhg==
   dependencies:
     "@stomp/rx-stomp" "^1.1.2"
@@ -8176,9 +8170,9 @@ minimatch@3.0.4, minimatch@^3.0.4:
     brace-expansion "^1.1.7"
 
 minimist@^1.1.1, minimist@^1.2.0, minimist@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.npmjs.org/minimist/-/minimist-1.2.5.tgz"
-  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
+  integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
 minipass-collect@^1.0.2:
   version "1.0.2"
