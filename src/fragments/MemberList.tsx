@@ -1,7 +1,7 @@
 import {  User } from 'chatkitty';
 import { ChatAppContext } from 'providers/ChatAppProvider';
 import React, { useContext, useEffect, useState } from 'react';
-import { StyledBox, useMediaQuery } from 'react-chat-ui-kit';
+import { Icon, Icons, StyledBox, useMediaQuery } from 'react-chat-ui-kit';
 import {
   Drawer,
   Heading,
@@ -56,11 +56,19 @@ const MemberList: React.FC = () => {
               borderRadius: '50%',
             }}
           />
+          <Icon
+            icon={Icons.Presence}
+            title={user.presence.online ? 'Connected' : 'Not connected'}
+            color={user.presence.online ? 'success' : 'inactive'}
+            style={{
+              display: 'inline-block',
+            }}
+          />
           <p style={{
             display: 'inline-block',
             marginLeft: '10px',
             width: '100px',
-            color: 'white'
+            color: 'white',
           }}>
             {user.displayName}
           </p>
