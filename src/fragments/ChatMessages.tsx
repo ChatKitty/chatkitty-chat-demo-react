@@ -109,15 +109,14 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             key={message.id}
             avatar={
               isUserMessage(message) ? (
-                <Avatar
-                  variant={AvatarVariants.ROUND}
-                  bg={getUniqueColor(
-                    message.user.displayName,
-                    theme.colors.avatars
-                  )}
-                >
-                  {message.user.displayName[0]}
-                </Avatar>
+                <img 
+                  src={message.user.displayPictureUrl} 
+                  style={{
+                    display: 'inline-block',
+                    width: '35px',
+                    borderRadius: '50%',
+                  }}
+                />
               ) : (
                 <Avatar
                   variant={AvatarVariants.ROUND}

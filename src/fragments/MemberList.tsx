@@ -37,6 +37,48 @@ const MemberList: React.FC = () => {
         {channel?.name}
       </Heading>
 
+      
+      <div>
+        {channel?.creator != null &&
+          <div>
+            <Heading
+              variant={HeadingVariants.INVERSE}
+              style={{ marginTop: '30px', marginLeft: '10px' }}
+            >
+              Owner
+            </Heading> 
+            <StyledBox>
+              <img 
+                src={channel.creator.displayPictureUrl} 
+                style={{
+                  display: 'inline-block',
+                  width: '20px',
+                  marginLeft: '10px',
+                  marginTop: '5px',
+                  borderRadius: '50%',
+                }}
+              />
+              <Icon
+                icon={Icons.Presence}
+                title={channel.creator.presence.online ? 'Connected' : 'Not connected'}
+                color={channel.creator.presence.online ? 'success' : 'inactive'}
+                style={{
+                  display: 'inline-block',
+                }}
+              />
+              <p style={{
+                display: 'inline-block',
+                marginLeft: '10px',
+                width: '100px',
+                color: 'yellow'
+              }}>
+                {channel.creator.displayName}
+              </p>
+            </StyledBox>
+          </div>
+        }
+      </div>
+      
       <Heading
         variant={HeadingVariants.INVERSE}
         style={{ marginTop: '30px', marginLeft: '10px' }}
@@ -45,34 +87,36 @@ const MemberList: React.FC = () => {
       </Heading>
       <StyledBox style={{marginTop: '20px'}}>
         {channelMembers?.map((user) => 
-        <StyledBox key={user.id}>
-          <img 
-            src={user.displayPictureUrl} 
-            style={{
-              display: 'inline-block',
-              width: '20px',
-              marginLeft: '10px',
-              marginTop: '5px',
-              borderRadius: '50%',
-            }}
-          />
-          <Icon
-            icon={Icons.Presence}
-            title={user.presence.online ? 'Connected' : 'Not connected'}
-            color={user.presence.online ? 'success' : 'inactive'}
-            style={{
-              display: 'inline-block',
-            }}
-          />
-          <p style={{
-            display: 'inline-block',
-            marginLeft: '10px',
-            width: '100px',
-            color: 'white',
-          }}>
-            {user.displayName}
-          </p>
-        </StyledBox>
+          <StyledBox key={user.id}>
+            {user.name !== channel?.creator?.name && <div>
+              <img 
+                src={user.displayPictureUrl} 
+                style={{
+                  display: 'inline-block',
+                  width: '20px',
+                  marginLeft: '10px',
+                  marginTop: '5px',
+                  borderRadius: '50%',
+                }}
+              />
+              <Icon
+                icon={Icons.Presence}
+                title={user.presence.online ? 'Connected' : 'Not connected'}
+                color={user.presence.online ? 'success' : 'inactive'}
+                style={{
+                  display: 'inline-block',
+                }}
+              />
+              <p style={{
+                display: 'inline-block',
+                marginLeft: '10px',
+                width: '100px',
+                color: 'white'
+              }}>
+                {user.displayName}
+              </p>
+            </div>}
+          </StyledBox>
         )}
       </StyledBox>
     </Drawer>
