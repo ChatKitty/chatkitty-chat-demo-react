@@ -7,7 +7,7 @@ interface UserAvatarProp {
     style: React.CSSProperties | undefined;
 }
 
-const UserAvater: React.FC<UserAvatarProp> = ({
+const UserAvatar: React.FC<UserAvatarProp> = ({
     user,
     style,
 }: UserAvatarProp) => {
@@ -24,4 +24,4 @@ const UserAvater: React.FC<UserAvatarProp> = ({
     )
 }
 
-export default UserAvater;
+export default UserAvatar;

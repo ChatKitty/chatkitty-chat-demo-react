@@ -9,7 +9,7 @@ import { ThemeContext } from 'styled-components';
 import { ChatAppContext } from '../providers/ChatAppProvider';
 
 import MessageListItem from './MessageListItem';
-import UserAvater from './UserAvatar';
+import UserAvatar from './UserAvatar';
 import WelcomeMessage from './WelcomeMessage';
 
 interface ChatMessagesProps {
@@ -110,7 +110,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             key={message.id}
             avatar={
               isUserMessage(message) ? (
-                <UserAvater
+                <UserAvatar
                   user={message.user}
                   style={{
                     display: 'inline-block',

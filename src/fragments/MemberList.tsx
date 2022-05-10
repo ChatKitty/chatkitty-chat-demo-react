@@ -9,7 +9,7 @@ import {
 } from 'react-chat-ui-kit';
 import { ThemeContext } from 'styled-components';
 
-import UserAvater from './UserAvatar';
+import UserAvatar from './UserAvatar';
 
 const MemberList: React.FC = () => {
   const theme = useContext(ThemeContext);
@@ -50,7 +50,7 @@ const MemberList: React.FC = () => {
               Owner
             </Heading> 
             <StyledBox>
-              <UserAvater
+              <UserAvatar
                 user={channel?.creator}
                 style={{
                   borderRadius: '50%',
@@ -91,7 +91,7 @@ const MemberList: React.FC = () => {
         {channelMembers?.map((user) => 
           <StyledBox key={user.id} >
             {user.name !== channel?.creator?.name && <div>
-              <UserAvater 
+              <UserAvatar 
                 user={user}
                 style={{
                   borderRadius: '50%',
