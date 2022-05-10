@@ -9,6 +9,8 @@ import {
 } from 'react-chat-ui-kit';
 import { ThemeContext } from 'styled-components';
 
+import UserAvater from './UserAvatar';
+
 const MemberList: React.FC = () => {
   const theme = useContext(ThemeContext);
   const isMedium = useMediaQuery(theme.mediaQueries.medium);
@@ -48,15 +50,8 @@ const MemberList: React.FC = () => {
               Owner
             </Heading> 
             <StyledBox>
-              <img 
-                src={channel.creator.displayPictureUrl} 
-                style={{
-                  display: 'inline',
-                  width: '25px',
-                  marginLeft: '10px',
-                  marginTop: '5px',
-                  borderRadius: '50%',
-                }}
+              <UserAvater
+                user={channel?.creator}
               />
               <Icon
                 icon={Icons.Presence}
@@ -90,15 +85,8 @@ const MemberList: React.FC = () => {
         {channelMembers?.map((user) => 
           <StyledBox key={user.id} >
             {user.name !== channel?.creator?.name && <div>
-              <img 
-                src={user.displayPictureUrl} 
-                style={{
-                  display: 'inline',
-                  width: '25px',
-                  marginLeft: '10px',
-                  marginTop: '5px',
-                  borderRadius: '50%',
-                }}
+              <UserAvater 
+                user={user}
               />
               <Icon
                 icon={Icons.Presence}
