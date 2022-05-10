@@ -43,7 +43,7 @@ const MemberList: React.FC = () => {
           <div>
             <Heading
               variant={HeadingVariants.INVERSE}
-              style={{ marginTop: '30px', marginLeft: '10px' }}
+              style={{ marginTop: '30px', marginLeft: '10px', marginBottom: '15px' }}
             >
               Owner
             </Heading> 
@@ -51,8 +51,8 @@ const MemberList: React.FC = () => {
               <img 
                 src={channel.creator.displayPictureUrl} 
                 style={{
-                  display: 'inline-block',
-                  width: '20px',
+                  display: 'inline',
+                  width: '25px',
                   marginLeft: '10px',
                   marginTop: '5px',
                   borderRadius: '50%',
@@ -63,14 +63,15 @@ const MemberList: React.FC = () => {
                 title={channel.creator.presence.online ? 'Connected' : 'Not connected'}
                 color={channel.creator.presence.online ? 'success' : 'inactive'}
                 style={{
-                  display: 'inline-block',
+                  display: 'inline',
                 }}
               />
               <p style={{
-                display: 'inline-block',
+                display: 'inline',
                 marginLeft: '10px',
                 width: '100px',
-                color: 'yellow'
+                color: 'yellow',
+                verticalAlign: '10px',
               }}>
                 {channel.creator.displayName}
               </p>
@@ -78,24 +79,23 @@ const MemberList: React.FC = () => {
           </div>
         }
       </div>
-      
+
       <Heading
         variant={HeadingVariants.INVERSE}
         style={{ marginTop: '30px', marginLeft: '10px' }}
       >
         Channel Members
       </Heading>
-      <StyledBox style={{marginTop: '20px'}}>
+      <StyledBox style={{marginTop: '15px'}}>
         {channelMembers?.map((user) => 
-          <StyledBox key={user.id}>
+          <StyledBox key={user.id} style ={{height: '40px'}}>
             {user.name !== channel?.creator?.name && <div>
               <img 
                 src={user.displayPictureUrl} 
                 style={{
-                  display: 'inline-block',
-                  width: '20px',
+                  display: 'inline',
+                  width: '25px',
                   marginLeft: '10px',
-                  marginTop: '5px',
                   borderRadius: '50%',
                 }}
               />
@@ -104,14 +104,15 @@ const MemberList: React.FC = () => {
                 title={user.presence.online ? 'Connected' : 'Not connected'}
                 color={user.presence.online ? 'success' : 'inactive'}
                 style={{
-                  display: 'inline-block',
+                  display: 'inline',
                 }}
               />
               <p style={{
-                display: 'inline-block',
+                display: 'inline',
                 marginLeft: '10px',
                 width: '100px',
-                color: 'white'
+                color: 'white',
+                verticalAlign: '7px',
               }}>
                 {user.displayName}
               </p>
