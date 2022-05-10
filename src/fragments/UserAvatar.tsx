@@ -4,10 +4,12 @@ import { StyledBox } from 'react-chat-ui-kit';
 
 interface UserAvatarProp {
     user: User;
+    style: React.CSSProperties | undefined;
 }
 
 const UserAvater: React.FC<UserAvatarProp> = ({
     user,
+    style,
 }: UserAvatarProp) => {
     return (
         <StyledBox 
@@ -16,12 +18,7 @@ const UserAvater: React.FC<UserAvatarProp> = ({
             }}>
             <img 
                 src={user.displayPictureUrl} 
-                style={{
-                    borderRadius: '50%',
-                    width: '25px',
-                    marginLeft: '10px',
-                    marginTop: '5px',
-                }}
+                style={style}
             />
         </StyledBox>
     )
