@@ -13,7 +13,7 @@ const MemberList: React.FC = () => {
   const theme = useContext(ThemeContext);
   const isMedium = useMediaQuery(theme.mediaQueries.medium);
 
-  const { layout, channel, memberListPaginator } = useContext(ChatAppContext);
+  const { layout, channel, memberListGetter } = useContext(ChatAppContext);
 
   const [channelMembers, setChannelMembers] = useState<User[] | null>([]);
 
@@ -21,8 +21,7 @@ const MemberList: React.FC = () => {
     if (!channel) {
       return;
     }
-    const memberList = memberListPaginator(channel);
-    memberList.then(resolved => {setChannelMembers(resolved)});
+    memberListGetter(channel).then(setChannelMembers);
   });
 
   return (

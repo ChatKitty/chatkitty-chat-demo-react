@@ -49,7 +49,7 @@ interface ChatAppContext {
   messagesPaginator: (
     channel: Channel
   ) => Promise<ChatKittyPaginator<Message> | null>;
-  memberListPaginator: (
+  memberListGetter: (
     Channel: Channel
   ) => Promise<User[] | null>;
   startChatSession: (
@@ -91,7 +91,7 @@ const initialValues: ChatAppContext = {
   channelUnreadMessagesCount: () => Promise.prototype,
   startChatSession: () => null,
   messagesPaginator: () => Promise.prototype,
-  memberListPaginator: () => Promise.prototype,
+  memberListGetter: () => Promise.prototype,
   prependToMessages: () => {},
   appendToMessages: () => {},
   channel: null,
@@ -349,7 +349,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
-  const memberListPaginator = async (channel: Channel) =>{
+  const memberListGetter = async (channel: Channel) =>{
     const result = await kitty.getChannelMembers({ channel: channel });
 
     if (succeeded<GetUsersSucceededResult>(result)) {
@@ -422,7 +422,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         channelUnreadMessagesCount,
         startChatSession,
         messagesPaginator,
-        memberListPaginator,
+        memberListGetter,
         prependToMessages,
         appendToMessages,
         messageDraft,
