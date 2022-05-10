@@ -9,6 +9,7 @@ import { ThemeContext } from 'styled-components';
 import { ChatAppContext } from '../providers/ChatAppProvider';
 
 import MessageListItem from './MessageListItem';
+import UserAvatar from './UserAvatar';
 import WelcomeMessage from './WelcomeMessage';
 
 interface ChatMessagesProps {
@@ -109,15 +110,14 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             key={message.id}
             avatar={
               isUserMessage(message) ? (
-                <Avatar
-                  variant={AvatarVariants.ROUND}
-                  bg={getUniqueColor(
-                    message.user.displayName,
-                    theme.colors.avatars
-                  )}
-                >
-                  {message.user.displayName[0]}
-                </Avatar>
+                <UserAvatar
+                  user={message.user}
+                  style={{
+                    display: 'inline-block',
+                    width: '35px',
+                    borderRadius: '50%',
+                  }}
+                />
               ) : (
                 <Avatar
                   variant={AvatarVariants.ROUND}
