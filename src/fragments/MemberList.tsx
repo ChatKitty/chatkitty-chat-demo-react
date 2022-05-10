@@ -21,21 +21,22 @@ const MemberList: React.FC = () => {
     if (!channel) {
       return;
     }
-    memberListGetter(channel).then(setChannelMembers);
+    memberListGetter(channel).then(resolved => {setChannelMembers(resolved)});
   });
 
-  return (
+  return channel ? (
     <Drawer
       open={layout.menu || isMedium}
       background={theme.backgrounds.primary}
     >
-      <Heading
-        variant={HeadingVariants.INVERSE}
-        style={{ fontSize: '25px', marginTop: '30px', marginLeft: '10px' }}
-      >
-        {channel?.name}
-      </Heading>
-
+      <div>
+        {channel?.name !== null && <Heading
+          variant={HeadingVariants.INVERSE}
+          style={{ fontSize: '25px', marginTop: '30px', marginLeft: '10px' }}
+        >
+          {channel?.name}
+        </Heading>}
+      </div>
       
       <div>
         {channel?.creator != null &&
@@ -87,7 +88,7 @@ const MemberList: React.FC = () => {
       </Heading>
       <StyledBox style={{marginTop: '15px'}}>
         {channelMembers?.map((user) => 
-          <StyledBox key={user.id} style ={{height: '40px'}}>
+          <StyledBox key={user.id} >
             {user.name !== channel?.creator?.name && <div>
               <img 
                 src={user.displayPictureUrl} 
@@ -95,6 +96,7 @@ const MemberList: React.FC = () => {
                   display: 'inline',
                   width: '25px',
                   marginLeft: '10px',
+                  marginTop: '5px',
                   borderRadius: '50%',
                 }}
               />
@@ -119,6 +121,18 @@ const MemberList: React.FC = () => {
           </StyledBox>
         )}
       </StyledBox>
+    </Drawer>
+  ):( 
+    <Drawer
+      open={layout.menu || isMedium}
+      background={theme.backgrounds.primary}
+    >
+      <Heading
+          variant={HeadingVariants.INVERSE}
+          style={{ fontSize: '20px', marginTop: '30px', marginLeft: '10px' }}
+        >
+          Please Select a Channel
+        </Heading>
     </Drawer>
   );
 };
