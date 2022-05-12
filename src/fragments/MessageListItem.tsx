@@ -15,6 +15,7 @@ import { useHover } from 'react-chat-ui-kit';
 import Message from './Message';
 import ReactionRenderer from './ReactionRenderer';
 
+
 interface MessageListItemProps {
   message: ChatKittyMessage;
   avatar: ReactElement;
@@ -30,7 +31,12 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         displayName: 'ChatKitty',
       };
 
-  const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 }); 
+  const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
+
+  const clickListener = () =>{
+    console.log('test');
+  };
+
   return (
     <FlexRow
       py="1"
@@ -49,12 +55,15 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
             {moment(message.createdTime).fromNow()}
           </Label>
           {isHovering && 
-            <StyledBox style={{position: 'relative', left: '20px'}}>
-            <Emoji size={15} emoji={'smiley'}/>
+            <StyledBox 
+            style={{position:'relative', left:'50px', cursor: 'pointer', borderRadius: '20%'}}
+            onClick={clickListener}
+            >
+              <Emoji size={15} emoji={'smiley'}/>
             </StyledBox>}
         </FlexRow>
 
-        <Message message={message}></Message>
+        <Message message={message}/>
         <ReactionRenderer reactions={message.reactions}/>
       </FlexColumn>
     </FlexRow>

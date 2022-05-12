@@ -52,6 +52,10 @@ interface ChatAppContext {
   memberListGetter: (
     Channel: Channel
   ) => Promise<User[] | null>;
+  messageReactor: (
+    emoji: string,
+    message: Message
+  ) => void
   startChatSession: (
     channel: Channel,
     onReceivedMessage: (message: Message) => void,
@@ -92,6 +96,7 @@ const initialValues: ChatAppContext = {
   startChatSession: () => null,
   messagesPaginator: () => Promise.prototype,
   memberListGetter: () => Promise.prototype,
+  messageReactor: () => Promise.prototype,
   prependToMessages: () => {},
   appendToMessages: () => {},
   channel: null,
@@ -359,6 +364,16 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
+  const messageReactor = async (emoji: string, message: Message) =>{
+    const result = await kitty.reactToMessage({ emoji, message })
+
+    if (succeeded(result)){
+      return result.reaction;
+    }
+
+    return null;
+  }
+
   const prependToMessages = (items: Message[]) => {
     setMessages((old) => [...items, ...old]);
   };
@@ -423,6 +438,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         startChatSession,
         messagesPaginator,
         memberListGetter,
+        messageReactor,
         prependToMessages,
         appendToMessages,
         messageDraft,
