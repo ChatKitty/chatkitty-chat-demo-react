@@ -1,7 +1,8 @@
 import { Message as ChatKittyMessage, isUserMessage } from 'chatkitty';
 import { Emoji } from 'emoji-mart';
 import moment from 'moment';
-import React, { ReactElement } from 'react';
+import { ChatAppContext } from 'providers/ChatAppProvider';
+import React, { ReactElement, useContext } from 'react';
 import {
   FlexColumn,
   FlexRow,
@@ -31,10 +32,12 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         displayName: 'ChatKitty',
       };
 
+  const { messageReactor } = useContext(ChatAppContext);
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
 
   const clickListener = () =>{
-    console.log('test');
+    messageReactor( 'smiley', message);
+    console.log(message.reactions);
   };
 
   return (

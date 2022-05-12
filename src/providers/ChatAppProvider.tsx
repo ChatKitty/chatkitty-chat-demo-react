@@ -12,6 +12,7 @@ import ChatKitty, {
   JoinedChannelResult,
   LeftChannelResult,
   Message,
+  Reaction,
   StartedChatSessionResult,
   succeeded,
   User,
@@ -54,13 +55,14 @@ interface ChatAppContext {
   ) => Promise<User[] | null>;
   messageReactor: (
     emoji: string,
-    message: Message
-  ) => void
+    message: Message,
+  ) => Promise<Reaction | null>
   startChatSession: (
     channel: Channel,
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
-    onTypingStopped: (user: User) => void
+    onTypingStopped: (user: User) => void,
+    onMessageUpdated: (message: Message) => void
   ) => ChatSession | null;
   prependToMessages: (messages: Message[]) => void;
   appendToMessages: (messages: Message[]) => void;
@@ -314,13 +316,15 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     channel: Channel,
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
-    onTypingStopped: (user: User) => void
+    onTypingStopped: (user: User) => void,
+    onMessageUpdated: (message: Message) => void
   ): ChatSession | null => {
     const result = kitty.startChatSession({
       channel,
       onReceivedMessage,
       onTypingStarted,
       onTypingStopped,
+      onMessageUpdated
     });
 
     if (succeeded<StartedChatSessionResult>(result)) {
@@ -364,7 +368,10 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
-  const messageReactor = async (emoji: string, message: Message) =>{
+  const messageReactor = async (
+    emoji: string, 
+    message: Message,
+    ) =>{
     const result = await kitty.reactToMessage({ emoji, message })
 
     if (succeeded(result)){

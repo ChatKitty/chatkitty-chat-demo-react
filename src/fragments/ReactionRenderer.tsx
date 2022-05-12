@@ -12,11 +12,11 @@ interface EmojiProps {
 const ReactionRenderer: React.FC<EmojiProps> = ({
     reactions
 }: EmojiProps) => {
-    
-    if (reactions != undefined){
-        reactions[0].emoji
-    }
 
+    if(reactions !== undefined) {
+        console.log(reactions[0].emoji.character);
+    }
+    
     return reactions ? (
         <StyledBox style={{
             marginTop: '1px',
@@ -25,7 +25,7 @@ const ReactionRenderer: React.FC<EmojiProps> = ({
         }}>
             {reactions.map((reactionList) =>
                 <div key={reactionList.emoji.character.length}> 
-                    <Emoji size={15} emoji={ reactionList.emoji.character}/>
+                    <p>{reactionList.emoji.character} {reactionList.count}</p>
                 </div>
             )}
             

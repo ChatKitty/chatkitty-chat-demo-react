@@ -43,6 +43,9 @@ const Chat: React.FC = () => {
             )
           );
         }
+      },
+      (message: Message) => {
+        prependToMessages([message]);
       }
     );
 
