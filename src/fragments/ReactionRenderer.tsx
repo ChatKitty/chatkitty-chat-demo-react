@@ -25,7 +25,7 @@ const ReactionRenderer: React.FC<EmojiProps> = ({
         }}>
             {reactions.map((reactionList) =>
                 <div key={reactionList.emoji.character.length}> 
-                    <Emoji size={15} emoji={ reactionList.emoji.character}>t</Emoji>
+                    <Emoji size={15} emoji={ reactionList.emoji.character}/>
                 </div>
             )}
             

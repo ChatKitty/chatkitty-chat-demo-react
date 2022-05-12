@@ -1,4 +1,5 @@
 import { Message as ChatKittyMessage, isUserMessage } from 'chatkitty';
+import { Emoji } from 'emoji-mart';
 import moment from 'moment';
 import React, { ReactElement } from 'react';
 import {
@@ -39,7 +40,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
       {...hoverProps}
     >
       {avatar}
-      <FlexColumn marginLeft="5" flexGrow={1}>
+      <FlexColumn marginLeft="5" flexGrow={1} >
         <FlexRow marginBottom="1">
           <StyledBox marginRight="3">
             <Heading>{sender.displayName}</Heading>
@@ -47,6 +48,10 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
           <Label size={LabelSizes.SMALL}>
             {moment(message.createdTime).fromNow()}
           </Label>
+          {isHovering && 
+            <StyledBox style={{position: 'relative', left: '20px'}}>
+            <Emoji size={15} emoji={'smiley'}/>
+            </StyledBox>}
         </FlexRow>
 
         <Message message={message}></Message>
