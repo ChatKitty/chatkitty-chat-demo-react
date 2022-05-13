@@ -15,10 +15,11 @@ import ChatMessages from './ChatMessages';
 import TypingIndicator from './TypingIndicator';
 
 const Chat: React.FC = () => {
-  const { channel, startChatSession, prependToMessages, currentUser } =
+  const { channel, startChatSession, prependToMessages, currentUser, updateMessages} =
     useContext(ChatAppContext);
 
   const [typingUsers, setTypingUsers] = useState<User[]>([]);
+
 
   useEffect(() => {
     if (!channel) {
@@ -45,10 +46,10 @@ const Chat: React.FC = () => {
         }
       },
       (message: Message) => {
-        prependToMessages([message]);
+        updateMessages(message);
       },
       (message: Message) => {
-        prependToMessages([message]);
+        updateMessages(message);
       }
     );
 

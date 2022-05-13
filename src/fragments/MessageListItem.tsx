@@ -39,7 +39,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
   const clickListener = () =>{
     let notIn= 1;
     if (message.reactions && currentUser){
-      for (let i = 0; i< message.reactions.length; i++){
+      for (let i = 0; i< message.reactions[0].count; i++){
         if( currentUser.id === message.reactions[0].users[i].id){
           notIn = 0;
           messageUnReactor( 'smiley', message);

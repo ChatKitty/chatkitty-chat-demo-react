@@ -80,6 +80,7 @@ interface ChatAppContext {
   showMenu: () => void;
   hideMenu: () => void;
   showChat: (channel: Channel) => void;
+  updateMessages: (message: Message) => void;
   showJoinChannel: () => void;
   hideJoinChannel: () => void;
   layout: LayoutState;
@@ -120,6 +121,7 @@ const initialValues: ChatAppContext = {
   showMenu: () => {},
   hideMenu: () => {},
   showChat: () => {},
+  updateMessages: () => {},
   showJoinChannel: () => {},
   hideJoinChannel: () => {},
   layout: { menu: false, chat: false, joinChannel: false },
@@ -181,6 +183,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     hideView('Menu');
   };
 
+  
+
   const showChat = (c: Channel) => {
     if (c.id === channel?.id) {
       return;
@@ -193,6 +197,11 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     showView('Chat');
   };
+
+  const updateMessages = (message: Message) => {
+    setMessages((old) => old.map((item) => item.id === message.id ? message: item));
+  };
+
 
   const hideChat = () => {
     setChannel(initialValues.channel);
@@ -449,6 +458,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         showMenu,
         hideMenu,
         showChat,
+        updateMessages,
         showJoinChannel,
         hideJoinChannel,
         currentUser,
