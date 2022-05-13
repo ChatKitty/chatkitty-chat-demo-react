@@ -1,5 +1,4 @@
 import {  ReactionSummary} from 'chatkitty';
-import { Emoji } from 'emoji-mart';
 import React from 'react';
 import { StyledBox } from 'react-chat-ui-kit';
 
@@ -25,7 +24,10 @@ const ReactionRenderer: React.FC<EmojiProps> = ({
         }}>
             {reactions.map((reactionList) =>
                 <div key={reactionList.emoji.character.length}> 
-                    <p>{reactionList.emoji.character} {reactionList.count}</p>
+                    <p>
+                        {reactionList.emoji.character} 
+                        {reactionList.count}
+                    </p>
                 </div>
             )}
             

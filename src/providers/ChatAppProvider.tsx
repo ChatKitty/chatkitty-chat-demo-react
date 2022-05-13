@@ -57,12 +57,17 @@ interface ChatAppContext {
     emoji: string,
     message: Message,
   ) => Promise<Reaction | null>
+  messageUnReactor: (
+    emoji: string,
+    message: Message,
+  ) => Promise<Reaction | null>
   startChatSession: (
     channel: Channel,
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
     onTypingStopped: (user: User) => void,
-    onMessageUpdated: (message: Message) => void
+    onMessageReactionAdded: (message: Message, reaction: Reaction) => void,
+    onMessageReactionRemoved: (message: Message, reaction: Reaction) => void,
   ) => ChatSession | null;
   prependToMessages: (messages: Message[]) => void;
   appendToMessages: (messages: Message[]) => void;
@@ -99,6 +104,7 @@ const initialValues: ChatAppContext = {
   messagesPaginator: () => Promise.prototype,
   memberListGetter: () => Promise.prototype,
   messageReactor: () => Promise.prototype,
+  messageUnReactor:() => Promise.prototype,
   prependToMessages: () => {},
   appendToMessages: () => {},
   channel: null,
@@ -317,14 +323,16 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
     onTypingStopped: (user: User) => void,
-    onMessageUpdated: (message: Message) => void
+    onMessageReactionAdded: (message: Message, reaction: Reaction) => void,
+    onMessageReactionRemoved: (message: Message, reaction: Reaction) => void
   ): ChatSession | null => {
     const result = kitty.startChatSession({
       channel,
       onReceivedMessage,
       onTypingStarted,
       onTypingStopped,
-      onMessageUpdated
+      onMessageReactionAdded,
+      onMessageReactionRemoved,
     });
 
     if (succeeded<StartedChatSessionResult>(result)) {
@@ -373,6 +381,19 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     message: Message,
     ) =>{
     const result = await kitty.reactToMessage({ emoji, message })
+
+    if (succeeded(result)){
+      return result.reaction;
+    }
+
+    return null;
+  }
+
+  const messageUnReactor = async (
+    emoji: string, 
+    message: Message,
+    ) =>{
+    const result = await kitty.removeReaction({ emoji, message })
 
     if (succeeded(result)){
       return result.reaction;
@@ -446,6 +467,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         messagesPaginator,
         memberListGetter,
         messageReactor,
+        messageUnReactor,
         prependToMessages,
         appendToMessages,
         messageDraft,
