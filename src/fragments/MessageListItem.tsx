@@ -80,7 +80,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         </FlexRow>
 
         <Message message={message}/>
-        <ReactionRenderer reactions={message.reactions}/>
+        <ReactionRenderer message={message}/>
       </FlexColumn>
     </FlexRow>
   );
