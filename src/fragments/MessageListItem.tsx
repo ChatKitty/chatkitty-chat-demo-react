@@ -1,8 +1,6 @@
 import { Message as ChatKittyMessage, isUserMessage} from 'chatkitty';
-import { Emoji } from 'emoji-mart';
 import moment from 'moment';
-import { ChatAppContext } from 'providers/ChatAppProvider';
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 import {
   FlexColumn,
   FlexRow,
@@ -14,6 +12,7 @@ import {
 import { useHover } from 'react-chat-ui-kit';
 
 import Message from './Message';
+import PopupEmojiWindow from './PopupEmojiWindow';
 import ReactionRenderer from './ReactionRenderer';
 
 
@@ -32,26 +31,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         displayName: 'ChatKitty',
       };
 
-  const { messageReactor, messageUnReactor, currentUser } = useContext(ChatAppContext);
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
-
-
-  const clickListener = () =>{
-    let notIn= 1;
-    if (message.reactions && currentUser){
-      for (let i = 0; i< message.reactions[0].count; i++){
-        if( currentUser.id === message.reactions[0].users[i].id){
-          notIn = 0;
-          messageUnReactor( 'smiley', message);
-          break;
-        }
-      }
-      
-    }
-    if(notIn){
-      messageReactor( 'smiley', message);
-    }
-  };
 
   return (
     <FlexRow
@@ -72,10 +52,9 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
           </Label>
           {isHovering && 
             <StyledBox 
-            style={{position:'relative', left:'50px', cursor: 'pointer', borderRadius: '20%'}}
-            onClick={clickListener}
+            style={{position:'relative', left:'50px', borderRadius: '20%'}}
             >
-              <Emoji size={15} emoji={'smiley'}/>
+              <PopupEmojiWindow message={message}/>
             </StyledBox>}
         </FlexRow>
 

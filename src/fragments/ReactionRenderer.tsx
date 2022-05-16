@@ -1,4 +1,5 @@
 import {  Message, ReactionSummary } from 'chatkitty';
+import { Emoji } from 'emoji-mart';
 import { ChatAppContext } from 'providers/ChatAppProvider';
 import React, { useContext } from 'react';
 import { StyledBox } from 'react-chat-ui-kit';
@@ -15,7 +16,7 @@ const ReactionRenderer: React.FC<EmojiProps> = ({
 
     const {currentUser, messageUnReactor, messageReactor} = useContext(ChatAppContext);
 
-    const emojiClickeListener = (reaction: ReactionSummary) => {
+    const emojiClickListener = (reaction: ReactionSummary) => {
         let notIn = true;
         let reacted = false;
         if(message.reactions && currentUser){
@@ -49,11 +50,13 @@ const ReactionRenderer: React.FC<EmojiProps> = ({
             whiteSpace: 'nowrap'
         }}>
             {message.reactions.map((reaction) =>
-                <div key={reaction.emoji.character} style={{cursor: 'pointer'}} onClick={() => emojiClickeListener(reaction)} > 
-                    <p >
-                        {reaction.emoji.character} 
-                        {reaction.count}
-                    </p>
+                <div 
+                    key={reaction.emoji.character} 
+                    style={{cursor: 'pointer',  marginRight:'2px', display: 'inline-block', background:'grey', borderRadius:'25%', width: '35px', height:'21px'}} 
+                    onClick={() => emojiClickListener(reaction)} 
+                > 
+                    <div style={{display: 'inline-block', marginLeft:'3px'}}><Emoji size={20} emoji={reaction.emoji.aliases[0]}/></div>
+                    <p style={{display:'inline-block', paddingLeft: '2px', color:'white',verticalAlign: '5px'}}>{reaction.count}</p>
                 </div>
             )}
             
