@@ -1,5 +1,4 @@
 import {  Message, ReactionSummary } from 'chatkitty';
-import { Emoji } from 'emoji-mart';
 import { ChatAppContext } from 'providers/ChatAppProvider';
 import React, { useContext } from 'react';
 import { StyledBox } from 'react-chat-ui-kit';
@@ -52,11 +51,11 @@ const ReactionRenderer: React.FC<EmojiProps> = ({
             {message.reactions.map((reaction) =>
                 <div 
                     key={reaction.emoji.character} 
-                    style={{cursor: 'pointer',  marginRight:'2px', display: 'inline-block', background:'grey', borderRadius:'25%', width: '35px', height:'21px'}} 
+                    style={{cursor: 'pointer',  marginRight:'2px', display: 'inline-block', background:'grey', borderRadius:'25%', width: '40px', height:'25px'}} 
                     onClick={() => emojiClickListener(reaction)} 
                 > 
-                    <div style={{display: 'inline-block', marginLeft:'3px'}}><Emoji size={20} emoji={reaction.emoji.aliases[0]}/></div>
-                    <p style={{display:'inline-block', paddingLeft: '2px', color:'white',verticalAlign: '5px'}}>{reaction.count}</p>
+                    <p style={{display: 'inline-block',verticalAlign: '-8px', fontSize:'18px'}}>{reaction.emoji.character}</p>
+                    <p style={{display:'inline-block', paddingLeft: '2px', color:'white',verticalAlign: '-5px'}}>{reaction.count}</p>
                 </div>
             )}
             

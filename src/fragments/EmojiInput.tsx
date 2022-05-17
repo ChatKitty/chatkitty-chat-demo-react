@@ -1,3 +1,4 @@
+
 import 'emoji-mart/css/emoji-mart.css';
 import { EmojiData, Picker as EmojiPicker } from 'emoji-mart';
 import React, { useContext } from 'react';
@@ -25,7 +26,12 @@ const EmojiInput: React.FC<EmojiInputProps> = ({
       render={(dismiss) => {
         const addEmoji = (emoji: EmojiData) => {
           if ('native' in emoji) {
-            onSelection(`${value}${emoji.native}`);
+            if(onSelection.name === 'emojiClickListener'){
+              onSelection(`${value}${emoji.id}`);
+            }
+            else{
+              onSelection(`${value}${emoji.native}`);
+            }
             dismiss();
           }
         };
