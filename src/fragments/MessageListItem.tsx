@@ -52,8 +52,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
           </Label>
           {isHovering && 
             <StyledBox 
-            className="popupText"
-            style={{position:'relative', left:'50px', borderRadius: '20%', display:'inline-block', height:'15px'}}
+            style={{position:'relative', left:'50px', borderRadius: '20%', display:'inline-block', height:'17px'}}
             >
               <PopupEmojiWindow message={message}/>
             </StyledBox>}

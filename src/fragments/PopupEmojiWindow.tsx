@@ -3,7 +3,7 @@ import { ChatAppContext } from "providers/ChatAppProvider";
 import React, { useContext } from "react";
 import { StyledBox } from "react-chat-ui-kit";
 
-import '../styles/popupStyle.css';
+
 import EmojiInput from "./EmojiInput";
 import EmojiSuggestion from "./EmojiSuggestion";
 
@@ -19,7 +19,7 @@ const PopupEmojiWindow: React.FC<popupProp> = ({message}: popupProp) => {
   const emojiClickListener = (emoji: string) => {
     let notIn = true;
     let notReacted = true;
-
+    messageReactor('U+1F600',message);
     if(currentUser && message.reactions){
       for(let i = 0; i<message.reactions.length; i++){
         if(message.reactions[i].emoji.aliases[0] === emoji){
@@ -41,10 +41,13 @@ const PopupEmojiWindow: React.FC<popupProp> = ({message}: popupProp) => {
         messageReactor(emoji, message);
       }
     }
+    else{
+      messageReactor(emoji, message);
+    }
   }
 
   return(
-        <StyledBox className='popuptext' style={{marginRight:"350px", marginBottom:"150px"}} >
+        <StyledBox  style={{marginRight:"320px", marginBottom:"150px"}} >
           <EmojiInput value="" onSelection={emojiClickListener} />
           <EmojiSuggestion value="" onSelection={emojiClickListener} />
         </StyledBox>

@@ -27,7 +27,7 @@ const EmojiInput: React.FC<EmojiInputProps> = ({
         const addEmoji = (emoji: EmojiData) => {
           if ('native' in emoji) {
             if(onSelection.name === 'emojiClickListener'){
-              onSelection(`${value}${emoji.id}`);
+              onSelection(`${value}${emoji.colons}`);
             }
             else{
               onSelection(`${value}${emoji.native}`);
