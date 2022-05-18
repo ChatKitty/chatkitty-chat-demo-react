@@ -9,33 +9,24 @@ interface EmojiProps {
     message: Message
 }
 
-const ReactionRenderer: React.FC<EmojiProps> = ({
+const Reactions: React.FC<EmojiProps> = ({
     message
 }: EmojiProps) => {
 
-    const {currentUser, messageUnReactor, messageReactor} = useContext(ChatAppContext);
+    const {currentUser, removeReaction, reactToMessage} = useContext(ChatAppContext);
 
     const emojiClickListener = (reaction: ReactionSummary) => {
-        let notIn = true;
-        let reacted = false;
-        if(message.reactions && currentUser){
-            for(let i = 0; i< message.reactions?.length; i++){
-                if(message.reactions[i].emoji.character === reaction.emoji.character){
-                    for (let j = 0; j< message.reactions[i].count; j++){
-                        if( currentUser.id === message.reactions[i].users[j].id){
-                          notIn = false;
-                          reacted = true;
-                          messageUnReactor(reaction.emoji.aliases[0], message);
-                          break;
-                        }
-                    }
-                    if(notIn){
-                        messageReactor(reaction.emoji.aliases[0], message);
-                        reacted = true;
-                    }
+        if(currentUser && message.reactions){
+            const reactionFound = message.reactions.find(reactedReaction => reactedReaction.emoji.character === reaction.emoji.character)
+            console.log(reactionFound);
+            if(reactionFound){
+                const userFound = reactionFound.users.find(user => user.id === currentUser.id)
+
+                if(userFound){
+                    removeReaction(reaction.emoji.aliases[0], message);
                 }
-                if(reacted){
-                    break;
+                else{
+                    reactToMessage(reaction.emoji.aliases[0], message);
                 }
             }
         }
@@ -65,4 +56,4 @@ const ReactionRenderer: React.FC<EmojiProps> = ({
 }
 
 
-export default ReactionRenderer;
+export default Reactions;

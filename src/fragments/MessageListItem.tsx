@@ -13,7 +13,7 @@ import { useHover } from 'react-chat-ui-kit';
 
 import Message from './Message';
 import PopupEmojiWindow from './PopupEmojiWindow';
-import ReactionRenderer from './ReactionRenderer';
+import Reactions from './Reactions';
 
 
 interface MessageListItemProps {
@@ -59,7 +59,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         </FlexRow>
 
         <Message message={message}/>
-        <ReactionRenderer message={message}/>
+        <Reactions message={message}/>
       </FlexColumn>
     </FlexRow>
   );

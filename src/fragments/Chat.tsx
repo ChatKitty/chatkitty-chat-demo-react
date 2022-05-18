@@ -15,7 +15,7 @@ import ChatMessages from './ChatMessages';
 import TypingIndicator from './TypingIndicator';
 
 const Chat: React.FC = () => {
-  const { channel, messages, startChatSession, prependToMessages, currentUser, updateMessages} =
+  const { channel, messages, startChatSession, prependToMessages, currentUser} =
     useContext(ChatAppContext);
 
   const [typingUsers, setTypingUsers] = useState<User[]>([]);
@@ -44,12 +44,6 @@ const Chat: React.FC = () => {
             )
           );
         }
-      },
-      (message: Message) => {
-        updateMessages(message);
-      },
-      (message: Message) => {
-        updateMessages(message);
       }
     );
 

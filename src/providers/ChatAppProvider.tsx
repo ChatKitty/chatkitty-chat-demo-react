@@ -54,11 +54,11 @@ interface ChatAppContext {
   memberListGetter: (
     Channel: Channel
   ) => Promise<User[] | null>;
-  messageReactor: (
+  reactToMessage: (
     emoji: string,
     message: Message,
   ) => Promise<Reaction | null>
-  messageUnReactor: (
+  removeReaction: (
     emoji: string,
     message: Message,
   ) => Promise<Reaction | null>
@@ -67,8 +67,6 @@ interface ChatAppContext {
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
     onTypingStopped: (user: User) => void,
-    onMessageReactionAdded: (message: Message, reaction: Reaction) => void,
-    onMessageReactionRemoved: (message: Message, reaction: Reaction) => void,
   ) => ChatSession | null;
   prependToMessages: (messages: Message[]) => void;
   appendToMessages: (messages: Message[]) => void;
@@ -105,8 +103,8 @@ const initialValues: ChatAppContext = {
   startChatSession: () => null,
   messagesPaginator: () => Promise.prototype,
   memberListGetter: () => Promise.prototype,
-  messageReactor: () => Promise.prototype,
-  messageUnReactor:() => Promise.prototype,
+  reactToMessage: () => Promise.prototype,
+  removeReaction:() => Promise.prototype,
   prependToMessages: () => {},
   appendToMessages: () => {},
   channel: null,
@@ -333,16 +331,18 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
     onTypingStopped: (user: User) => void,
-    onMessageReactionAdded: (message: Message, reaction: Reaction) => void,
-    onMessageReactionRemoved: (message: Message, reaction: Reaction) => void
   ): ChatSession | null => {
     const result = kitty.startChatSession({
       channel,
       onReceivedMessage,
       onTypingStarted,
       onTypingStopped,
-      onMessageReactionAdded,
-      onMessageReactionRemoved,
+      onMessageReactionAdded: (message) => {
+        updateMessages(message);
+      },
+      onMessageReactionRemoved: (message) => {
+        updateMessages(message);
+      }
     });
 
     if (succeeded<StartedChatSessionResult>(result)) {
@@ -386,7 +386,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
-  const messageReactor = async (
+  const reactToMessage = async (
     emoji: string, 
     message: Message,
     ) =>{
@@ -399,7 +399,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   }
 
-  const messageUnReactor = async (
+  const removeReaction = async (
     emoji: string, 
     message: Message,
     ) =>{
@@ -477,8 +477,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         startChatSession,
         messagesPaginator,
         memberListGetter,
-        messageReactor,
-        messageUnReactor,
+        reactToMessage,
+        removeReaction,
         prependToMessages,
         appendToMessages,
         messageDraft,

@@ -14,35 +14,35 @@ interface popupProp{
 const PopupEmojiWindow: React.FC<popupProp> = ({message}: popupProp) => {
 
 
-  const {currentUser, messageUnReactor, messageReactor} = useContext(ChatAppContext);
+  const {currentUser, removeReaction, reactToMessage} = useContext(ChatAppContext);
 
   const emojiClickListener = (emoji: string) => {
     let notIn = true;
     let notReacted = true;
-    messageReactor('U+1F600',message);
+
     if(currentUser && message.reactions){
       for(let i = 0; i<message.reactions.length; i++){
         if(message.reactions[i].emoji.aliases[0] === emoji){
           notIn = false;
           for(let j = 0; j< message.reactions[i].users.length; j++){
             if(message.reactions[i].users[j].id === currentUser.id){
-                messageUnReactor(emoji, message);
+                removeReaction(emoji, message);
                 notReacted = false;
                 break;
             }
           }
           if(notReacted){
-            messageReactor(emoji, message);
+            reactToMessage(emoji, message);
             break;
           }
         }
       }
       if(notIn){
-        messageReactor(emoji, message);
+        reactToMessage(emoji, message);
       }
     }
     else{
-      messageReactor(emoji, message);
+      reactToMessage(emoji, message);
     }
   }
 
