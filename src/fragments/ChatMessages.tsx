@@ -129,7 +129,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             }
           />
         ))}
-        <WelcomeMessage />
+        {messages.length != 0 && <WelcomeMessage />}
         <div ref={boundaryRef} />
         {/* This moves the list of messages to the bottom, since there's a bug with flex-end scroll */}
         <FlexColumn flex="1 1 auto"></FlexColumn>
