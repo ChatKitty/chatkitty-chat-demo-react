@@ -1,4 +1,4 @@
-import { Message as ChatKittyMessage, isUserMessage } from 'chatkitty';
+import { Message as ChatKittyMessage, isUserMessage} from 'chatkitty';
 import moment from 'moment';
 import React, { ReactElement } from 'react';
 import {
@@ -12,6 +12,9 @@ import {
 import { useHover } from 'react-chat-ui-kit';
 
 import Message from './Message';
+import PopupEmojiWindow from './PopupEmojiWindow';
+import Reactions from './Reactions';
+
 
 interface MessageListItemProps {
   message: ChatKittyMessage;
@@ -39,7 +42,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
       {...hoverProps}
     >
       {avatar}
-      <FlexColumn marginLeft="5" flexGrow={1}>
+      <FlexColumn marginLeft="5" flexGrow={1} >
         <FlexRow marginBottom="1">
           <StyledBox marginRight="3">
             <Heading>{sender.displayName}</Heading>
@@ -47,9 +50,16 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
           <Label size={LabelSizes.SMALL}>
             {moment(message.createdTime).fromNow()}
           </Label>
+          {isHovering && 
+            <StyledBox 
+            style={{position:'relative', left:'50px', borderRadius: '20%', display:'inline-block', height:'17px'}}
+            >
+              <PopupEmojiWindow message={message}/>
+            </StyledBox>}
         </FlexRow>
 
-        <Message message={message}></Message>
+        <Message message={message}/>
+        <Reactions message={message}/>
       </FlexColumn>
     </FlexRow>
   );

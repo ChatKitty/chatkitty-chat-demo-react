@@ -12,6 +12,7 @@ import ChatKitty, {
   JoinedChannelResult,
   LeftChannelResult,
   Message,
+  Reaction,
   StartedChatSessionResult,
   succeeded,
   User,
@@ -49,12 +50,23 @@ interface ChatAppContext {
   messagesPaginator: (
     channel: Channel
   ) => Promise<ChatKittyPaginator<Message> | null>;
-  memberListGetter: (Channel: Channel) => Promise<User[] | null>;
+
+  memberListGetter: (
+    Channel: Channel
+  ) => Promise<User[] | null>;
+  reactToMessage: (
+    emoji: string,
+    message: Message,
+  ) => Promise<Reaction | null>
+  removeReaction: (
+    emoji: string,
+    message: Message,
+  ) => Promise<Reaction | null>
   startChatSession: (
     channel: Channel,
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
-    onTypingStopped: (user: User) => void
+    onTypingStopped: (user: User) => void,
   ) => ChatSession | null;
   prependToMessages: (messages: Message[]) => void;
   appendToMessages: (messages: Message[]) => void;
@@ -67,6 +79,7 @@ interface ChatAppContext {
   showMenu: () => void;
   hideMenu: () => void;
   showChat: (channel: Channel) => void;
+  updateMessages: (message: Message) => void;
   showJoinChannel: () => void;
   hideJoinChannel: () => void;
   layout: LayoutState;
@@ -90,6 +103,8 @@ const initialValues: ChatAppContext = {
   startChatSession: () => null,
   messagesPaginator: () => Promise.prototype,
   memberListGetter: () => Promise.prototype,
+  reactToMessage: () => Promise.prototype,
+  removeReaction:() => Promise.prototype,
   prependToMessages: () => {},
   appendToMessages: () => {},
   channel: null,
@@ -105,6 +120,7 @@ const initialValues: ChatAppContext = {
   showMenu: () => {},
   hideMenu: () => {},
   showChat: () => {},
+  updateMessages: () => {},
   showJoinChannel: () => {},
   hideJoinChannel: () => {},
   layout: { menu: false, chat: false, joinChannel: false },
@@ -166,6 +182,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     hideView('Menu');
   };
 
+  
+
   const showChat = (c: Channel) => {
     if (c.id === channel?.id) {
       return;
@@ -178,6 +196,11 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     showView('Chat');
   };
+
+  const updateMessages = (message: Message) => {
+    setMessages((old) => old.map((item) => item.id === message.id ? message: item));
+  };
+
 
   const hideChat = () => {
     setChannel(initialValues.channel);
@@ -307,13 +330,19 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     channel: Channel,
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
-    onTypingStopped: (user: User) => void
+    onTypingStopped: (user: User) => void,
   ): ChatSession | null => {
     const result = kitty.startChatSession({
       channel,
       onReceivedMessage,
       onTypingStarted,
       onTypingStopped,
+      onMessageReactionAdded: (message) => {
+        updateMessages(message);
+      },
+      onMessageReactionRemoved: (message) => {
+        updateMessages(message);
+      }
     });
 
     if (succeeded<StartedChatSessionResult>(result)) {
@@ -356,6 +385,32 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     return null;
   };
+
+  const reactToMessage = async (
+    emoji: string, 
+    message: Message,
+    ) =>{
+    const result = await kitty.reactToMessage({ emoji, message })
+
+    if (succeeded(result)){
+      return result.reaction;
+    }
+
+    return null;
+  }
+
+  const removeReaction = async (
+    emoji: string, 
+    message: Message,
+    ) =>{
+    const result = await kitty.removeReaction({ emoji, message })
+
+    if (succeeded(result)){
+      return result.reaction;
+    }
+
+    return null;
+  }
 
   const prependToMessages = (items: Message[]) => {
     setMessages((old) => [...items, ...old]);
@@ -404,6 +459,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         showMenu,
         hideMenu,
         showChat,
+        updateMessages,
         showJoinChannel,
         hideJoinChannel,
         currentUser,
@@ -421,6 +477,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         startChatSession,
         messagesPaginator,
         memberListGetter,
+        reactToMessage,
+        removeReaction,
         prependToMessages,
         appendToMessages,
         messageDraft,
