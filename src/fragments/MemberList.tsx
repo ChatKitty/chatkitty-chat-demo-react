@@ -1,12 +1,8 @@
-import {  User } from 'chatkitty';
+import { User } from 'chatkitty';
 import { ChatAppContext } from 'providers/ChatAppProvider';
 import React, { useContext, useEffect, useState } from 'react';
 import { Icon, Icons, StyledBox, useMediaQuery } from 'react-chat-ui-kit';
-import {
-  Drawer,
-  Heading,
-  HeadingVariants,
-} from 'react-chat-ui-kit';
+import { Drawer, Heading, HeadingVariants } from 'react-chat-ui-kit';
 import { ThemeContext } from 'styled-components';
 
 import UserAvatar from './UserAvatar';
@@ -23,7 +19,9 @@ const MemberList: React.FC = () => {
     if (!channel) {
       return;
     }
-    memberListGetter(channel).then(resolved => {setChannelMembers(resolved)});
+    memberListGetter(channel).then((resolved) => {
+      setChannelMembers(resolved);
+    });
   });
 
   return channel ? (
@@ -32,23 +30,29 @@ const MemberList: React.FC = () => {
       background={theme.backgrounds.primary}
     >
       <div>
-        {channel?.name !== null && <Heading
-          variant={HeadingVariants.INVERSE}
-          style={{ fontSize: '25px', marginTop: '30px', marginLeft: '10px' }}
-        >
-          {channel?.name}
-        </Heading>}
+        {channel?.name !== null && (
+          <Heading
+            variant={HeadingVariants.INVERSE}
+            style={{ fontSize: '25px', marginTop: '30px', marginLeft: '10px' }}
+          >
+            {channel?.name}
+          </Heading>
+        )}
       </div>
-      
+
       <div>
-        {channel?.creator != null &&
+        {channel?.creator != null && (
           <div>
             <Heading
               variant={HeadingVariants.INVERSE}
-              style={{ marginTop: '30px', marginLeft: '10px', marginBottom: '15px' }}
+              style={{
+                marginTop: '30px',
+                marginLeft: '10px',
+                marginBottom: '15px',
+              }}
             >
               Owner
-            </Heading> 
+            </Heading>
             <StyledBox>
               <UserAvatar
                 user={channel?.creator}
@@ -61,24 +65,30 @@ const MemberList: React.FC = () => {
               />
               <Icon
                 icon={Icons.Presence}
-                title={channel.creator.presence.online ? 'Connected' : 'Not connected'}
+                title={
+                  channel.creator.presence.online
+                    ? 'Connected'
+                    : 'Not connected'
+                }
                 color={channel.creator.presence.online ? 'success' : 'inactive'}
                 style={{
                   display: 'inline',
                 }}
               />
-              <p style={{
-                display: 'inline',
-                marginLeft: '10px',
-                width: '100px',
-                color: 'yellow',
-                verticalAlign: '10px',
-              }}>
+              <p
+                style={{
+                  display: 'inline',
+                  marginLeft: '10px',
+                  width: '100px',
+                  color: 'yellow',
+                  verticalAlign: '10px',
+                }}
+              >
                 {channel.creator.displayName}
               </p>
             </StyledBox>
           </div>
-        }
+        )}
       </div>
 
       <Heading
@@ -87,52 +97,56 @@ const MemberList: React.FC = () => {
       >
         Channel Members
       </Heading>
-      <StyledBox style={{marginTop: '15px'}}>
-        {channelMembers?.map((user) => 
-          <StyledBox key={user.id} >
-            {user.name !== channel?.creator?.name && <div>
-              <UserAvatar 
-                user={user}
-                style={{
-                  borderRadius: '50%',
-                  width: '25px',
-                  marginLeft: '10px',
-                  marginTop: '5px',
-                }}
-              />
-              <Icon
-                icon={Icons.Presence}
-                title={user.presence.online ? 'Connected' : 'Not connected'}
-                color={user.presence.online ? 'success' : 'inactive'}
-                style={{
-                  display: 'inline',
-                }}
-              />
-              <p style={{
-                display: 'inline',
-                marginLeft: '10px',
-                width: '100px',
-                color: 'white',
-                verticalAlign: '7px',
-              }}>
-                {user.displayName}
-              </p>
-            </div>}
+      <StyledBox style={{ marginTop: '15px' }}>
+        {channelMembers?.map((user) => (
+          <StyledBox key={user.id}>
+            {user.name !== channel?.creator?.name && (
+              <div>
+                <UserAvatar
+                  user={user}
+                  style={{
+                    borderRadius: '50%',
+                    width: '25px',
+                    marginLeft: '10px',
+                    marginTop: '5px',
+                  }}
+                />
+                <Icon
+                  icon={Icons.Presence}
+                  title={user.presence.online ? 'Connected' : 'Not connected'}
+                  color={user.presence.online ? 'success' : 'inactive'}
+                  style={{
+                    display: 'inline',
+                  }}
+                />
+                <p
+                  style={{
+                    display: 'inline',
+                    marginLeft: '10px',
+                    width: '100px',
+                    color: 'white',
+                    verticalAlign: '7px',
+                  }}
+                >
+                  {user.displayName}
+                </p>
+              </div>
+            )}
           </StyledBox>
-        )}
+        ))}
       </StyledBox>
     </Drawer>
-  ):( 
+  ) : (
     <Drawer
       open={layout.menu || isMedium}
       background={theme.backgrounds.primary}
     >
       <Heading
-          variant={HeadingVariants.INVERSE}
-          style={{ fontSize: '20px', marginTop: '30px', marginLeft: '10px' }}
-        >
-          Please Select a Channel
-        </Heading>
+        variant={HeadingVariants.INVERSE}
+        style={{ fontSize: '20px', marginTop: '30px', marginLeft: '10px' }}
+      >
+        Please Select a Channel
+      </Heading>
     </Drawer>
   );
 };

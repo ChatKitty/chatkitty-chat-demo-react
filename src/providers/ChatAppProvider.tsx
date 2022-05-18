@@ -50,6 +50,7 @@ interface ChatAppContext {
   messagesPaginator: (
     channel: Channel
   ) => Promise<ChatKittyPaginator<Message> | null>;
+
   memberListGetter: (
     Channel: Channel
   ) => Promise<User[] | null>;
@@ -375,7 +376,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
-  const memberListGetter = async (channel: Channel) =>{
+  const memberListGetter = async (channel: Channel) => {
     const result = await kitty.getChannelMembers({ channel: channel });
 
     if (succeeded<GetUsersSucceededResult>(result)) {
