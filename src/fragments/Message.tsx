@@ -3,13 +3,18 @@ import invariant from 'invariant';
 import React from 'react';
 import { TextMessage } from 'react-chat-ui-kit';
 
+import LinkPreview from './LinkPreview';
+
 type MessageProps = {
   message: ChatKittyMessage;
 };
 
 const Message: React.FC<MessageProps> = ({ message }: MessageProps) => {
   if (isTextMessage(message)) {
-    return <TextMessage text={message.body} />;
+    return (<div>
+            <TextMessage text={message.body} />
+            {message.links !== undefined && <LinkPreview links={message.links}/>}
+          </div>);
   }
 
   return invariant(

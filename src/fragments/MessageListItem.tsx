@@ -33,6 +33,8 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
 
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
 
+  message
+
   return (
     <FlexRow
       py="1"
@@ -52,7 +54,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
           </Label>
           {isHovering && 
             <StyledBox 
-            style={{position:'relative', left:'50px', borderRadius: '20%', display:'inline-block', height:'17px'}}
+            style={{position:'relative', left:'50px', borderRadius: '20%', display:'inline-block', height:'17px', width:'15px'}}
             >
               <PopupEmojiWindow message={message}/>
             </StyledBox>}
