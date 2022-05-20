@@ -426,6 +426,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     }
 
     await kitty.sendKeystrokes({ channel, keys: draft.text });
+    
 
     setMessageDraft(draft);
   };
@@ -434,7 +435,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     setMessageDraft(initialValues.messageDraft);
   };
 
-  const sendMessageDraft = async (draft: MessageDraft) => {
+  const sendMessageDraft = async (draft: MessageDraft , file? : File) => {
     if (!channel) {
       return;
     }
@@ -447,6 +448,26 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
       discardMessageDraft();
     }
+    if(file){
+      await kitty.sendMessage({
+        channel: channel,
+        file: file,
+        progressListener: {
+          onStarted: () =>{
+            console.log("starting");
+          },
+          onProgress: () =>{
+            console.log("loading");
+          },
+          onCompleted: () => {
+            console.log("complete");
+          }
+
+        }
+      });
+
+    }
+    
   };
 
   const logout = async () => {
