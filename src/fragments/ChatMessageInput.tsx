@@ -13,7 +13,6 @@ import { ChatAppContext } from '../providers/ChatAppProvider';
 
 import EmojiInput from './EmojiInput';
 import EmojiSuggestion from './EmojiSuggestion';
-import FileInput from './FileInput';
 import GiphyInput from './GiphyInput';
 
 const autoExpand = (el: HTMLTextAreaElement) => {
@@ -91,7 +90,7 @@ const ChatMessageInput: React.FC = () => {
 
           <StyledBox marginLeft="1">
             <div style={{display:'inline-block'}}><EmojiInput value={text} onSelection={emojiInserted} /></div>
-            <div style={{display:'inline-block'}}><FileInput/></div>
+
             <EmojiSuggestion value={text} onSelection={emojiInserted} />
           </StyledBox>
 
