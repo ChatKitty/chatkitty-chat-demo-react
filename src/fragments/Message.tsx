@@ -11,10 +11,10 @@ type MessageProps = {
 
 const Message: React.FC<MessageProps> = ({ message }: MessageProps) => {
   if (isTextMessage(message)) {
-    return (<div>
+    return (<>
             <TextMessage text={message.body} />
-            {message.links !== undefined && <LinkPreview links={message.links}/>}
-          </div>);
+            {message.links && <LinkPreview links={message.links}/>}
+          </>);
   }
 
   return invariant(

@@ -51,22 +51,14 @@ interface ChatAppContext {
     channel: Channel
   ) => Promise<ChatKittyPaginator<Message> | null>;
 
-  memberListGetter: (
-    Channel: Channel
-  ) => Promise<User[] | null>;
-  reactToMessage: (
-    emoji: string,
-    message: Message,
-  ) => Promise<Reaction | null>
-  removeReaction: (
-    emoji: string,
-    message: Message,
-  ) => Promise<Reaction | null>
+  memberListGetter: (Channel: Channel) => Promise<User[] | null>;
+  reactToMessage: (emoji: string, message: Message) => Promise<Reaction | null>;
+  removeReaction: (emoji: string, message: Message) => Promise<Reaction | null>;
   startChatSession: (
     channel: Channel,
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
-    onTypingStopped: (user: User) => void,
+    onTypingStopped: (user: User) => void
   ) => ChatSession | null;
   prependToMessages: (messages: Message[]) => void;
   appendToMessages: (messages: Message[]) => void;
@@ -104,7 +96,7 @@ const initialValues: ChatAppContext = {
   messagesPaginator: () => Promise.prototype,
   memberListGetter: () => Promise.prototype,
   reactToMessage: () => Promise.prototype,
-  removeReaction:() => Promise.prototype,
+  removeReaction: () => Promise.prototype,
   prependToMessages: () => {},
   appendToMessages: () => {},
   channel: null,
@@ -182,8 +174,6 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     hideView('Menu');
   };
 
-  
-
   const showChat = (c: Channel) => {
     if (c.id === channel?.id) {
       return;
@@ -198,9 +188,10 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   };
 
   const updateMessages = (message: Message) => {
-    setMessages((old) => old.map((item) => item.id === message.id ? message: item));
+    setMessages((old) =>
+      old.map((item) => (item.id === message.id ? message : item))
+    );
   };
-
 
   const hideChat = () => {
     setChannel(initialValues.channel);
@@ -330,7 +321,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     channel: Channel,
     onReceivedMessage: (message: Message) => void,
     onTypingStarted: (user: User) => void,
-    onTypingStopped: (user: User) => void,
+    onTypingStopped: (user: User) => void
   ): ChatSession | null => {
     const result = kitty.startChatSession({
       channel,
@@ -342,7 +333,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
       },
       onMessageReactionRemoved: (message) => {
         updateMessages(message);
-      }
+      },
     });
 
     if (succeeded<StartedChatSessionResult>(result)) {
@@ -386,31 +377,25 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
-  const reactToMessage = async (
-    emoji: string, 
-    message: Message,
-    ) =>{
-    const result = await kitty.reactToMessage({ emoji, message })
+  const reactToMessage = async (emoji: string, message: Message) => {
+    const result = await kitty.reactToMessage({ emoji, message });
 
-    if (succeeded(result)){
+    if (succeeded(result)) {
       return result.reaction;
     }
 
     return null;
-  }
+  };
 
-  const removeReaction = async (
-    emoji: string, 
-    message: Message,
-    ) =>{
-    const result = await kitty.removeReaction({ emoji, message })
+  const removeReaction = async (emoji: string, message: Message) => {
+    const result = await kitty.removeReaction({ emoji, message });
 
-    if (succeeded(result)){
+    if (succeeded(result)) {
       return result.reaction;
     }
 
     return null;
-  }
+  };
 
   const prependToMessages = (items: Message[]) => {
     setMessages((old) => [...items, ...old]);
@@ -426,7 +411,6 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     }
 
     await kitty.sendKeystrokes({ channel, keys: draft.text });
-    
 
     setMessageDraft(draft);
   };
@@ -435,7 +419,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     setMessageDraft(initialValues.messageDraft);
   };
 
-  const sendMessageDraft = async (draft: MessageDraft , file? : File) => {
+  const sendMessageDraft = async (draft: MessageDraft, file?: File) => {
     if (!channel) {
       return;
     }
@@ -448,26 +432,23 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
       discardMessageDraft();
     }
-    if(file){
+    if (file) {
       await kitty.sendMessage({
-        channel: channel,
-        file: file,
+        channel,
+        file,
         progressListener: {
-          onStarted: () =>{
-            console.log("starting");
+          onStarted: () => {
+            console.log('starting');
           },
-          onProgress: () =>{
-            console.log("loading");
+          onProgress: () => {
+            console.log('loading');
           },
           onCompleted: () => {
-            console.log("complete");
-          }
-
-        }
+            console.log('complete');
+          },
+        },
       });
-
     }
-    
   };
 
   const logout = async () => {

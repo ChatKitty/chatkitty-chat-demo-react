@@ -33,8 +33,6 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
 
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
 
-  message
-
   return (
     <FlexRow
       py="1"
