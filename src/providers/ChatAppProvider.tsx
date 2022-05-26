@@ -66,6 +66,7 @@ interface ChatAppContext {
   messageDraft: TextMessageDraft;
   updateMessageDraft: (draft: TextMessageDraft) => void;
   discardMessageDraft: () => void;
+  sendFileMessage: (file: File) => void;
   sendMessageDraft: (draft: MessageDraft) => void;
   loading: boolean;
   showMenu: () => void;
@@ -107,6 +108,7 @@ const initialValues: ChatAppContext = {
   },
   updateMessageDraft: () => {},
   discardMessageDraft: () => {},
+  sendFileMessage: () => {},
   sendMessageDraft: () => {},
   loading: false,
   showMenu: () => {},
@@ -419,7 +421,30 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     setMessageDraft(initialValues.messageDraft);
   };
 
-  const sendMessageDraft = async (draft: MessageDraft, file?: File) => {
+
+  const sendFileMessage = async (file: File) => {
+    if (!channel) {
+      return;
+    }
+    await kitty.sendMessage({
+      channel,
+      file,
+      progressListener: {
+        onStarted: () => {
+          console.log('starting');
+        },
+        onProgress: () => {
+          console.log('loading');
+        },
+        onCompleted: () => {
+          console.log('complete');
+        },
+      },
+    });
+    
+  }
+
+  const sendMessageDraft = async (draft: MessageDraft) => {
     if (!channel) {
       return;
     }
@@ -432,23 +457,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
       discardMessageDraft();
     }
-    if (file) {
-      await kitty.sendMessage({
-        channel,
-        file,
-        progressListener: {
-          onStarted: () => {
-            console.log('starting');
-          },
-          onProgress: () => {
-            console.log('loading');
-          },
-          onCompleted: () => {
-            console.log('complete');
-          },
-        },
-      });
-    }
+    
   };
 
   const logout = async () => {
@@ -486,6 +495,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         messageDraft,
         updateMessageDraft,
         discardMessageDraft,
+        sendFileMessage,
         sendMessageDraft,
         channel,
         messages,
