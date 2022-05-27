@@ -1,5 +1,5 @@
 import { ChatAppContext } from 'providers/ChatAppProvider';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Dropdown, Icons } from 'react-chat-ui-kit';
 
 interface FileInputProps {
@@ -9,12 +9,19 @@ interface FileInputProps {
 const FileInput: React.FC<FileInputProps> = () => {
 
   const {sendFileMessage} = useContext(ChatAppContext);
+  const [file, setFile] = useState<File>();
+
 
   const onChange = (file: React.ChangeEvent<HTMLInputElement>) => {
     const files = file.target.files;
-
     if(files){ 
-      sendFileMessage(files[0]);
+      setFile(files[0]);
+    }
+  }
+
+  const onClick = () => {
+    if(file){
+      sendFileMessage(file);
     }
   }
   
@@ -51,11 +58,23 @@ const FileInput: React.FC<FileInputProps> = () => {
               style={{
                 display: 'flex',
                 justifyContent: 'center',
-                marginTop: '40px',
+                marginTop: '10px',
+                marginLeft:'10px', 
+                cursor:'pointer',
               }}
             >
-              <input type='file' name='file' onChange={(file) => onChange(file)}/>
+              <input type='file' onChange={(file) => onChange(file)}/>
             </div>
+
+            <button 
+              style={{
+                marginLeft:'35%',
+                marginTop:'15px',
+              }}
+              onClick={onClick}
+            >
+            Submit
+            </button>
 
           </div>
         );

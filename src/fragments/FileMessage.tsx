@@ -11,16 +11,23 @@ const FileMessage: React.FC<FileMessageProp> = ({
   message,
 }: FileMessageProp) => {
   useEffect(() => {
-    console.log(message.file.contentType);
+    console.log(message.file.url);
   }, []);
-
+  
   return (
-    <>
-      <div style={{width: '50px', height: '50px'}}>
-        {message.file.contentType === 'image/png' ? (<img src={message.file.url} style={{maxWidth:'100%', borderRadius:'10%'}}/>) : (<img src={FileIcon} style={{maxWidth:'100%'}} />)}
-      </div>  
-      <p>Working on the file message to display: {message.file.name}</p>
-    </>
+    <a href={message.file.url} download={message.file.name}>
+      <div style={{ width: '100px', height: '100px' }}>
+        {message.file.contentType === 'image/png' ? (
+          <img
+            src={message.file.url}
+            style={{ maxWidth: '100%', borderRadius: '10%' }}
+          />
+        ) : (
+          <img src={FileIcon} style={{ maxWidth: '50%' }} />
+        )}
+        <p style={{marginTop:'1px'}}>{message.file.name}</p>
+      </div>
+    </a> 
   );
 };
 
