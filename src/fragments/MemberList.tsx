@@ -15,14 +15,20 @@ const MemberList: React.FC = () => {
 
   const [channelMembers, setChannelMembers] = useState<User[] | null>([]);
 
+
   useEffect(() => {
     if (!channel) {
       return;
     }
+    console.log('ran');
     memberListGetter(channel).then((resolved) => {
-      setChannelMembers(resolved);
+      
+      if(resolved !== channelMembers){
+        setChannelMembers(resolved);
+      }
     });
-  });
+
+  },[channel]);
 
   return channel ? (
     <Drawer

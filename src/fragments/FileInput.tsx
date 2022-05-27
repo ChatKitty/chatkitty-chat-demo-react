@@ -12,7 +12,6 @@ const FileInput: React.FC<FileInputProps> = () => {
 
   const onChange = (file: React.ChangeEvent<HTMLInputElement>) => {
     const files = file.target.files;
-    
 
     if(files){ 
       sendFileMessage(files[0]);
