@@ -51,7 +51,7 @@ const FileInput: React.FC<FileInputProps> = () => {
                 marginTop: '10px',
               }}
             >
-              Click or drag file to upload
+              Press Button to Upload
             </p>
 
             <div

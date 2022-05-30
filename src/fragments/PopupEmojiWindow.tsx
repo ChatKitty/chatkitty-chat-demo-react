@@ -1,58 +1,52 @@
-import { Message } from "chatkitty";
-import { ChatAppContext } from "providers/ChatAppProvider";
-import React, { useContext } from "react";
-import { StyledBox } from "react-chat-ui-kit";
+import { Message } from 'chatkitty';
+import { ChatAppContext } from 'providers/ChatAppProvider';
+import React, { useContext } from 'react';
+import { StyledBox } from 'react-chat-ui-kit';
 
+import EmojiInput from './EmojiInput';
 
-import EmojiInput from "./EmojiInput";
-import EmojiSuggestion from "./EmojiSuggestion";
-
-interface popupProp{
-    message: Message;
+interface popupProp {
+  message: Message;
 }
 
-const PopupEmojiWindow: React.FC<popupProp> = ({message}: popupProp) => {
-
-
-  const {currentUser, removeReaction, reactToMessage} = useContext(ChatAppContext);
+const PopupEmojiWindow: React.FC<popupProp> = ({ message }: popupProp) => {
+  const { currentUser, removeReaction, reactToMessage } =
+    useContext(ChatAppContext);
 
   const emojiClickListener = (emoji: string) => {
     let notIn = true;
     let notReacted = true;
 
-    if(currentUser && message.reactions){
-      for(let i = 0; i<message.reactions.length; i++){
-        if(message.reactions[i].emoji.aliases[0] === emoji){
+    if (currentUser && message.reactions) {
+      for (let i = 0; i < message.reactions.length; i++) {
+        if (message.reactions[i].emoji.aliases[0] === emoji) {
           notIn = false;
-          for(let j = 0; j< message.reactions[i].users.length; j++){
-            if(message.reactions[i].users[j].id === currentUser.id){
-                removeReaction(emoji, message);
-                notReacted = false;
-                break;
+          for (let j = 0; j < message.reactions[i].users.length; j++) {
+            if (message.reactions[i].users[j].id === currentUser.id) {
+              removeReaction(emoji, message);
+              notReacted = false;
+              break;
             }
           }
-          if(notReacted){
+          if (notReacted) {
             reactToMessage(emoji, message);
             break;
           }
         }
       }
-      if(notIn){
+      if (notIn) {
         reactToMessage(emoji, message);
       }
-    }
-    else{
+    } else {
       reactToMessage(emoji, message);
     }
-  }
+  };
 
-  return(
-        <StyledBox  style={{marginRight:"320px", marginBottom:"150px"}} >
-          <EmojiInput value="" onSelection={emojiClickListener} />
-          <EmojiSuggestion value="" onSelection={emojiClickListener} />
-        </StyledBox>
-    );
-
-}
+  return (
+    <StyledBox style={{ marginRight: '50px', marginBottom: '170px' }}>
+      <EmojiInput value="" onSelection={emojiClickListener} />
+    </StyledBox>
+  );
+};
 
 export default PopupEmojiWindow;

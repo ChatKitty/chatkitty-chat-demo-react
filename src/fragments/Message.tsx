@@ -1,4 +1,8 @@
-import { Message as ChatKittyMessage, isFileMessage, isTextMessage } from 'chatkitty';
+import {
+  Message as ChatKittyMessage,
+  isFileMessage,
+  isTextMessage,
+} from 'chatkitty';
 import React from 'react';
 import { TextMessage } from 'react-chat-ui-kit';
 
@@ -10,25 +14,21 @@ type MessageProps = {
 };
 
 const Message: React.FC<MessageProps> = ({ message }: MessageProps) => {
-
-  
-  return ( 
+  return (
     <>
-      {isTextMessage(message) && 
+      {isTextMessage(message) && (
         <>
           <TextMessage text={message.body} />
-          {message.links && <LinkPreview links={message.links}/>}
+          {message.links && <LinkPreview links={message.links} />}
         </>
-      }
-      {isFileMessage(message) && 
+      )}
+      {isFileMessage(message) && (
         <>
-          <FileMessage message={message}/>
+          <FileMessage message={message} />
         </>
-      }
-    </>   
+      )}
+    </>
   );
-
-
 };
 
 export default Message;
