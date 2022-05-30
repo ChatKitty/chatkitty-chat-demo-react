@@ -35,6 +35,7 @@ interface ChatAppContext {
   currentUser: CurrentUser | null;
   online: boolean;
   users: () => Promise<ChatKittyPaginator<User> | null>;
+  getURLFile: (fileURL: string) => Promise<Blob>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinableChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinChannel: (channel: Channel) => void;
@@ -84,6 +85,7 @@ const initialValues: ChatAppContext = {
   currentUser: null,
   online: false,
   users: () => Promise.prototype,
+  getURLFile: () => Promise.prototype,
   joinedChannelsPaginator: () => Promise.prototype,
   joinableChannelsPaginator: () => Promise.prototype,
   joinChannel: () => {},
@@ -245,6 +247,11 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
+  const getURLFile = async (fileURL: string) => {
+    const blobPromise = await fetch(fileURL).then(fileblob => fileblob.blob());
+    return(blobPromise);
+  }
+
   const joinedChannelsPaginator = async () => {
     const result = await kitty.getChannels({
       filter: { joined: true },
@@ -297,6 +304,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const onLeftChannel = (handler: (channel: Channel) => void) => {
     return kitty.onChannelLeft(handler);
   };
+
+  
 
   const channelDisplayName = (channel: Channel): string => {
     if (isDirectChannel(channel)) {
@@ -476,6 +485,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         currentUser,
         online,
         users,
+        getURLFile,
         joinedChannelsPaginator,
         joinableChannelsPaginator,
         joinChannel,

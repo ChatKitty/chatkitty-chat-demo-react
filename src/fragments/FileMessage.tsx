@@ -1,5 +1,6 @@
 import { BaseFileMessage, FileUserMessage } from 'chatkitty';
-import React, { useEffect } from 'react';
+import { ChatAppContext } from 'providers/ChatAppProvider';
+import React, { useContext, useEffect, useState } from 'react';
 
 import FileIcon from '../assets/images/File_Icon.png';
 
@@ -10,12 +11,27 @@ interface FileMessageProp {
 const FileMessage: React.FC<FileMessageProp> = ({
   message,
 }: FileMessageProp) => {
-  useEffect(() => {
-    console.log(message.file.url);
-  }, []);
+
+  const{getURLFile} = useContext(ChatAppContext);
   
+  const [link, setLink] = useState<string>('');
+
+  useEffect(() => {
+    const blobPromise = getURLFile(message.file.url)
+  
+    if(blobPromise){
+      blobPromise.then( 
+        (blob) =>{ 
+        setLink( URL.createObjectURL(blob) );} 
+      )
+  }
+  }, [message]);
+
+  
+
+
   return (
-    <a href={message.file.url} download={message.file.name}>
+    <a href={link} download={message.file.name}>
       <div style={{ width: '100px', height: '100px' }}>
         {message.file.contentType === 'image/png' ? (
           <img
