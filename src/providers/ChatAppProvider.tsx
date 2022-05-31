@@ -143,7 +143,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const [messageDraft, setMessageDraft] = useState(initialValues.messageDraft);
   const [loading, setLoading] = useState(initialValues.loading);
   const [layout, setLayout] = useState(initialValues.layout);
-  const [replyMessage, setReplyMessage] = useState(initialValues.replyMessage);
+  const [replyMessage, setReplyMessage] = useState<Message | null>(initialValues.replyMessage);
 
   const views: Set<View> = new Set();
 
@@ -464,17 +464,24 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     
   }
 
-  const sendMessageDraft = async (draft: MessageDraft, message?: Message) => {
+  const sendMessageDraft = async (draft: MessageDraft) => {
     if (!channel) {
       return;
     }
 
     if (isTextMessageDraft(draft)) {
-      await kitty.sendMessage({
-        channel: channel,
-        body: draft.text,
-        message,
-      });
+      if(replyMessage){
+        await kitty.sendMessage({
+          channel: channel,
+          body: draft.text,
+          message: replyMessage,
+        });
+      }else{
+        await kitty.sendMessage({
+          channel: channel,
+          body: draft.text,
+        });
+      }
 
       discardMessageDraft();
     }

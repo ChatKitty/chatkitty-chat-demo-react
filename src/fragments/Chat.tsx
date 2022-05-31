@@ -1,4 +1,4 @@
-import { Message, User } from 'chatkitty';
+import { isUserMessage, Message, User } from 'chatkitty';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   FlexColumn,
@@ -21,6 +21,7 @@ const Chat: React.FC = () => {
     startChatSession,
     prependToMessages,
     currentUser,
+    replyMessage,
   } = useContext(ChatAppContext);
 
   const [typingUsers, setTypingUsers] = useState<User[]>([]);
@@ -68,9 +69,10 @@ const Chat: React.FC = () => {
     >
       <ChatHeader channel={channel} />
       <ChatMessages channel={channel} />
-      {messages.length !== 0 ? (
+      {messages.length !== 0 ? (<>
         <TypingIndicator typingUsers={typingUsers} />
-      ) : (
+        {replyMessage && isUserMessage(replyMessage) && <p>Replying to {replyMessage.user.displayName}</p>}
+      </>) : (
         <StyledBox
           style={{
             position: 'relative',
