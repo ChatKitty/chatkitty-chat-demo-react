@@ -22,7 +22,7 @@ const MemberList: React.FC = () => {
     memberListGetter(channel).then((resolved) => {
       setChannelMembers(resolved);
     });
-  });
+  }, [channel]);
 
   return channel ? (
     <Drawer

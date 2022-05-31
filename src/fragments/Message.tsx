@@ -1,8 +1,12 @@
-import { Message as ChatKittyMessage, isTextMessage } from 'chatkitty';
-import invariant from 'invariant';
+import {
+  Message as ChatKittyMessage,
+  isFileMessage,
+  isTextMessage,
+} from 'chatkitty';
 import React from 'react';
 import { TextMessage } from 'react-chat-ui-kit';
 
+import FileMessage from './FileMessage';
 import LinkPreview from './LinkPreview';
 
 type MessageProps = {
@@ -10,16 +14,20 @@ type MessageProps = {
 };
 
 const Message: React.FC<MessageProps> = ({ message }: MessageProps) => {
-  if (isTextMessage(message)) {
-    return (<>
-            <TextMessage text={message.body} />
-            {message.links && <LinkPreview links={message.links}/>}
-          </>);
-  }
-
-  return invariant(
-    false,
-    `No component available for displaying message of type "${message.type}"`
+  return (
+    <>
+      {isTextMessage(message) && (
+        <>
+          <TextMessage text={message.body} />
+          {message.links && <LinkPreview links={message.links} />}
+        </>
+      )}
+      {isFileMessage(message) && (
+        <>
+          <FileMessage message={message} />
+        </>
+      )}
+    </>
   );
 };
 

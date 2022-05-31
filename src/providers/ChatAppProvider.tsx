@@ -35,6 +35,7 @@ interface ChatAppContext {
   currentUser: CurrentUser | null;
   online: boolean;
   users: () => Promise<ChatKittyPaginator<User> | null>;
+  getURLFile: (fileURL: string) => Promise<Blob>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinableChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinChannel: (channel: Channel) => void;
@@ -66,6 +67,7 @@ interface ChatAppContext {
   messageDraft: TextMessageDraft;
   updateMessageDraft: (draft: TextMessageDraft) => void;
   discardMessageDraft: () => void;
+  sendFileMessage: (file: File) => void;
   sendMessageDraft: (draft: MessageDraft) => void;
   loading: boolean;
   showMenu: () => void;
@@ -83,6 +85,7 @@ const initialValues: ChatAppContext = {
   currentUser: null,
   online: false,
   users: () => Promise.prototype,
+  getURLFile: () => Promise.prototype,
   joinedChannelsPaginator: () => Promise.prototype,
   joinableChannelsPaginator: () => Promise.prototype,
   joinChannel: () => {},
@@ -107,6 +110,7 @@ const initialValues: ChatAppContext = {
   },
   updateMessageDraft: () => {},
   discardMessageDraft: () => {},
+  sendFileMessage: () => {},
   sendMessageDraft: () => {},
   loading: false,
   showMenu: () => {},
@@ -243,6 +247,11 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
+  const getURLFile = async (fileURL: string) => {
+    const blobPromise = await fetch(fileURL).then(fileblob => fileblob.blob());
+    return(blobPromise);
+  }
+
   const joinedChannelsPaginator = async () => {
     const result = await kitty.getChannels({
       filter: { joined: true },
@@ -295,6 +304,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const onLeftChannel = (handler: (channel: Channel) => void) => {
     return kitty.onChannelLeft(handler);
   };
+
+  
 
   const channelDisplayName = (channel: Channel): string => {
     if (isDirectChannel(channel)) {
@@ -419,7 +430,30 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     setMessageDraft(initialValues.messageDraft);
   };
 
-  const sendMessageDraft = async (draft: MessageDraft, file?: File) => {
+
+  const sendFileMessage = async (file: File) => {
+    if (!channel) {
+      return;
+    }
+    await kitty.sendMessage({
+      channel,
+      file,
+      progressListener: {
+        onStarted: () => {
+          console.log('starting');
+        },
+        onProgress: () => {
+          console.log('loading');
+        },
+        onCompleted: () => {
+          console.log('complete');
+        },
+      },
+    });
+    
+  }
+
+  const sendMessageDraft = async (draft: MessageDraft) => {
     if (!channel) {
       return;
     }
@@ -432,23 +466,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
       discardMessageDraft();
     }
-    if (file) {
-      await kitty.sendMessage({
-        channel,
-        file,
-        progressListener: {
-          onStarted: () => {
-            console.log('starting');
-          },
-          onProgress: () => {
-            console.log('loading');
-          },
-          onCompleted: () => {
-            console.log('complete');
-          },
-        },
-      });
-    }
+    
   };
 
   const logout = async () => {
@@ -467,6 +485,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         currentUser,
         online,
         users,
+        getURLFile,
         joinedChannelsPaginator,
         joinableChannelsPaginator,
         joinChannel,
@@ -486,6 +505,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         messageDraft,
         updateMessageDraft,
         discardMessageDraft,
+        sendFileMessage,
         sendMessageDraft,
         channel,
         messages,
