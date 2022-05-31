@@ -1,10 +1,13 @@
 import { Message as ChatKittyMessage, isUserMessage } from 'chatkitty';
 import moment from 'moment';
-import React, { ReactElement } from 'react';
+import { ChatAppContext } from 'providers/ChatAppProvider';
+import React, { ReactElement, useContext } from 'react';
 import {
+  Dropdown,
   FlexColumn,
   FlexRow,
   Heading,
+  Icons,
   Label,
   LabelSizes,
   StyledBox,
@@ -20,6 +23,8 @@ interface MessageListItemProps {
   avatar: ReactElement;
 }
 
+
+
 const MessageListItem: React.FC<MessageListItemProps> = ({
   message,
   avatar,
@@ -29,8 +34,9 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
     : {
         displayName: 'ChatKitty',
       };
-
+  
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
+  const {changeReply} = useContext(ChatAppContext);
 
   return (
     <FlexRow
@@ -50,19 +56,40 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
             {moment(message.createdTime).fromNow()}
           </Label>
           {isHovering && (
-            <StyledBox
-              style={{
-                position: 'relative',
-                left: '100px',
-                borderRadius: '20%',
-                display: 'inline-block',
-                marginLeft:'5px',
-                height: '17px',
-                width: '15px',
-              }}
-            >
-              <PopupEmojiWindow message={message} />
-            </StyledBox>
+            <>
+              <StyledBox
+                style={{
+                  position: 'relative',
+                  left: '100px',
+                  borderRadius: '20%',
+                  display: 'inline-block',
+                  marginLeft:'5px',
+                  height: '17px',
+                  width: '15px',
+                }}
+              >
+                <PopupEmojiWindow message={message} />
+                
+              </StyledBox>
+              <div style={{
+                  position: 'relative',
+                  left: '100px',
+                  borderRadius: '20%',
+                  display: 'inline-block',
+                  marginLeft:'5px',
+                  height: '17px',
+                  width: '15px',
+                }}>
+                  <Dropdown 
+                    icon={Icons.Send} 
+                    title={''}
+                    render={() => {
+                      changeReply(message);
+                      return(<></>);
+                    }}
+                 />
+                </div>
+            </>
           )}
         </FlexRow>
 

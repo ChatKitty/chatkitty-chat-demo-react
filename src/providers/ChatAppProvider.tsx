@@ -34,6 +34,7 @@ interface ChatAppContext {
   login: (username: string) => void;
   currentUser: CurrentUser | null;
   online: boolean;
+  replyMessage: Message | null;
   users: () => Promise<ChatKittyPaginator<User> | null>;
   getURLFile: (fileURL: string) => Promise<Blob>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
@@ -72,6 +73,7 @@ interface ChatAppContext {
   loading: boolean;
   showMenu: () => void;
   hideMenu: () => void;
+  changeReply: (message: Message) => void;
   showChat: (channel: Channel) => void;
   updateMessages: (message: Message) => void;
   showJoinChannel: () => void;
@@ -84,6 +86,7 @@ const initialValues: ChatAppContext = {
   login: () => {},
   currentUser: null,
   online: false,
+  replyMessage: null,
   users: () => Promise.prototype,
   getURLFile: () => Promise.prototype,
   joinedChannelsPaginator: () => Promise.prototype,
@@ -115,6 +118,7 @@ const initialValues: ChatAppContext = {
   loading: false,
   showMenu: () => {},
   hideMenu: () => {},
+  changeReply: () => {},
   showChat: () => {},
   updateMessages: () => {},
   showJoinChannel: () => {},
@@ -139,6 +143,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const [messageDraft, setMessageDraft] = useState(initialValues.messageDraft);
   const [loading, setLoading] = useState(initialValues.loading);
   const [layout, setLayout] = useState(initialValues.layout);
+  const [replyMessage, setReplyMessage] = useState(initialValues.replyMessage);
 
   const views: Set<View> = new Set();
 
@@ -169,6 +174,11 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     setLayout(getLayout());
   };
+
+  const changeReply = (message: Message) => {
+    setReplyMessage(message);
+    console.log(replyMessage);
+  }
 
   const showMenu = () => {
     showView('Menu');
@@ -388,6 +398,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
+
   const reactToMessage = async (emoji: string, message: Message) => {
     const result = await kitty.reactToMessage({ emoji, message });
 
@@ -453,7 +464,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     
   }
 
-  const sendMessageDraft = async (draft: MessageDraft) => {
+  const sendMessageDraft = async (draft: MessageDraft, message?: Message) => {
     if (!channel) {
       return;
     }
@@ -462,6 +473,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
       await kitty.sendMessage({
         channel: channel,
         body: draft.text,
+        message,
       });
 
       discardMessageDraft();
@@ -478,12 +490,14 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
       value={{
         showMenu,
         hideMenu,
+        changeReply,
         showChat,
         updateMessages,
         showJoinChannel,
         hideJoinChannel,
         currentUser,
         online,
+        replyMessage,
         users,
         getURLFile,
         joinedChannelsPaginator,
