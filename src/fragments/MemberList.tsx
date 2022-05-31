@@ -20,9 +20,7 @@ const MemberList: React.FC = () => {
       return;
     }
     memberListGetter(channel).then((resolved) => {
-      if (resolved != channelMembers) {
-        setChannelMembers(resolved);
-      }
+      setChannelMembers(resolved);
     });
   }, [channel]);
 

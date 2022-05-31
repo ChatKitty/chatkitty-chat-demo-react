@@ -7,30 +7,27 @@ interface FileInputProps {
 }
 
 const FileInput: React.FC<FileInputProps> = () => {
-
-  const {sendFileMessage} = useContext(ChatAppContext);
+  const { sendFileMessage } = useContext(ChatAppContext);
   const [file, setFile] = useState<File>();
-
 
   const onChange = (file: React.ChangeEvent<HTMLInputElement>) => {
     const files = file.target.files;
-    if(files){ 
+    if (files) {
       setFile(files[0]);
     }
-  }
+  };
 
   const onClick = () => {
-    if(file){
+    if (file) {
       sendFileMessage(file);
     }
-  }
-  
+  };
+
   return (
     <Dropdown
       icon={Icons.Add}
       title={''}
       render={() => {
-
         return (
           <div
             style={{
@@ -59,23 +56,22 @@ const FileInput: React.FC<FileInputProps> = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 marginTop: '10px',
-                marginLeft:'10px', 
-                cursor:'pointer',
+                marginLeft: '10px',
+                cursor: 'pointer',
               }}
             >
-              <input type='file' onChange={(file) => onChange(file)}/>
+              <input type="file" onChange={(file) => onChange(file)} />
             </div>
 
-            <button 
+            <button
               style={{
-                marginLeft:'35%',
-                marginTop:'15px',
+                marginLeft: '35%',
+                marginTop: '15px',
               }}
               onClick={onClick}
             >
-            Submit
+              Submit
             </button>
-
           </div>
         );
       }}
