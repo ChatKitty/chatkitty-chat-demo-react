@@ -6,6 +6,7 @@ import ChatKitty, {
   CurrentUser,
   GetChannelsSucceededResult,
   GetCountSucceedResult,
+  GetMessageParentSucceededResult,
   GetMessagesSucceededResult,
   GetUsersSucceededResult,
   isDirectChannel,
@@ -408,11 +409,17 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
   const getMessageParent = async (message: Message) => {
 
-    const result = await kitty.getMessageParent({message});
+    
 
-    if(succeeded(result)){
+    /**/
+    const result = await kitty.getMessageParent({
+      message
+    });
+    
+    if(succeeded<GetMessageParentSucceededResult>(result)){
       return result.message;
     }
+    /**/
 
     return null;
 
