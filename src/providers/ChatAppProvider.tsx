@@ -52,6 +52,10 @@ interface ChatAppContext {
   messagesPaginator: (
     channel: Channel
   ) => Promise<ChatKittyPaginator<Message> | null>;
+  replyMessagesPaginator: (
+    message: Message
+  ) => Promise<ChatKittyPaginator<Message> | null>;
+  getMessageParent: (messafe: Message) => Promise<Message | null>;
 
   memberListGetter: (Channel: Channel) => Promise<User[] | null>;
   reactToMessage: (emoji: string, message: Message) => Promise<Reaction | null>;
@@ -100,6 +104,8 @@ const initialValues: ChatAppContext = {
   channelUnreadMessagesCount: () => Promise.prototype,
   startChatSession: () => null,
   messagesPaginator: () => Promise.prototype,
+  replyMessagesPaginator: () => Promise.prototype,
+  getMessageParent: () => Promise.prototype,
   memberListGetter: () => Promise.prototype,
   reactToMessage: () => Promise.prototype,
   removeReaction: () => Promise.prototype,
@@ -388,6 +394,30 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
+  const replyMessagesPaginator = async (message: Message) => {
+    const result = await kitty.getMessages({
+      message,
+    });
+
+    if (succeeded<GetMessagesSucceededResult>(result)) {
+      return result.paginator;
+    }
+
+    return null;
+  };
+
+  const getMessageParent = async (message: Message) => {
+
+    const result = await kitty.getMessageParent({message});
+
+    if(succeeded(result)){
+      return result.message;
+    }
+
+    return null;
+
+  }
+
   const memberListGetter = async (channel: Channel) => {
     const result = await kitty.getChannelMembers({ channel: channel });
 
@@ -484,6 +514,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
       }
 
       discardMessageDraft();
+      setReplyMessage(initialValues.replyMessage);
     }
     
   };
@@ -518,6 +549,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         channelUnreadMessagesCount,
         startChatSession,
         messagesPaginator,
+        replyMessagesPaginator,
+        getMessageParent,
         memberListGetter,
         reactToMessage,
         removeReaction,

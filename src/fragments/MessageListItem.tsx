@@ -1,7 +1,7 @@
 import { Message as ChatKittyMessage, isUserMessage } from 'chatkitty';
 import moment from 'moment';
 import { ChatAppContext } from 'providers/ChatAppProvider';
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import {
   Dropdown,
   FlexColumn,
@@ -36,7 +36,19 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
       };
   
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
-  const {changeReply} = useContext(ChatAppContext);
+  const {changeReply, getMessageParent} = useContext(ChatAppContext);
+  const [messageParent, setMessageParent] = useState<ChatKittyMessage | null>(null);
+
+
+  useEffect(() => {
+    getMessageParent(message).then((message) => {
+      setMessageParent(message)
+    });
+  },[])
+  
+  
+
+
 
   return (
     <FlexRow
@@ -94,6 +106,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         </FlexRow>
 
         <Message message={message} />
+        {messageParent && isUserMessage(messageParent) && <p>{messageParent.user.displayName}</p>}
         <Reactions message={message} />
       </FlexColumn>
     </FlexRow>
