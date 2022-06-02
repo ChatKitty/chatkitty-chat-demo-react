@@ -26,6 +26,7 @@ const Chat: React.FC = () => {
     prependToMessages,
     currentUser,
     replyMessage,
+    userFile,
   } = useContext(ChatAppContext);
 
   const [typingUsers, setTypingUsers] = useState<User[]>([]);
@@ -96,6 +97,7 @@ const Chat: React.FC = () => {
         </StyledBox>
       )}
       <ChatMessageInput />
+      {userFile && <p>{userFile.name}</p>}
     </FlexColumn>
   ) : (
     <StyledBox margin="auto">

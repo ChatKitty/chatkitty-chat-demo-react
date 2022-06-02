@@ -36,6 +36,7 @@ interface ChatAppContext {
   currentUser: CurrentUser | null;
   online: boolean;
   replyMessage: Message | null;
+  userFile: File | null;
   users: () => Promise<ChatKittyPaginator<User> | null>;
   getURLFile: (fileURL: string) => Promise<Blob>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
@@ -80,6 +81,8 @@ interface ChatAppContext {
   hideMenu: () => void;
   changeReply: (message: Message) => void;
   cancelReply: () => void;
+  setFile: (file: File) => void;
+  clearFile: () => void;
   showChat: (channel: Channel) => void;
   updateMessages: (message: Message) => void;
   showJoinChannel: () => void;
@@ -93,6 +96,7 @@ const initialValues: ChatAppContext = {
   currentUser: null,
   online: false,
   replyMessage: null,
+  userFile: null,
   users: () => Promise.prototype,
   getURLFile: () => Promise.prototype,
   joinedChannelsPaginator: () => Promise.prototype,
@@ -128,6 +132,8 @@ const initialValues: ChatAppContext = {
   hideMenu: () => {},
   changeReply: () => {},
   cancelReply: () => {},
+  setFile: () => {},
+  clearFile: () => {},
   showChat: () => {},
   updateMessages: () => {},
   showJoinChannel: () => {},
@@ -153,6 +159,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const [loading, setLoading] = useState(initialValues.loading);
   const [layout, setLayout] = useState(initialValues.layout);
   const [replyMessage, setReplyMessage] = useState<Message | null>(initialValues.replyMessage);
+  const [userFile, setUserFile] = useState<File | null>(initialValues.userFile);
 
   const views: Set<View> = new Set();
 
@@ -190,6 +197,14 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
   const cancelReply = () => {
     setReplyMessage(initialValues.replyMessage);
+  }
+
+  const setFile = (file: File) => {
+    setUserFile(file);
+  }
+
+  const clearFile = () => {
+    setUserFile(initialValues.userFile);
   }
 
   const showMenu = () => {
@@ -495,20 +510,10 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     await kitty.sendMessage({
       channel,
       file,
-      progressListener: {
-        onStarted: () => {
-          console.log('starting');
-        },
-        onProgress: () => {
-          console.log('loading');
-        },
-        onCompleted: () => {
-          console.log('complete');
-        },
-      },
     });
     
   }
+
 
   const sendMessageDraft = async (draft: MessageDraft) => {
     if (!channel) {
@@ -516,18 +521,36 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     }
 
     if (isTextMessageDraft(draft)) {
-      if(replyMessage){
-        await kitty.sendMessage({
-          body: draft.text,
-          message: replyMessage,
-        });
+      if(userFile){
+        if(replyMessage){
+          await kitty.sendMessage({
+            body: draft.text,
+            message: replyMessage,
+            file: userFile,
+          });
+        }else{
+          await kitty.sendMessage({
+            channel: channel,
+            body: draft.text,
+            file: userFile,
+          });
+        }
       }else{
-        await kitty.sendMessage({
-          channel: channel,
-          body: draft.text,
-        });
-      }
+        if(replyMessage){
+          await kitty.sendMessage({
+            body: draft.text,
+            message: replyMessage,
+          });
+        }else{
+          await kitty.sendMessage({
+            channel: channel,
+            body: draft.text,
+          });
+        }
 
+      }
+      
+      clearFile();
       discardMessageDraft();
       setReplyMessage(initialValues.replyMessage);
     }
@@ -545,6 +568,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         hideMenu,
         changeReply,
         cancelReply,
+        setFile,
+        clearFile,
         showChat,
         updateMessages,
         showJoinChannel,
@@ -552,6 +577,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         currentUser,
         online,
         replyMessage,
+        userFile,
         users,
         getURLFile,
         joinedChannelsPaginator,
