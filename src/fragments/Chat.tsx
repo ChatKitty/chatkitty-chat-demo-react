@@ -2,12 +2,15 @@ import { isUserMessage, Message, User } from 'chatkitty';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   FlexColumn,
+  FlexRow,
   Heading,
   HeadingSizes,
   StyledBox,
 } from 'react-chat-ui-kit';
 
+import XIcon from '../assets/images/x-icon.png';
 import { ChatAppContext } from '../providers/ChatAppProvider';
+
 
 import ChatHeader from './ChatHeader';
 import ChatMessageInput from './ChatMessageInput';
@@ -19,6 +22,7 @@ const Chat: React.FC = () => {
     channel,
     messages,
     startChatSession,
+    cancelReply,
     prependToMessages,
     currentUser,
     replyMessage,
@@ -59,6 +63,10 @@ const Chat: React.FC = () => {
     return session.end;
   }, [channel]);
 
+  const cancel = () => {
+    cancelReply();
+  }
+
   return channel ? (
     <FlexColumn
       height="100%"
@@ -71,7 +79,10 @@ const Chat: React.FC = () => {
       <ChatMessages channel={channel} />
       {messages.length !== 0 ? (<>
         <TypingIndicator typingUsers={typingUsers} />
-        {replyMessage && isUserMessage(replyMessage) && <p>Replying to {replyMessage.user.displayName}</p>}
+        {replyMessage && isUserMessage(replyMessage) && <FlexRow alignItems="flex-start">
+          <p>Replying to <strong>{replyMessage.user.displayName}</strong> </p>
+          <img src={XIcon} style={{width:'15px', cursor:'pointer', marginLeft:'50px'}} onClick={cancel}/> 
+        </FlexRow>}
       </>) : (
         <StyledBox
           style={{

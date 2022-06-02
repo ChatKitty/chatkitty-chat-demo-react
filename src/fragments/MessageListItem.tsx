@@ -3,16 +3,17 @@ import moment from 'moment';
 import { ChatAppContext } from 'providers/ChatAppProvider';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import {
-  Dropdown,
   FlexColumn,
   FlexRow,
   Heading,
-  Icons,
   Label,
   LabelSizes,
   StyledBox,
 } from 'react-chat-ui-kit';
 import { useHover } from 'react-chat-ui-kit';
+
+import replyIcon from '../assets/images/reply-icon.png';
+
 
 import Message from './Message';
 import PopupEmojiWindow from './PopupEmojiWindow';
@@ -45,6 +46,11 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
       setMessageParent(message)
     }).catch(e => {console.log(e)});
   },[])
+
+
+  const changeReplyMessage = () => {
+    changeReply(message);
+  }
   
   
 
@@ -67,13 +73,12 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
             {moment(message.createdTime).fromNow()}
           </Label>
           {isHovering && (
-            <>
+            <FlexRow>
               <StyledBox
                 style={{
                   position: 'relative',
                   left: '100px',
                   borderRadius: '20%',
-                  display: 'inline-block',
                   marginLeft:'5px',
                   height: '17px',
                   width: '15px',
@@ -86,21 +91,13 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
                   position: 'relative',
                   left: '100px',
                   borderRadius: '20%',
-                  display: 'inline-block',
                   marginLeft:'5px',
                   height: '17px',
                   width: '15px',
                 }}>
-                  <Dropdown 
-                    icon={Icons.Send} 
-                    title={''}
-                    render={() => {
-                      changeReply(message);
-                      return(<></>);
-                    }}
-                 />
+                  <img src={replyIcon} style={{width:'20px', cursor:'pointer'}} onClick={changeReplyMessage}/> 
                 </div>
-            </>
+            </FlexRow>
           )}
         </FlexRow>
 
@@ -120,7 +117,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         {isFileMessage(messageParent) && <p>: {messageParent.file.name}</p>}
       </FlexRow>
     }
-    </>
+    </> 
   );
 };
 

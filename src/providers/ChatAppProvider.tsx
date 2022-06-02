@@ -79,6 +79,7 @@ interface ChatAppContext {
   showMenu: () => void;
   hideMenu: () => void;
   changeReply: (message: Message) => void;
+  cancelReply: () => void;
   showChat: (channel: Channel) => void;
   updateMessages: (message: Message) => void;
   showJoinChannel: () => void;
@@ -126,6 +127,7 @@ const initialValues: ChatAppContext = {
   showMenu: () => {},
   hideMenu: () => {},
   changeReply: () => {},
+  cancelReply: () => {},
   showChat: () => {},
   updateMessages: () => {},
   showJoinChannel: () => {},
@@ -184,7 +186,10 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
   const changeReply = (message: Message) => {
     setReplyMessage(message);
-    console.log(replyMessage);
+  }
+
+  const cancelReply = () => {
+    setReplyMessage(initialValues.replyMessage);
   }
 
   const showMenu = () => {
@@ -409,17 +414,21 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
   const getMessageParent = async (message: Message) => {
 
-    
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const test: any = message ;
 
-    /**/
-    const result = await kitty.getMessageParent({
-      message
-    });
+    if(test.nestedLevel > 0){
+      console.log(test.nestedLevel)
     
-    if(succeeded<GetMessageParentSucceededResult>(result)){
-      return result.message;
+      const result = await kitty.getMessageParent({
+        message
+      });
+      
+      if(succeeded<GetMessageParentSucceededResult>(result)){
+        return result.message;
+      }
     }
-    /**/
+    
 
     return null;
 
@@ -509,7 +518,6 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     if (isTextMessageDraft(draft)) {
       if(replyMessage){
         await kitty.sendMessage({
-          channel: channel,
           body: draft.text,
           message: replyMessage,
         });
@@ -536,6 +544,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         showMenu,
         hideMenu,
         changeReply,
+        cancelReply,
         showChat,
         updateMessages,
         showJoinChannel,
