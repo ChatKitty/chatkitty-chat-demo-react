@@ -191,6 +191,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     setLayout(getLayout());
   };
 
+  
+
   const changeReply = (message: Message) => {
     setReplyMessage(message);
   }
@@ -535,7 +537,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
             file: userFile,
           });
         }
-      }else{
+      }
+      else{
         if(replyMessage){
           await kitty.sendMessage({
             body: draft.text,

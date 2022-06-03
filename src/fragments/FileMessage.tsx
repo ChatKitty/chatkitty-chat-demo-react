@@ -35,7 +35,7 @@ const FileMessage: React.FC<FileMessageProp> = ({
         <p style={{ marginTop: '1px' }}>{message.file.name}</p>
       </div>
     </a>
-  );
+    );
 };
 
 export default FileMessage;

@@ -95,6 +95,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
     restoreScrollPosition();
   }, []);
 
+
   return (
     <ScrollView ref={containerRef} onScroll={handleScroll}>
       <FlexColumn
@@ -105,29 +106,30 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
       >
         <div ref={messagesEndRef} />
         {messages.map((message) => (
-          <MessageListItem
-            message={message}
-            key={message.id}
-            avatar={
-              isUserMessage(message) ? (
-                <UserAvatar
-                  user={message.user}
-                  style={{
-                    display: 'inline-block',
-                    width: '35px',
-                    borderRadius: '50%',
-                  }}
-                />
-              ) : (
-                <Avatar
-                  variant={AvatarVariants.ROUND}
-                  bg={getUniqueColor('system', theme.colors.avatars)}
-                >
-                  C
-                </Avatar>
-              )
-            }
-          />
+          <div key={message.id} id={message.id + ''}>
+            <MessageListItem
+              message={message}
+              avatar={
+                isUserMessage(message) ? (
+                  <UserAvatar
+                    user={message.user}
+                    style={{
+                      display: 'inline-block',
+                      width: '35px',
+                      borderRadius: '50%',
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    variant={AvatarVariants.ROUND}
+                    bg={getUniqueColor('system', theme.colors.avatars)}
+                  >
+                    C
+                  </Avatar>
+                )
+              }
+            />
+          </div>
         ))}
         {messages.length != 0 && <WelcomeMessage />}
         <div ref={boundaryRef} />

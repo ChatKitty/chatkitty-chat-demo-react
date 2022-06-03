@@ -23,6 +23,7 @@ const Chat: React.FC = () => {
     messages,
     startChatSession,
     cancelReply,
+    clearFile,
     prependToMessages,
     currentUser,
     replyMessage,
@@ -64,8 +65,12 @@ const Chat: React.FC = () => {
     return session.end;
   }, [channel]);
 
-  const cancel = () => {
+  const cancelReplyMessage = () => {
     cancelReply();
+  }
+
+  const clearUserFile = () => {
+    clearFile();
   }
 
   return channel ? (
@@ -82,7 +87,7 @@ const Chat: React.FC = () => {
         <TypingIndicator typingUsers={typingUsers} />
         {replyMessage && isUserMessage(replyMessage) && <FlexRow alignItems="flex-start">
           <p>Replying to <strong>{replyMessage.user.displayName}</strong> </p>
-          <img src={XIcon} style={{width:'15px', cursor:'pointer', marginLeft:'50px'}} onClick={cancel}/> 
+          <img src={XIcon} style={{width:'15px', cursor:'pointer', marginLeft:'50px'}} onClick={cancelReplyMessage}/> 
         </FlexRow>}
       </>) : (
         <StyledBox
@@ -97,7 +102,12 @@ const Chat: React.FC = () => {
         </StyledBox>
       )}
       <ChatMessageInput />
-      {userFile && <p>{userFile.name}</p>}
+      <FlexRow marginLeft={'25px'} marginBottom={'10px'}>
+        {userFile && <>
+          <p>{userFile.name}</p>
+          <img src={XIcon} style={{width:'15px', cursor:'pointer', marginLeft:'50px'}} onClick={clearUserFile}/>
+        </>}
+      </FlexRow>
     </FlexColumn>
   ) : (
     <StyledBox margin="auto">

@@ -8,7 +8,7 @@ interface FileInputProps {
 
 const FileInput: React.FC<FileInputProps> = () => {
   const { sendFileMessage, setFile } = useContext(ChatAppContext);
-  const [file, setCurrentFile] = useState<File>();
+  const [file, setCurrentFile] = useState<File | null>();
 
   const onChange = (file: React.ChangeEvent<HTMLInputElement>) => {
     const files = file.target.files;
@@ -26,6 +26,7 @@ const FileInput: React.FC<FileInputProps> = () => {
   const addFile = () => {
     if(file){
       setFile(file);
+      setCurrentFile(null);
     }
   }
 
@@ -72,17 +73,17 @@ const FileInput: React.FC<FileInputProps> = () => {
             <FlexRow>
               <button
                 style={{
-                  marginLeft: '35%',
+                  marginLeft: '25%',
                   marginTop: '15px',
                 }}
                 onClick={sendFile}
               >
-                Submit
+                Send
               </button>
 
               <button
                 style={{
-                  marginLeft: '35%',
+                  marginLeft: '2px',
                   marginTop: '15px',
                 }}
                 onClick={addFile}

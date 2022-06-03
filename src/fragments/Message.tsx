@@ -22,11 +22,9 @@ const Message: React.FC<MessageProps> = ({ message }: MessageProps) => {
           {message.links && <LinkPreview links={message.links} />}
         </>
       )}
-      {isFileMessage(message) && (
-        <>
+      {isFileMessage(message) && 
           <FileMessage message={message} />
-        </>
-      )}
+      }
     </>
   );
 };

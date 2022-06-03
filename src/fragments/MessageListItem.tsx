@@ -44,7 +44,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
   useEffect(() => {
     getMessageParent(message).then((message) => {
       setMessageParent(message)
-    }).catch(e => {console.log(e)});
+    });
   },[])
 
 
@@ -52,10 +52,30 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
     changeReply(message);
   }
   
+  const scrollToElement = () => {
+    const element = document.getElementById(messageParent?.id + '')
+    
+    if(element){
+      element.scrollIntoView(false);
+    }
+  }
   
 
 
   return (<>
+    {messageParent && isUserMessage(messageParent) &&
+      <FlexRow 
+        style={{marginLeft:'20px', cursor:'pointer'}}
+        alignItems="flex-start"
+        bg={isHovering ? 'backgrounds.contentHover' : ''}
+        {...hoverProps}
+        onClick={scrollToElement}
+      >
+        <strong>@{messageParent.user.displayName}</strong>
+        {isTextMessage(messageParent) && <p>: {messageParent.body}</p>}
+        {isFileMessage(messageParent) && <p>: {messageParent.file.name}</p>}
+      </FlexRow>
+    }
     <FlexRow
       py="1"
       px={[5, 6]}
@@ -105,18 +125,6 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         <Reactions message={message} />
       </FlexColumn>
     </FlexRow>
-    {messageParent && isUserMessage(messageParent) &&
-      <FlexRow 
-        style={{marginLeft:'20px'}}
-        alignItems="flex-start"
-        bg={isHovering ? 'backgrounds.contentHover' : ''}
-        {...hoverProps}
-      >
-        <strong>@{messageParent.user.displayName}</strong>
-        {isTextMessage(messageParent) && <p>: {messageParent.body}</p>}
-        {isFileMessage(messageParent) && <p>: {messageParent.file.name}</p>}
-      </FlexRow>
-    }
     </> 
   );
 };
