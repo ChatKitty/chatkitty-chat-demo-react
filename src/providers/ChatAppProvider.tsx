@@ -6,6 +6,7 @@ import ChatKitty, {
   CurrentUser,
   GetChannelsSucceededResult,
   GetCountSucceedResult,
+  GetMessageParentSucceededResult,
   GetMessagesSucceededResult,
   GetUsersSucceededResult,
   isDirectChannel,
@@ -34,6 +35,8 @@ interface ChatAppContext {
   login: (username: string) => void;
   currentUser: CurrentUser | null;
   online: boolean;
+  replyMessage: Message | null;
+  userFile: File | null;
   users: () => Promise<ChatKittyPaginator<User> | null>;
   getURLFile: (fileURL: string) => Promise<Blob>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
@@ -51,6 +54,10 @@ interface ChatAppContext {
   messagesPaginator: (
     channel: Channel
   ) => Promise<ChatKittyPaginator<Message> | null>;
+  replyMessagesPaginator: (
+    message: Message
+  ) => Promise<ChatKittyPaginator<Message> | null>;
+  getMessageParent: (messafe: Message) => Promise<Message | null>;
 
   memberListGetter: (Channel: Channel) => Promise<User[] | null>;
   reactToMessage: (emoji: string, message: Message) => Promise<Reaction | null>;
@@ -72,6 +79,10 @@ interface ChatAppContext {
   loading: boolean;
   showMenu: () => void;
   hideMenu: () => void;
+  changeReply: (message: Message) => void;
+  cancelReply: () => void;
+  setCurrentFile: (file: File) => void;
+  clearFile: () => void;
   showChat: (channel: Channel) => void;
   updateMessages: (message: Message) => void;
   showJoinChannel: () => void;
@@ -84,6 +95,8 @@ const initialValues: ChatAppContext = {
   login: () => {},
   currentUser: null,
   online: false,
+  replyMessage: null,
+  userFile: null,
   users: () => Promise.prototype,
   getURLFile: () => Promise.prototype,
   joinedChannelsPaginator: () => Promise.prototype,
@@ -97,6 +110,8 @@ const initialValues: ChatAppContext = {
   channelUnreadMessagesCount: () => Promise.prototype,
   startChatSession: () => null,
   messagesPaginator: () => Promise.prototype,
+  replyMessagesPaginator: () => Promise.prototype,
+  getMessageParent: () => Promise.prototype,
   memberListGetter: () => Promise.prototype,
   reactToMessage: () => Promise.prototype,
   removeReaction: () => Promise.prototype,
@@ -115,6 +130,10 @@ const initialValues: ChatAppContext = {
   loading: false,
   showMenu: () => {},
   hideMenu: () => {},
+  changeReply: () => {},
+  cancelReply: () => {},
+  setCurrentFile: () => {},
+  clearFile: () => {},
   showChat: () => {},
   updateMessages: () => {},
   showJoinChannel: () => {},
@@ -139,15 +158,13 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const [messageDraft, setMessageDraft] = useState(initialValues.messageDraft);
   const [loading, setLoading] = useState(initialValues.loading);
   const [layout, setLayout] = useState(initialValues.layout);
+  const [replyMessage, setReplyMessage] = useState<Message | null>(initialValues.replyMessage);
+  const [userFile, setUserFile] = useState<File | null>(initialValues.userFile);
 
   const views: Set<View> = new Set();
 
   const demoUsers = [
-    'b2a6da08-88bf-4778-b993-7234e6d8a3ff',
-    'c6f75947-af48-4893-a78e-0e0b9bd68580',
-    'abc4264d-f1b1-41c0-b4cc-1e9daadfc893',
-    '2989c53a-d0c5-4222-af8d-fbf7b0c74ec6',
-    '8fadc920-f3e6-49ff-9398-1e58b3dc44dd',
+    '910746e1-d6e1-4df1-80b6-88ad90d7d2ad'
   ];
 
   const getLayout = (): LayoutState => {
@@ -169,6 +186,24 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     setLayout(getLayout());
   };
+
+  
+
+  const changeReply = (message: Message) => {
+    setReplyMessage(message);
+  }
+
+  const cancelReply = () => {
+    setReplyMessage(initialValues.replyMessage);
+  }
+
+  const setCurrentFile = (file: File) => {
+    setUserFile(file);
+  }
+
+  const clearFile = () => {
+    setUserFile(initialValues.userFile);
+  }
 
   const showMenu = () => {
     showView('Menu');
@@ -378,6 +413,38 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     return null;
   };
 
+  const replyMessagesPaginator = async (message: Message) => {
+    const result = await kitty.getMessages({
+      message,
+    });
+
+    if (succeeded<GetMessagesSucceededResult>(result)) {
+      return result.paginator;
+    }
+
+    return null;
+  };
+
+  const getMessageParent = async (message: Message) => {
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const test: any = message ;
+
+    if(test.nestedLevel > 0){
+      const result = await kitty.getMessageParent({
+        message
+      });
+      
+      if(succeeded<GetMessageParentSucceededResult>(result)){
+        return result.message;
+      }
+    }
+    
+
+    return null;
+
+  }
+
   const memberListGetter = async (channel: Channel) => {
     const result = await kitty.getChannelMembers({ channel: channel });
 
@@ -387,6 +454,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     return null;
   };
+
 
   const reactToMessage = async (emoji: string, message: Message) => {
     const result = await kitty.reactToMessage({ emoji, message });
@@ -438,20 +506,10 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     await kitty.sendMessage({
       channel,
       file,
-      progressListener: {
-        onStarted: () => {
-          console.log('starting');
-        },
-        onProgress: () => {
-          console.log('loading');
-        },
-        onCompleted: () => {
-          console.log('complete');
-        },
-      },
     });
     
   }
+
 
   const sendMessageDraft = async (draft: MessageDraft) => {
     if (!channel) {
@@ -459,12 +517,39 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     }
 
     if (isTextMessageDraft(draft)) {
-      await kitty.sendMessage({
-        channel: channel,
-        body: draft.text,
-      });
+      if(userFile){
+        if(replyMessage){
+          await kitty.sendMessage({
+            body: draft.text,
+            message: replyMessage,
+            file: userFile,
+          });
+        }else{
+          await kitty.sendMessage({
+            channel: channel,
+            body: draft.text,
+            file: userFile,
+          });
+        }
+      }
+      else{
+        if(replyMessage){
+          await kitty.sendMessage({
+            body: draft.text,
+            message: replyMessage,
+          });
+        }else{
+          await kitty.sendMessage({
+            channel: channel,
+            body: draft.text,
+          });
+        }
 
+      }
+      
+      clearFile();
       discardMessageDraft();
+      setReplyMessage(initialValues.replyMessage);
     }
     
   };
@@ -478,12 +563,18 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
       value={{
         showMenu,
         hideMenu,
+        changeReply,
+        cancelReply,
+        setCurrentFile,
+        clearFile,
         showChat,
         updateMessages,
         showJoinChannel,
         hideJoinChannel,
         currentUser,
         online,
+        replyMessage,
+        userFile,
         users,
         getURLFile,
         joinedChannelsPaginator,
@@ -497,6 +588,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         channelUnreadMessagesCount,
         startChatSession,
         messagesPaginator,
+        replyMessagesPaginator,
+        getMessageParent,
         memberListGetter,
         reactToMessage,
         removeReaction,

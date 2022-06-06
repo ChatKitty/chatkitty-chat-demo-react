@@ -1,14 +1,14 @@
 import { ChatAppContext } from 'providers/ChatAppProvider';
 import React, { useContext, useState } from 'react';
-import { Dropdown, Icons } from 'react-chat-ui-kit';
+import { Dropdown, FlexRow, Icons } from 'react-chat-ui-kit';
 
 interface FileInputProps {
   file?: File;
 }
 
 const FileInput: React.FC<FileInputProps> = () => {
-  const { sendFileMessage } = useContext(ChatAppContext);
-  const [file, setFile] = useState<File>();
+  const { sendFileMessage, setCurrentFile } = useContext(ChatAppContext);
+  const [file, setFile] = useState<File | null>(null);
 
   const onChange = (file: React.ChangeEvent<HTMLInputElement>) => {
     const files = file.target.files;
@@ -17,11 +17,18 @@ const FileInput: React.FC<FileInputProps> = () => {
     }
   };
 
-  const onClick = () => {
+  const sendFile = () => {
     if (file) {
       sendFileMessage(file);
     }
   };
+
+  const addFile = () => {
+    if(file){
+      setCurrentFile(file);
+      setFile(null);
+    }
+  }
 
   return (
     <Dropdown
@@ -62,16 +69,28 @@ const FileInput: React.FC<FileInputProps> = () => {
             >
               <input type="file" onChange={(file) => onChange(file)} />
             </div>
+            
+            <FlexRow>
+              <button
+                style={{
+                  marginLeft: '25%',
+                  marginTop: '15px',
+                }}
+                onClick={sendFile}
+              >
+                Send
+              </button>
 
-            <button
-              style={{
-                marginLeft: '35%',
-                marginTop: '15px',
-              }}
-              onClick={onClick}
-            >
-              Submit
-            </button>
+              <button
+                style={{
+                  marginLeft: '2px',
+                  marginTop: '15px',
+                }}
+                onClick={addFile}
+              >
+                Add
+              </button>
+            </FlexRow>
           </div>
         );
       }}

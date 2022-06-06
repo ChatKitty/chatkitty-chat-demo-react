@@ -105,31 +105,32 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
       >
         <div ref={messagesEndRef} />
         {messages.map((message) => (
-          <MessageListItem
-            message={message}
-            key={message.id}
-            avatar={
-              isUserMessage(message) ? (
-                <UserAvatar
-                  user={message.user}
-                  style={{
-                    display: 'inline-block',
-                    width: '35px',
-                    borderRadius: '50%',
-                  }}
-                />
-              ) : (
-                <Avatar
-                  variant={AvatarVariants.ROUND}
-                  bg={getUniqueColor('system', theme.colors.avatars)}
-                >
-                  C
-                </Avatar>
-              )
-            }
-          />
+          <div key={message.id} id={String(message.id)}>
+            <MessageListItem
+              message={message}
+              avatar={
+                isUserMessage(message) ? (
+                  <UserAvatar
+                    user={message.user}
+                    style={{
+                      display: 'inline-block',
+                      width: '35px',
+                      borderRadius: '50%',
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    variant={AvatarVariants.ROUND}
+                    bg={getUniqueColor('system', theme.colors.avatars)}
+                  >
+                    C
+                  </Avatar>
+                )
+              }
+            />
+          </div>
         ))}
-        {messages.length != 0 && <WelcomeMessage />}
+        {messages.length !== 0 && <WelcomeMessage />}
         <div ref={boundaryRef} />
         {/* This moves the list of messages to the bottom, since there's a bug with flex-end scroll */}
         <FlexColumn flex="1 1 auto"></FlexColumn>

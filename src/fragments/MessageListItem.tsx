@@ -1,6 +1,7 @@
-import { Message as ChatKittyMessage, isUserMessage } from 'chatkitty';
+import { Message as ChatKittyMessage, isFileMessage, isTextMessage, isUserMessage } from 'chatkitty';
 import moment from 'moment';
-import React, { ReactElement } from 'react';
+import { ChatAppContext } from 'providers/ChatAppProvider';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import {
   FlexColumn,
   FlexRow,
@@ -11,6 +12,9 @@ import {
 } from 'react-chat-ui-kit';
 import { useHover } from 'react-chat-ui-kit';
 
+import replyIcon from '../assets/images/reply-icon.png';
+
+
 import Message from './Message';
 import PopupEmojiWindow from './PopupEmojiWindow';
 import Reactions from './Reactions';
@@ -19,6 +23,8 @@ interface MessageListItemProps {
   message: ChatKittyMessage;
   avatar: ReactElement;
 }
+
+
 
 const MessageListItem: React.FC<MessageListItemProps> = ({
   message,
@@ -29,10 +35,47 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
     : {
         displayName: 'ChatKitty',
       };
-
+  
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
+  const {changeReply, getMessageParent} = useContext(ChatAppContext);
+  const [messageParent, setMessageParent] = useState<ChatKittyMessage | null>(null);
 
-  return (
+
+  useEffect(() => {
+    getMessageParent(message).then((message) => {
+      setMessageParent(message)
+    });
+  },[])
+
+
+  const changeReplyMessage = () => {
+    changeReply(message);
+  }
+  
+  const scrollToElement = () => {
+    const element = document.getElementById(String(messageParent?.id))
+    
+    if(element){
+      element.scrollIntoView(false);
+    }
+  }
+  
+
+
+  return (<>
+    {messageParent && isUserMessage(messageParent) &&
+      <FlexRow 
+        style={{marginLeft:'20px', cursor:'pointer'}}
+        alignItems="flex-start"
+        bg={isHovering ? 'backgrounds.contentHover' : ''}
+        {...hoverProps}
+        onClick={scrollToElement}
+      >
+        <strong>@{messageParent.user.displayName}</strong>
+        {isTextMessage(messageParent) && <p>: {messageParent.body}</p>}
+        {isFileMessage(messageParent) && <p>: {messageParent.file.name}</p>}
+      </FlexRow>
+    }
     <FlexRow
       py="1"
       px={[5, 6]}
@@ -50,19 +93,31 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
             {moment(message.createdTime).fromNow()}
           </Label>
           {isHovering && (
-            <StyledBox
-              style={{
-                position: 'relative',
-                left: '100px',
-                borderRadius: '20%',
-                display: 'inline-block',
-                marginLeft:'5px',
-                height: '17px',
-                width: '15px',
-              }}
-            >
-              <PopupEmojiWindow message={message} />
-            </StyledBox>
+            <FlexRow>
+              <StyledBox
+                style={{
+                  position: 'relative',
+                  left: '100px',
+                  borderRadius: '20%',
+                  marginLeft:'5px',
+                  height: '17px',
+                  width: '15px',
+                }}
+              >
+                <PopupEmojiWindow message={message} />
+                
+              </StyledBox>
+              <div style={{
+                  position: 'relative',
+                  left: '100px',
+                  borderRadius: '20%',
+                  marginLeft:'5px',
+                  height: '17px',
+                  width: '15px',
+                }}>
+                  <img src={replyIcon} style={{width:'20px', cursor:'pointer'}} onClick={changeReplyMessage}/> 
+                </div>
+            </FlexRow>
           )}
         </FlexRow>
 
@@ -70,6 +125,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         <Reactions message={message} />
       </FlexColumn>
     </FlexRow>
+    </> 
   );
 };
 

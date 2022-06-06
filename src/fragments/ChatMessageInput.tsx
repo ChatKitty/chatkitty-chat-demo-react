@@ -89,16 +89,11 @@ const ChatMessageInput: React.FC = () => {
             <GiphyInput onSelected={sendGif} />
           )}
 
-          <StyledBox marginLeft="1">
-            <div style={{ display: 'inline-block' }}>
+          <FlexRow marginLeft="1">
               <EmojiInput value={text} onSelection={emojiInserted} />
               <EmojiSuggestion value={text} onSelection={emojiInserted} />
-            </div>
-
-            <div style={{ display: 'inline-block' }}>
               <FileInput />
-            </div>
-          </StyledBox>
+          </FlexRow>
 
           {touch && (
             <StyledBox
