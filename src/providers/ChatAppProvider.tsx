@@ -81,7 +81,7 @@ interface ChatAppContext {
   hideMenu: () => void;
   changeReply: (message: Message) => void;
   cancelReply: () => void;
-  setFile: (file: File) => void;
+  setCurrentFile: (file: File) => void;
   clearFile: () => void;
   showChat: (channel: Channel) => void;
   updateMessages: (message: Message) => void;
@@ -132,7 +132,7 @@ const initialValues: ChatAppContext = {
   hideMenu: () => {},
   changeReply: () => {},
   cancelReply: () => {},
-  setFile: () => {},
+  setCurrentFile: () => {},
   clearFile: () => {},
   showChat: () => {},
   updateMessages: () => {},
@@ -164,11 +164,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const views: Set<View> = new Set();
 
   const demoUsers = [
-    'b2a6da08-88bf-4778-b993-7234e6d8a3ff',
-    'c6f75947-af48-4893-a78e-0e0b9bd68580',
-    'abc4264d-f1b1-41c0-b4cc-1e9daadfc893',
-    '2989c53a-d0c5-4222-af8d-fbf7b0c74ec6',
-    '8fadc920-f3e6-49ff-9398-1e58b3dc44dd',
+    '910746e1-d6e1-4df1-80b6-88ad90d7d2ad'
   ];
 
   const getLayout = (): LayoutState => {
@@ -201,7 +197,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     setReplyMessage(initialValues.replyMessage);
   }
 
-  const setFile = (file: File) => {
+  const setCurrentFile = (file: File) => {
     setUserFile(file);
   }
 
@@ -435,8 +431,6 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     const test: any = message ;
 
     if(test.nestedLevel > 0){
-      console.log(test.nestedLevel)
-    
       const result = await kitty.getMessageParent({
         message
       });
@@ -571,7 +565,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         hideMenu,
         changeReply,
         cancelReply,
-        setFile,
+        setCurrentFile,
         clearFile,
         showChat,
         updateMessages,

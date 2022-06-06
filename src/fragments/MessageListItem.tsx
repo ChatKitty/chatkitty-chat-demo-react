@@ -53,7 +53,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
   }
   
   const scrollToElement = () => {
-    const element = document.getElementById(messageParent?.id + '')
+    const element = document.getElementById(String(messageParent?.id))
     
     if(element){
       element.scrollIntoView(false);

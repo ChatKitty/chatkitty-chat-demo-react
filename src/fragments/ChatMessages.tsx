@@ -95,7 +95,6 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
     restoreScrollPosition();
   }, []);
 
-
   return (
     <ScrollView ref={containerRef} onScroll={handleScroll}>
       <FlexColumn
@@ -106,7 +105,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
       >
         <div ref={messagesEndRef} />
         {messages.map((message) => (
-          <div key={message.id} id={message.id + ''}>
+          <div key={message.id} id={String(message.id)}>
             <MessageListItem
               message={message}
               avatar={
@@ -131,7 +130,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
             />
           </div>
         ))}
-        {messages.length != 0 && <WelcomeMessage />}
+        {messages.length !== 0 && <WelcomeMessage />}
         <div ref={boundaryRef} />
         {/* This moves the list of messages to the bottom, since there's a bug with flex-end scroll */}
         <FlexColumn flex="1 1 auto"></FlexColumn>
