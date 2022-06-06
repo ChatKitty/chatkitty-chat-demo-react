@@ -22,6 +22,7 @@ import Reactions from './Reactions';
 interface MessageListItemProps {
   message: ChatKittyMessage;
   avatar: ReactElement;
+  index?: number;
 }
 
 
@@ -29,6 +30,7 @@ interface MessageListItemProps {
 const MessageListItem: React.FC<MessageListItemProps> = ({
   message,
   avatar,
+  index,
 }: MessageListItemProps) => {
   const sender: { displayName: string } = isUserMessage(message)
     ? message.user
@@ -37,14 +39,20 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
       };
   
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
-  const {changeReply, getMessageParent} = useContext(ChatAppContext);
+  const {changeReply, getMessageParent, messages} = useContext(ChatAppContext);
   const [messageParent, setMessageParent] = useState<ChatKittyMessage | null>(null);
+  const [previousMessage, setPreviousMessage] = useState<ChatKittyMessage|null>(null);
 
 
   useEffect(() => {
     getMessageParent(message).then((message) => {
       setMessageParent(message)
     });
+
+    if(index){
+      setPreviousMessage(messages[index-1]);
+    }
+    
   },[])
 
 
@@ -83,7 +91,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
       bg={isHovering ? 'backgrounds.contentHover' : ''}
       {...hoverProps}
     >
-      {avatar}
+      {(avatar)}
       <FlexColumn marginLeft="5" flexGrow={1}>
         <FlexRow marginBottom="1">
           <StyledBox marginRight="3">
