@@ -104,10 +104,11 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
         flexDirection="column-reverse"
       >
         <div ref={messagesEndRef} />
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div key={message.id} id={String(message.id)}>
             <MessageListItem
               message={message}
+              previousMessage={ (index < messages.length - 1) ? messages[index+1] : undefined}
               avatar={
                 isUserMessage(message) ? (
                   <UserAvatar

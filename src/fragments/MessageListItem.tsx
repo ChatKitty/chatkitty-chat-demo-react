@@ -1,4 +1,9 @@
-import { Message as ChatKittyMessage, isFileMessage, isTextMessage, isUserMessage } from 'chatkitty';
+import {
+  Message as ChatKittyMessage,
+  isFileMessage,
+  isTextMessage,
+  isUserMessage,
+} from 'chatkitty';
 import moment from 'moment';
 import { ChatAppContext } from 'providers/ChatAppProvider';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
@@ -14,7 +19,6 @@ import { useHover } from 'react-chat-ui-kit';
 
 import replyIcon from '../assets/images/reply-icon.png';
 
-
 import Message from './Message';
 import PopupEmojiWindow from './PopupEmojiWindow';
 import Reactions from './Reactions';
@@ -22,110 +26,144 @@ import Reactions from './Reactions';
 interface MessageListItemProps {
   message: ChatKittyMessage;
   avatar: ReactElement;
+  previousMessage?: ChatKittyMessage;
 }
-
-
 
 const MessageListItem: React.FC<MessageListItemProps> = ({
   message,
   avatar,
+  previousMessage,
 }: MessageListItemProps) => {
   const sender: { displayName: string } = isUserMessage(message)
     ? message.user
     : {
         displayName: 'ChatKitty',
       };
-  
-  const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
-  const {changeReply, getMessageParent} = useContext(ChatAppContext);
-  const [messageParent, setMessageParent] = useState<ChatKittyMessage | null>(null);
 
+  const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
+  const { changeReply, getMessageParent } = useContext(ChatAppContext);
+  const [messageParent, setMessageParent] = useState<ChatKittyMessage | null>(
+    null
+  );
+
+  const [sameUser, setSameUser] = useState<boolean | null>(true);
 
   useEffect(() => {
     getMessageParent(message).then((message) => {
-      setMessageParent(message)
+      setMessageParent(message);
     });
-  },[])
 
+    if (previousMessage) {
+      const time = moment(message.createdTime);
+      const previousTime = moment(previousMessage.createdTime);
+      const ellapsedTime = time.diff(previousTime, 'minute');
+
+      setSameUser(
+        isUserMessage(previousMessage) &&
+          previousMessage.user.displayName === sender.displayName &&
+          ellapsedTime < 1
+      );
+    }
+  }, []);
 
   const changeReplyMessage = () => {
     changeReply(message);
-  }
-  
+  };
+
   const scrollToElement = () => {
-    const element = document.getElementById(String(messageParent?.id))
-    
-    if(element){
+    const element = document.getElementById(String(messageParent?.id));
+
+    if (element) {
       element.scrollIntoView(false);
     }
-  }
-  
+  };
 
-
-  return (<>
-    {messageParent && isUserMessage(messageParent) &&
-      <FlexRow 
-        style={{marginLeft:'20px', cursor:'pointer'}}
+  return (
+    <div style={{ position: 'relative' }}>
+      {messageParent && isUserMessage(messageParent) && (
+        <FlexRow
+          style={{ marginLeft: '20px', cursor: 'pointer' }}
+          alignItems="flex-start"
+          bg={isHovering ? 'backgrounds.contentHover' : ''}
+          {...hoverProps}
+          onClick={scrollToElement}
+        >
+          <strong>@{messageParent.user.displayName}</strong>
+          {isTextMessage(messageParent) && <p>: {messageParent.body}</p>}
+          {isFileMessage(messageParent) && <p>: {messageParent.file.name}</p>}
+        </FlexRow>
+      )}
+      <FlexRow
+        py="1"
+        px={[5, 6]}
         alignItems="flex-start"
         bg={isHovering ? 'backgrounds.contentHover' : ''}
         {...hoverProps}
-        onClick={scrollToElement}
       >
-        <strong>@{messageParent.user.displayName}</strong>
-        {isTextMessage(messageParent) && <p>: {messageParent.body}</p>}
-        {isFileMessage(messageParent) && <p>: {messageParent.file.name}</p>}
-      </FlexRow>
-    }
-    <FlexRow
-      py="1"
-      px={[5, 6]}
-      alignItems="flex-start"
-      bg={isHovering ? 'backgrounds.contentHover' : ''}
-      {...hoverProps}
-    >
-      {avatar}
-      <FlexColumn marginLeft="5" flexGrow={1}>
-        <FlexRow marginBottom="1">
-          <StyledBox marginRight="3">
-            <Heading>{sender.displayName}</Heading>
-          </StyledBox>
-          <Label size={LabelSizes.SMALL}>
-            {moment(message.createdTime).fromNow()}
-          </Label>
-          {isHovering && (
-            <FlexRow>
-              <StyledBox
-                style={{
-                  position: 'relative',
-                  left: '100px',
-                  borderRadius: '20%',
-                  marginLeft:'5px',
-                  height: '17px',
-                  width: '15px',
-                }}
+        {(!sameUser || messageParent || !previousMessage) && avatar}
+        <FlexColumn marginLeft="5" flexGrow={1}>
+          <FlexRow marginBottom="1">
+            {(!sameUser || messageParent || !previousMessage) && (
+              <StyledBox marginRight="3">
+                <Heading>{sender.displayName}</Heading>
+              </StyledBox>
+            )}
+            {(!sameUser || messageParent || !previousMessage) && (
+              <Label size={LabelSizes.SMALL}>
+                {moment(message.createdTime).fromNow()}
+              </Label>
+            )}
+          </FlexRow>
+
+          <FlexRow>
+            <div
+              style={{
+                position: 'relative',
+                left:
+                  sameUser && !messageParent && previousMessage
+                    ? '30px'
+                    : '0px',
+              }}
+            >
+              <Message message={message} />
+            </div>
+            {isHovering && (
+              <FlexRow
+                style={{ position: 'absolute', top: '10px', right: '50px' }}
               >
                 <PopupEmojiWindow message={message} />
-                
-              </StyledBox>
-              <div style={{
-                  position: 'relative',
-                  left: '100px',
-                  borderRadius: '20%',
-                  marginLeft:'5px',
-                  height: '17px',
-                  width: '15px',
-                }}>
-                  <img src={replyIcon} style={{width:'20px', cursor:'pointer'}} onClick={changeReplyMessage}/> 
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '0px',
+                    right: '30px',
+                    borderRadius: '20%',
+                    height: '17px',
+                    width: '15px',
+                  }}
+                >
+                  <img
+                    src={replyIcon}
+                    style={{ width: '20px', cursor: 'pointer' }}
+                    onClick={changeReplyMessage}
+                  />
                 </div>
-            </FlexRow>
-          )}
-        </FlexRow>
+              </FlexRow>
+            )}
+          </FlexRow>
 
-        <Message message={message} />
-        <Reactions message={message} />
-      </FlexColumn>
-    </FlexRow>
-    </> 
+          <div
+            style={{
+              position: 'relative',
+              marginLeft:
+                sameUser && !messageParent && previousMessage ? '30px' : '0px',
+            }}
+          >
+            <Reactions message={message} />
+          </div>
+        </FlexColumn>
+      </FlexRow>
+    </div>
   );
 };
 
