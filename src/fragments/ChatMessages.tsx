@@ -108,7 +108,7 @@ const ChatMessages: React.FC<ChatMessagesProps> = ({
           <div key={message.id} id={String(message.id)}>
             <MessageListItem
               message={message}
-              index={index}
+              previousMessage={ (index < messages.length - 1) ? messages[index+1] : undefined}
               avatar={
                 isUserMessage(message) ? (
                   <UserAvatar

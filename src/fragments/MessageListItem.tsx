@@ -26,13 +26,13 @@ import Reactions from './Reactions';
 interface MessageListItemProps {
   message: ChatKittyMessage;
   avatar: ReactElement;
-  index?: number;
+  previousMessage?: ChatKittyMessage;
 }
 
 const MessageListItem: React.FC<MessageListItemProps> = ({
   message,
   avatar,
-  index,
+  previousMessage,
 }: MessageListItemProps) => {
   const sender: { displayName: string } = isUserMessage(message)
     ? message.user
@@ -41,8 +41,7 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
       };
 
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
-  const { changeReply, getMessageParent, messages } =
-    useContext(ChatAppContext);
+  const { changeReply, getMessageParent } = useContext(ChatAppContext);
   const [messageParent, setMessageParent] = useState<ChatKittyMessage | null>(
     null
   );
@@ -54,34 +53,15 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
       setMessageParent(message);
     });
 
-    if (index !== undefined && index < messages.length - 1) {
-      const previousMessage = messages[index + 1];
-      const messageTime = message.createdTime
-        .split('T')
-        .join('-')
-        .split('-')
-        .join(':')
-        .split(':');
-      const previousMessageTime = previousMessage.createdTime
-        .split('T')
-        .join('-')
-        .split('-')
-        .join(':')
-        .split(':');
-      let sameTime = true;
-
-      for (let i = 0; i < 5; i++) {
-        if (messageTime[i] !== previousMessageTime[i]) {
-          console.log(message.id);
-          sameTime = false;
-          break;
-        }
-      }
+    if (previousMessage) {
+      const time = moment(message.createdTime);
+      const previousTime = moment(previousMessage.createdTime);
+      const ellapsedTime = time.diff(previousTime, 'minute');
 
       setSameUser(
         isUserMessage(previousMessage) &&
           previousMessage.user.displayName === sender.displayName &&
-          sameTime
+          ellapsedTime < 1
       );
     }
   }, []);
@@ -120,15 +100,15 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         bg={isHovering ? 'backgrounds.contentHover' : ''}
         {...hoverProps}
       >
-        {(!sameUser || messageParent) && avatar}
+        {(!sameUser || messageParent || !previousMessage) && avatar}
         <FlexColumn marginLeft="5" flexGrow={1}>
           <FlexRow marginBottom="1">
-            {(!sameUser || messageParent) && (
+            {(!sameUser || messageParent || !previousMessage) && (
               <StyledBox marginRight="3">
                 <Heading>{sender.displayName}</Heading>
               </StyledBox>
             )}
-            {(!sameUser || messageParent) && (
+            {(!sameUser || messageParent || !previousMessage) && (
               <Label size={LabelSizes.SMALL}>
                 {moment(message.createdTime).fromNow()}
               </Label>
@@ -139,7 +119,10 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
             <div
               style={{
                 position: 'relative',
-                left: sameUser && !messageParent ? '30px' : '0px',
+                left:
+                  sameUser && !messageParent && previousMessage
+                    ? '30px'
+                    : '0px',
               }}
             >
               <Message message={message} />
@@ -172,7 +155,8 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
           <div
             style={{
               position: 'relative',
-              marginLeft: sameUser && !messageParent ? '30px' : '0px',
+              marginLeft:
+                sameUser && !messageParent && previousMessage ? '30px' : '0px',
             }}
           >
             <Reactions message={message} />
