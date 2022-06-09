@@ -263,7 +263,14 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     kitty.onCurrentUserOffline(() => {
       setOnline(false);
     });
-  }, []);
+
+    if(currentUser){
+      kitty.onNotificationReceived((notification) => {
+        console.log(notification);
+      })
+    }
+
+  }, [currentUser]);
 
   const login = async (username: string) => {
     setLoading(true);
