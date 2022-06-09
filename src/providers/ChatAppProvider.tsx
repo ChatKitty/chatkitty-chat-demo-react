@@ -16,6 +16,7 @@ import ChatKitty, {
   Reaction,
   StartedChatSessionResult,
   succeeded,
+  SystemSentMessageNotification,
   User,
 } from 'chatkitty';
 import React, { ReactElement, useEffect, useState } from 'react';
@@ -37,6 +38,7 @@ interface ChatAppContext {
   online: boolean;
   replyMessage: Message | null;
   userFile: File | null;
+  currentNotification: SystemSentMessageNotification | null;
   users: () => Promise<ChatKittyPaginator<User> | null>;
   getURLFile: (fileURL: string) => Promise<Blob>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
@@ -97,6 +99,7 @@ const initialValues: ChatAppContext = {
   online: false,
   replyMessage: null,
   userFile: null,
+  currentNotification: null,
   users: () => Promise.prototype,
   getURLFile: () => Promise.prototype,
   joinedChannelsPaginator: () => Promise.prototype,
@@ -160,6 +163,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const [layout, setLayout] = useState(initialValues.layout);
   const [replyMessage, setReplyMessage] = useState<Message | null>(initialValues.replyMessage);
   const [userFile, setUserFile] = useState<File | null>(initialValues.userFile);
+
+  const [currentNotification, setcurrentNotification] = useState<SystemSentMessageNotification | null>(initialValues.currentNotification);
 
   const views: Set<View> = new Set();
 
@@ -266,7 +271,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
 
     if(currentUser){
       kitty.onNotificationReceived((notification) => {
-        console.log(notification);
+        setcurrentNotification(notification);
       })
     }
 
@@ -586,6 +591,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         online,
         replyMessage,
         userFile,
+        currentNotification,
         users,
         getURLFile,
         joinedChannelsPaginator,
