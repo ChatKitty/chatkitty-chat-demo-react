@@ -40,7 +40,7 @@ interface ChatAppContext {
   userFile: File | null;
   currentNotification: SystemSentMessageNotification | null;
   users: () => Promise<ChatKittyPaginator<User> | null>;
-  getURLFile: (fileURL: string) => Promise<Blob>;
+  getURLFile: (fileURL: string) => Promise<Blob | null>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinableChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinChannel: (channel: Channel) => void;
@@ -299,8 +299,14 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   };
 
   const getURLFile = async (fileURL: string) => {
-    const blobPromise = await fetch(fileURL).then(fileblob => fileblob.blob());
-    return(blobPromise);
+    try{
+      const blobPromise = await fetch(fileURL).then(fileblob => fileblob.blob());
+      return(blobPromise);
+    }
+    catch(error){
+      console.log(error);
+    }
+    return(null);
   }
 
   const joinedChannelsPaginator = async () => {

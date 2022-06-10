@@ -17,7 +17,12 @@ const FileMessage: React.FC<FileMessageProp> = ({
 
   useEffect(() => {
     getURLFile(message.file.url).then((blob) => {
-      setLink(URL.createObjectURL(blob));
+      if(blob){
+        setLink(URL.createObjectURL(blob));
+      }
+      else{
+        setLink(message.file.url);
+      }
     });
   },[]);
 
