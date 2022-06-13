@@ -11,6 +11,7 @@ import { usePaginator } from 'react-chat-ui-kit';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
 
+import DisplayNotification from './DisplayNotification';
 import MyChannelListItem from './MyChannelListItem';
 
 const MyChannels: React.FC = () => {
@@ -20,6 +21,7 @@ const MyChannels: React.FC = () => {
     onLeftChannel,
     loading,
     currentUser,
+    currentNotification,
     showChat,
     showJoinChannel,
   } = useContext(ChatAppContext);
@@ -56,7 +58,7 @@ const MyChannels: React.FC = () => {
     <div>Loading...</div>
   ) : (
     <>
-      <FlexRow justifyContent="space-between" mx={6} marginBottom={1}>
+      <FlexRow justifyContent="space-between" mx={6} marginBottom={1} display='relative'>
         <Heading variant={HeadingVariants.INVERSE}>Channels</Heading>
         <Icon
           icon={Icons.Add}
@@ -75,6 +77,7 @@ const MyChannels: React.FC = () => {
         ))}
         <div ref={boundaryRef} />
       </ScrollView>
+      {currentNotification && <DisplayNotification notification={currentNotification}/>}
     </>
   );
 };
