@@ -56,12 +56,6 @@ const MemberList: React.FC = () => {
             <StyledBox>
               <UserAvatar
                 user={channel?.creator}
-                style={{
-                  borderRadius: '50%',
-                  width: '25px',
-                  marginLeft: '10px',
-                  marginTop: '5px',
-                }}
               />
               <Icon
                 icon={Icons.Presence}
@@ -104,12 +98,6 @@ const MemberList: React.FC = () => {
               <div>
                 <UserAvatar
                   user={user}
-                  style={{
-                    borderRadius: '50%',
-                    width: '25px',
-                    marginLeft: '10px',
-                    marginTop: '5px',
-                  }}
                 />
                 <Icon
                   icon={Icons.Presence}

@@ -77,7 +77,7 @@ const MyChannels: React.FC = () => {
         ))}
         <div ref={boundaryRef} />
       </ScrollView>
-      {currentNotification && <DisplayNotification notification={currentNotification}/>}
+      \<DisplayNotification notification={currentNotification}/>
     </>
   );
 };
