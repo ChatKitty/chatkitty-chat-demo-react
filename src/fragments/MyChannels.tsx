@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   FlexRow,
   Heading,
@@ -42,6 +42,8 @@ const MyChannels: React.FC = () => {
     dependencies: [currentUser],
   });
 
+  const [notificationView, setNotificationView] = useState<boolean>(false);
+
   useEffect(() => {
     return onJoinedChannel((channel) => {
       append([channel]);
@@ -53,6 +55,21 @@ const MyChannels: React.FC = () => {
       remove((c) => c.id === channel.id);
     });
   }, [currentUser]);
+
+  useEffect(() => {
+    if(currentNotification){
+      setNotificationView(true);
+    }
+    const interval = setInterval(() => {
+      setNotificationView(false);
+      clearInterval(interval);
+    }, 10000);
+
+  },[currentNotification]);
+
+  const onClick = () => {
+    setNotificationView(false);
+  }
 
   return loading ? (
     <div>Loading...</div>
@@ -77,7 +94,7 @@ const MyChannels: React.FC = () => {
         ))}
         <div ref={boundaryRef} />
       </ScrollView>
-      { currentNotification && <DisplayNotification notification={currentNotification}/>}
+      { notificationView && <div onClick={onClick}><DisplayNotification notification={currentNotification}/></div>}
     </>
   );
 };

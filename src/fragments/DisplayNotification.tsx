@@ -15,9 +15,6 @@ interface notificationProp {
 const DisplayNotification: React.FC<notificationProp> = ({
   notification,
 }: notificationProp) => {
-  const onClick = () => {
-    console.log(notification);
-  };
 
   return (
     <StyledBox
@@ -33,7 +30,7 @@ const DisplayNotification: React.FC<notificationProp> = ({
       }}
     >
       {notification && isUserMessage(notification.data.message) ? (
-        <FlexRow onClick={onClick}>
+        <FlexRow >
           <div style={{ marginLeft:'5px'}}>
             <UserAvatar 
               user={notification.data.message.user} 
@@ -49,12 +46,12 @@ const DisplayNotification: React.FC<notificationProp> = ({
             <p style={{width:'150px', height:'40px', overflow:'hidden', marginBottom:'5px'}}>
               <strong>{notification.data.message.user.displayName}:</strong> {notification.body}
             </p>
-            {moment(notification.createdTime).hour()}:{moment(notification.createdTime).minute()}
+            {moment(notification.createdTime).format('LT')}
           </FlexColumn>
           
         </FlexRow>
       ):(<>
-        <FlexRow onClick={onClick}>
+        <FlexRow>
           <div style={{marginLeft:'5px'}}>
             <Avatar/>
           </div>
