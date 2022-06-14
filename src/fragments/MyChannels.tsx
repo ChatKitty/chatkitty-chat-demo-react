@@ -1,3 +1,4 @@
+import { Channel } from 'chatkitty';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   FlexRow,
@@ -25,6 +26,8 @@ const MyChannels: React.FC = () => {
     showChat,
     showJoinChannel,
   } = useContext(ChatAppContext);
+  const [notificationView, setNotificationView] = useState<boolean>(false);
+  const [channelList, setChannelList] = useState<Channel[]>([]);
 
   const {
     items: channels,
@@ -37,12 +40,14 @@ const MyChannels: React.FC = () => {
     onInitialPageFetched: (items) => {
       if (items) {
         showChat(items[0]);
+        setChannelList(items);
       }
     },
     dependencies: [currentUser],
   });
+  
 
-  const [notificationView, setNotificationView] = useState<boolean>(false);
+  
 
   useEffect(() => {
     return onJoinedChannel((channel) => {
@@ -69,6 +74,16 @@ const MyChannels: React.FC = () => {
 
   const onClick = () => {
     setNotificationView(false);
+    if(currentNotification?.channel){
+      if(channelList){
+        for(let i = 0; i<channelList.length; i++){
+          if(channelList[i].id === currentNotification.channel.id){
+            showChat(channelList[i]);
+          } 
+        }
+      } 
+    }
+
   }
 
   return loading ? (
