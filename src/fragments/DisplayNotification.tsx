@@ -4,6 +4,8 @@ import { Avatar, FlexColumn, FlexRow, StyledBox } from 'react-chat-ui-kit';
 
 import UserAvatar from './UserAvatar';
 
+import './../styles/slide.css';
+
 interface notificationProp {
   notification?: SystemSentMessageNotification| null;
 }
@@ -17,6 +19,7 @@ const DisplayNotification: React.FC<notificationProp> = ({
 
   return (
     <StyledBox
+      className='slideIn'
       style={{
         width: '250px',
         height: '90px',
@@ -29,20 +32,25 @@ const DisplayNotification: React.FC<notificationProp> = ({
     >
       {notification && isUserMessage(notification.data.message) ? (
         <FlexRow onClick={onClick}>
-          <UserAvatar user={notification.data.message.user}/>
-          <FlexColumn style={{ marginLeft:'1%'}}>
+          <div style={{ marginLeft:'5px'}}>
+            <UserAvatar user={notification.data.message.user}/>
+          </div>
+          <FlexColumn style={{ marginLeft:'10px', marginTop:'15px'}}>
             <strong>{notification.channel?.name}</strong>
             <strong>{notification.data.message.user.displayName}</strong>
-            <p>{notification.body}</p>
+            <p style={{width:'150px', height:'50px', overflow:'hidden'}}>
+              <strong>{notification.data.message.user.displayName}:</strong>
+               {notification.body}
+            </p>
           </FlexColumn>
           
         </FlexRow>
       ):(<>
-        <FlexRow onClick={onClick} position='relative'>
-          <div style={{marginTop:'25px', marginLeft:'5px'}}><Avatar/></div>
+        <FlexRow onClick={onClick}>
+          <div style={{marginLeft:'5px'}}><Avatar/></div>
           <FlexColumn style={{ marginLeft:'10px', marginTop:'15px'}}>
             <strong >#channel name</strong>
-            <p style={{position:'absolute', width:'150px', height:'50px', overflow:'hidden'}}> <strong>username: </strong> message text message text message textmessage textmessage textmessage textmessage text </p>
+            <p style={{width:'150px', height:'50px', overflow:'hidden'}}> <strong>username: </strong> message text message text message textmessage textmessage textmessage textmessage text </p>
           </FlexColumn>
           
         </FlexRow>
