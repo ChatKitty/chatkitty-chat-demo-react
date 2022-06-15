@@ -14,6 +14,7 @@ type MessageProps = {
 };
 
 const Message: React.FC<MessageProps> = ({ message }: MessageProps) => {
+  
   return (
     <>
       {isTextMessage(message) && (

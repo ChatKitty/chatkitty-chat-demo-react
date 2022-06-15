@@ -10,10 +10,14 @@ import './../styles/slide.css';
 
 interface notificationProp {
   notification?: SystemSentMessageNotification| null;
+  isReplyNotification?: boolean;
+  isMentionNotification?: boolean; 
 }
 
 const DisplayNotification: React.FC<notificationProp> = ({
   notification,
+  isReplyNotification,
+  isMentionNotification,
 }: notificationProp) => {
 
   return (
@@ -26,8 +30,10 @@ const DisplayNotification: React.FC<notificationProp> = ({
         position: 'absolute',
         bottom: '5px',
         left: '5px',
-        borderRadius:'5%'
+        borderRadius:'5%',
+        cursor:'pointer'
       }}
+      
     >
       {notification && isUserMessage(notification.data.message) ? (
         <FlexRow >
@@ -44,7 +50,11 @@ const DisplayNotification: React.FC<notificationProp> = ({
           <FlexColumn style={{ marginLeft:'10px', marginTop:'15px'}}>
             <strong>#{notification.channel?.name}</strong>
             <p style={{width:'150px', height:'40px', overflow:'hidden', marginBottom:'5px'}}>
-              <strong>{notification.data.message.user.displayName}:</strong> {notification.body}
+              <strong>{notification.data.message.user.displayName}</strong>{ 
+              isReplyNotification ? (<p> replied to your message</p>) : 
+              isMentionNotification ? (<p> mentioned you in a message</p>):
+              (<p>: {notification.body}</p>)
+              }
             </p>
             {moment(notification.createdTime).format('LT')}
           </FlexColumn>
@@ -58,9 +68,9 @@ const DisplayNotification: React.FC<notificationProp> = ({
           <FlexColumn style={{ marginLeft:'10px', marginTop:'15px'}}>
             <strong >#channel name</strong>
             <p style={{width:'150px', height:'40px', overflow:'hidden', marginBottom:'5px'}}> 
-              <strong>username:</strong> message text message text message textmessage textmessage textmessage textmessage text 
+              <strong>username:</strong> message text
             </p>
-            10:10
+            time
           </FlexColumn>
           
         </FlexRow>
