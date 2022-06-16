@@ -28,6 +28,8 @@ const MyChannels: React.FC = () => {
   } = useContext(ChatAppContext);
   const [notificationView, setNotificationView] = useState<boolean>(false);
   const [channelList, setChannelList] = useState<Channel[]>([]);
+  const [isMentionNotification, setIsMentionNotification] =
+    useState<boolean>(false);
 
   const {
     items: channels,
@@ -45,9 +47,6 @@ const MyChannels: React.FC = () => {
     },
     dependencies: [currentUser],
   });
-  
-
-  
 
   useEffect(() => {
     return onJoinedChannel((channel) => {
@@ -62,35 +61,45 @@ const MyChannels: React.FC = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    if(currentNotification){
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const test: any = currentNotification?.data.message;
+    if (test && test.mentions) {
+      setIsMentionNotification(true);
+    }
+
+    if (currentNotification) {
       setNotificationView(true);
     }
     const interval = setInterval(() => {
       setNotificationView(false);
       clearInterval(interval);
     }, 10000);
-
-  },[currentNotification]);
+  }, [currentNotification]);
 
   const onClick = () => {
     setNotificationView(false);
-    if(currentNotification?.channel){
-      if(channelList){
-        for(let i = 0; i<channelList.length; i++){
-          if(channelList[i].id === currentNotification.channel.id){
-            showChat(channelList[i]);
-          } 
-        }
-      } 
+    if (currentNotification?.channel) {
+      if (channelList) {
+        const currentNotificationChannelId = currentNotification.channel.id;
+        channelList.find((currentChannel) => {
+          if (currentChannel.id === currentNotificationChannelId) {
+            showChat(currentChannel);
+          }
+        });
+      }
     }
-
-  }
+  };
 
   return loading ? (
     <div>Loading...</div>
   ) : (
     <>
-      <FlexRow justifyContent="space-between" mx={6} marginBottom={1} display='relative'>
+      <FlexRow
+        justifyContent="space-between"
+        mx={6}
+        marginBottom={1}
+        display="relative"
+      >
         <Heading variant={HeadingVariants.INVERSE}>Channels</Heading>
         <Icon
           icon={Icons.Add}
@@ -109,7 +118,14 @@ const MyChannels: React.FC = () => {
         ))}
         <div ref={boundaryRef} />
       </ScrollView>
-      { notificationView && <div onClick={onClick}><DisplayNotification notification={currentNotification}/></div>}
+      {notificationView && currentNotification && (
+        <div onClick={onClick}>
+          <DisplayNotification
+            notification={currentNotification}
+            isMentionNotification={isMentionNotification}
+          />
+        </div>
+      )}
     </>
   );
 };

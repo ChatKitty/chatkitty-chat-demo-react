@@ -42,7 +42,8 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
       };
 
   const [isHovering, hoverProps] = useHover({ mouseEnterDelayMS: 0 });
-  const { changeReply, getMessageParent, currentUser } = useContext(ChatAppContext);
+  const { changeReply, getMessageParent, currentUser } =
+    useContext(ChatAppContext);
   const [messageParent, setMessageParent] = useState<ChatKittyMessage | null>(
     null
   );
@@ -52,7 +53,11 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
   useEffect(() => {
     getMessageParent(message).then((message) => {
       setMessageParent(message);
-      if(message && isUserMessage(message) && message.user.id === currentUser?.id){
+      if (
+        message &&
+        isUserMessage(message) &&
+        message.user.id === currentUser?.id
+      ) {
         setIsMentionOrReply(true);
       }
     });
@@ -73,16 +78,14 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const test: any = message;
-    if(test.mentions && test.mentions.length){
-      const mentionedUser = test.mentions.map((currentMention: UserMessageMention)=>{
-        currentMention.user.id === currentUser?.id; 
+    if (test.mentions && test.mentions.length) {
+      test.mentions.map((currentMention: UserMessageMention) => {
+        if (currentMention.user.name === currentUser?.name) {
+          setIsMentionOrReply(true);
+        }
       });
-      if(mentionedUser){
-        setIsMentionOrReply(true);
-      }  
     }
-
-  },[]);
+  }, []);
 
   const changeReplyMessage = () => {
     changeReply(message);
@@ -102,7 +105,13 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         <FlexRow
           style={{ marginLeft: '20px', cursor: 'pointer' }}
           alignItems="flex-start"
-          bg={isHovering ? 'backgrounds.contentHover' : isMentionOrReply ? 'yellow' : ''}
+          bg={
+            isHovering
+              ? 'backgrounds.contentHover'
+              : isMentionOrReply
+              ? 'yellow'
+              : ''
+          }
           {...hoverProps}
           onClick={scrollToElement}
         >
@@ -115,7 +124,13 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
         py="1"
         px={[5, 6]}
         alignItems="flex-start"
-        bg={isHovering ? 'backgrounds.contentHover' : isMentionOrReply ? 'yellow' : '' }
+        bg={
+          isHovering
+            ? 'backgrounds.contentHover'
+            : isMentionOrReply
+            ? 'yellow'
+            : ''
+        }
         {...hoverProps}
       >
         {(!sameUser || messageParent || !previousMessage) && avatar}

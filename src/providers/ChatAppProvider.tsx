@@ -59,7 +59,7 @@ interface ChatAppContext {
   replyMessagesPaginator: (
     message: Message
   ) => Promise<ChatKittyPaginator<Message> | null>;
-  getMessageParent: (messafe: Message) => Promise<Message | null>;
+  getMessageParent: (message: Message) => Promise<Message | null>;
 
   memberListGetter: (Channel: Channel) => Promise<User[] | null>;
   reactToMessage: (emoji: string, message: Message) => Promise<Reaction | null>;
