@@ -37,7 +37,7 @@ const DisplayNotification: React.FC<NotificationProp> = ({
         cursor: 'pointer',
       }}
     >
-      {isUserMessage(notification.data.message) && (
+      {isUserMentionedNotification(notification) && isUserMessage(notification.data.message) && (
         <FlexRow>
           <div style={{ marginLeft: '5px' }}>
             <UserAvatar
