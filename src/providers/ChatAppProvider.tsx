@@ -16,6 +16,7 @@ import ChatKitty, {
   Reaction,
   StartedChatSessionResult,
   succeeded,
+  SystemSentMessageNotification,
   User,
 } from 'chatkitty';
 import React, { ReactElement, useEffect, useState } from 'react';
@@ -37,8 +38,9 @@ interface ChatAppContext {
   online: boolean;
   replyMessage: Message | null;
   userFile: File | null;
+  currentNotification: SystemSentMessageNotification | null;
   users: () => Promise<ChatKittyPaginator<User> | null>;
-  getURLFile: (fileURL: string) => Promise<Blob>;
+  getURLFile: (fileURL: string) => Promise<Blob | null>;
   joinedChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinableChannelsPaginator: () => Promise<ChatKittyPaginator<Channel> | null>;
   joinChannel: (channel: Channel) => void;
@@ -57,7 +59,7 @@ interface ChatAppContext {
   replyMessagesPaginator: (
     message: Message
   ) => Promise<ChatKittyPaginator<Message> | null>;
-  getMessageParent: (messafe: Message) => Promise<Message | null>;
+  getMessageParent: (message: Message) => Promise<Message | null>;
 
   memberListGetter: (Channel: Channel) => Promise<User[] | null>;
   reactToMessage: (emoji: string, message: Message) => Promise<Reaction | null>;
@@ -97,6 +99,7 @@ const initialValues: ChatAppContext = {
   online: false,
   replyMessage: null,
   userFile: null,
+  currentNotification: null,
   users: () => Promise.prototype,
   getURLFile: () => Promise.prototype,
   joinedChannelsPaginator: () => Promise.prototype,
@@ -160,6 +163,8 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   const [layout, setLayout] = useState(initialValues.layout);
   const [replyMessage, setReplyMessage] = useState<Message | null>(initialValues.replyMessage);
   const [userFile, setUserFile] = useState<File | null>(initialValues.userFile);
+
+  const [currentNotification, setcurrentNotification] = useState<SystemSentMessageNotification | null>(initialValues.currentNotification);
 
   const views: Set<View> = new Set();
 
@@ -263,7 +268,14 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
     kitty.onCurrentUserOffline(() => {
       setOnline(false);
     });
-  }, []);
+
+    if(currentUser){
+      kitty.onNotificationReceived((notification) => {
+        setcurrentNotification(notification);
+      })
+    }
+
+  }, [currentUser]);
 
   const login = async (username: string) => {
     setLoading(true);
@@ -287,8 +299,14 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
   };
 
   const getURLFile = async (fileURL: string) => {
-    const blobPromise = await fetch(fileURL).then(fileblob => fileblob.blob());
-    return(blobPromise);
+    try{
+      const blobPromise = await fetch(fileURL).then(fileblob => fileblob.blob());
+      return(blobPromise);
+    }
+    catch(error){
+      console.log(error);
+    }
+    return(null);
   }
 
   const joinedChannelsPaginator = async () => {
@@ -579,6 +597,7 @@ const ChatAppContextProvider: React.FC<ChatAppContextProviderProps> = ({
         online,
         replyMessage,
         userFile,
+        currentNotification,
         users,
         getURLFile,
         joinedChannelsPaginator,

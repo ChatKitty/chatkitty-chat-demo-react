@@ -17,7 +17,6 @@ const Reactions: React.FC<EmojiProps> = ({ message }: EmojiProps) => {
         (reactedReaction) =>
           reactedReaction.emoji.character === reaction.emoji.character
       );
-      console.log(reactionFound);
       if (reactionFound) {
         const userFound = reactionFound.users.find(
           (user) => user.id === currentUser.id

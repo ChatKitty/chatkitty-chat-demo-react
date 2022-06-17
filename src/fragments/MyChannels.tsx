@@ -1,4 +1,5 @@
-import React, { useContext, useEffect } from 'react';
+import { Channel } from 'chatkitty';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   FlexRow,
   Heading,
@@ -11,6 +12,7 @@ import { usePaginator } from 'react-chat-ui-kit';
 
 import { ChatAppContext } from '../providers/ChatAppProvider';
 
+import DisplayNotification from './DisplayNotification';
 import MyChannelListItem from './MyChannelListItem';
 
 const MyChannels: React.FC = () => {
@@ -20,9 +22,12 @@ const MyChannels: React.FC = () => {
     onLeftChannel,
     loading,
     currentUser,
+    currentNotification,
     showChat,
     showJoinChannel,
   } = useContext(ChatAppContext);
+  const [notificationView, setNotificationView] = useState<boolean>(false);
+  const [channelList, setChannelList] = useState<Channel[]>([]);
 
   const {
     items: channels,
@@ -35,6 +40,7 @@ const MyChannels: React.FC = () => {
     onInitialPageFetched: (items) => {
       if (items) {
         showChat(items[0]);
+        setChannelList(items);
       }
     },
     dependencies: [currentUser],
@@ -52,11 +58,42 @@ const MyChannels: React.FC = () => {
     });
   }, [currentUser]);
 
+  useEffect(() => {
+    
+    if (currentNotification) {
+      setNotificationView(true);
+      
+      const interval = setTimeout(() => {
+        setNotificationView(false);
+        clearTimeout(interval);
+      }, 10000);
+    }
+  }, [currentNotification]);
+
+  const onClick = () => {
+    setNotificationView(false);
+    if (currentNotification?.channel) {
+      if (channelList) {
+        const currentNotificationChannelId = currentNotification.channel.id;
+        channelList.find((currentChannel) => {
+          if (currentChannel.id === currentNotificationChannelId) {
+            showChat(currentChannel);
+          }
+        });
+      }
+    }
+  };
+
   return loading ? (
     <div>Loading...</div>
   ) : (
     <>
-      <FlexRow justifyContent="space-between" mx={6} marginBottom={1}>
+      <FlexRow
+        justifyContent="space-between"
+        mx={6}
+        marginBottom={1}
+        display="relative"
+      >
         <Heading variant={HeadingVariants.INVERSE}>Channels</Heading>
         <Icon
           icon={Icons.Add}
@@ -75,6 +112,13 @@ const MyChannels: React.FC = () => {
         ))}
         <div ref={boundaryRef} />
       </ScrollView>
+      {notificationView && currentNotification && (
+        <div onClick={onClick}>
+          <DisplayNotification
+            notification={currentNotification}
+          />
+        </div>
+      )}
     </>
   );
 };
