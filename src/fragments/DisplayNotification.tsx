@@ -1,21 +1,28 @@
-import { isUserMessage, SystemSentMessageNotification } from 'chatkitty';
+import { isUserMentionedNotification, isUserMessage, Notification } from 'chatkitty';
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlexColumn, FlexRow, StyledBox } from 'react-chat-ui-kit';
 
 import UserAvatar from './UserAvatar';
 
 import './../styles/slide.css';
 
-interface notificationProp {
-  notification: SystemSentMessageNotification ;
-  isMentionNotification?: boolean | null;
+interface NotificationProp {
+  notification: Notification ;
 }
 
-const DisplayNotification: React.FC<notificationProp> = ({
+const DisplayNotification: React.FC<NotificationProp> = ({
   notification,
-  isMentionNotification,
-}: notificationProp) => {
+}: NotificationProp) => {
+
+  const [isMentionNotification, setIsMentionNotification] = useState<boolean>(false);
+
+  useEffect(() => {
+    if(isUserMentionedNotification(notification)){
+      setIsMentionNotification(true);
+    }
+  })
+  
   return (
     <StyledBox
       className="slideIn"

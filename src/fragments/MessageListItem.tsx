@@ -76,15 +76,17 @@ const MessageListItem: React.FC<MessageListItemProps> = ({
   }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const test: any = message;
-    if (test.mentions && test.mentions.length) {
-      test.mentions.map((currentMention: UserMessageMention) => {
-        if (currentMention.user.name === currentUser?.name) {
+    
+  
+    if (isTextMessage(message) && message.mentions) {
+      message.mentions.map((currentMention) => {
+        const mention = currentMention as UserMessageMention;
+        if (mention.user.name === currentUser?.name) {
           setIsMentionOrReply(true);
         }
       });
     }
+    
   }, []);
 
   const changeReplyMessage = () => {

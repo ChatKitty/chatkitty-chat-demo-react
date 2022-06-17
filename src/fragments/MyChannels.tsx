@@ -28,8 +28,6 @@ const MyChannels: React.FC = () => {
   } = useContext(ChatAppContext);
   const [notificationView, setNotificationView] = useState<boolean>(false);
   const [channelList, setChannelList] = useState<Channel[]>([]);
-  const [isMentionNotification, setIsMentionNotification] =
-    useState<boolean>(false);
 
   const {
     items: channels,
@@ -61,19 +59,15 @@ const MyChannels: React.FC = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const test: any = currentNotification?.data.message;
-    if (test && test.mentions) {
-      setIsMentionNotification(true);
-    }
-
+    
     if (currentNotification) {
       setNotificationView(true);
+      
+      const interval = setTimeout(() => {
+        setNotificationView(false);
+        clearTimeout(interval);
+      }, 10000);
     }
-    const interval = setInterval(() => {
-      setNotificationView(false);
-      clearInterval(interval);
-    }, 10000);
   }, [currentNotification]);
 
   const onClick = () => {
@@ -122,7 +116,6 @@ const MyChannels: React.FC = () => {
         <div onClick={onClick}>
           <DisplayNotification
             notification={currentNotification}
-            isMentionNotification={isMentionNotification}
           />
         </div>
       )}
